@@ -1,5 +1,7 @@
 ﻿
 
+using System.Diagnostics;
+
 namespace du
 {
     public class Program
@@ -19,19 +21,22 @@ namespace du
                 Console.WriteLine("         Runs sequential followed by parallel mode");
                 return;
             }
-            
+            var sw = new Stopwatch();
             // Deter commands
             switch (input[0])
             {
                 case "-s":
-                    ParseSeq(input[1]);
+                    sw.Start();
+                    int[] info = ParseSeq(input[1], new int[3]);
+                    sw.Stop();
+                    PrintResults(sw, "Sequential", info);
                     break;
                 case "-p":
                     ParsePar(input[1]);
                     break;
                 case "-b":
                     // todo order? err says seq then par, but demo shows par then seq
-                    ParseSeq(input[1]);
+                    ParseSeq(input[1], new int[3]);
                     ParsePar(input[1]);
                     break;
                 default:
@@ -64,10 +69,17 @@ namespace du
           
         }
 
-
-        private static void ParseSeq(string src)
+        private static void PrintResults(Stopwatch sw, string mode, int[] info)
         {
-            Console.WriteLine("Do sequential");
+            var elapsed = String.Format("{0:0}.{1:0}", sw.Elapsed.Seconds, sw.Elapsed.Milliseconds / 10);
+            Console.WriteLine("\n" + mode + "Calculated in: " + elapsed );
+            Console.WriteLine("{0:0} folders, {1:0} files, {2:0} bytes\n", info[0], info[1], info[2]);
+        }
+
+
+        private static int[] ParseSeq(string src, int[] info)
+        {
+            return info;
         }
 
         private static void ParsePar(string src)
