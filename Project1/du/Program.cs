@@ -24,25 +24,32 @@ namespace du
         
         private static bool ValArgs(string[] args)
         {
-            // Todo dotnet run args?
 
             var cmd = args[0];
-            var isValid = false;
+            var src = args[1];
+
+            // Check directory
+            if (!Directory.Exists(src))
+            {
+                return false;
+            }
         
             // check if first arg is correct
             if (cmd.Equals("-s"))
             {
-                isValid = true;
-            } else if (cmd.Equals("-p"))
-            {
-                isValid = true;
-            }else if (cmd.Equals("-b"))
-            {
-                isValid = true;
+                return true;
             }
-        
-
-            return isValid;
+            if (cmd.Equals("-p"))
+            {
+                return true;
+            }
+            if (cmd.Equals("-b"))
+            {
+                return true;
+            }
+            
+            // cmd not valid, fail
+            return false;
         }
 
 
