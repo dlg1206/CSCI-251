@@ -7,7 +7,8 @@ namespace du
 
         public static void Main(string[] args)
         {
-            if (args.Length == 0 || !ValArgs(args[0].Split(" ")))
+            var input = args[0].Split(" ");
+            if (args.Length == 0 || !ValArgs(input))
             {
                 Console.WriteLine("Usage: du [-s] [-p] [-b] <path>");
                 Console.WriteLine("Summarize disk usage of the set of FILEs, recursively for directories.\n");
@@ -19,7 +20,23 @@ namespace du
                 return;
             }
             
-            Console.WriteLine("ok");
+            // Deter commands
+            switch (input[0])
+            {
+                case "-s":
+                    ParseSeq(input[1]);
+                    break;
+                case "-p":
+                    ParsePar(input[1]);
+                    break;
+                case "-b":
+                    // todo order? err says seq then par, but demo shows par then seq
+                    ParseSeq(input[1]);
+                    ParsePar(input[1]);
+                    break;
+                default:
+                    return;
+            }
             
             
         }
@@ -50,12 +67,12 @@ namespace du
 
         private static void ParseSeq(string src)
         {
-            
+            Console.WriteLine("Do sequential");
         }
 
         private static void ParsePar(string src)
         {
-            
+            Console.WriteLine("do //");
         }
 
 
