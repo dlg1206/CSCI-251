@@ -7,7 +7,7 @@ namespace du
 
         public static void Main(string[] args)
         {
-            if (!ValArgs(args[0].Split(" ")))
+            if (args.Length == 0 || !ValArgs(args[0].Split(" ")))
             {
                 Console.WriteLine("Usage: du [-s] [-p] [-b] <path>");
                 Console.WriteLine("Summarize disk usage of the set of FILEs, recursively for directories.\n");
@@ -20,40 +20,43 @@ namespace du
             }
             
             Console.WriteLine("ok");
+            
+            
         }
         
         private static bool ValArgs(string[] args)
         {
-
-            var cmd = args[0];
-            var src = args[1];
-
+            // only expecting 2 args
+            if (args.Length != 2) { return false; }
+   
             // Check directory
-            if (!Directory.Exists(src))
-            {
-                return false;
-            }
+            if (!Directory.Exists(args[1])) { return false; }
         
-            // check if first arg is correct
-            if (cmd.Equals("-s"))
+            // check if cmd is correct
+            switch (args[0])
             {
-                return true;
+                case "-s":
+                    return true;
+                case "-p":
+                    return true;
+                case "-b":
+                    return true;
+                default:
+                    return false;
             }
-            if (cmd.Equals("-p"))
-            {
-                return true;
-            }
-            if (cmd.Equals("-b"))
-            {
-                return true;
-            }
-            
-            // cmd not valid, fail
-            return false;
+          
         }
 
 
+        private static void ParseSeq(string src)
+        {
+            
+        }
 
+        private static void ParsePar(string src)
+        {
+            
+        }
 
 
     }
