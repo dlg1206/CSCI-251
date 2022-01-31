@@ -9,6 +9,7 @@ namespace du
 
         public static void Main(string[] args)
         {
+            // todo account for spaces? ie "-b Program Files" -> [-b, Program, Files-
             var input = args[0].Split(" ");
             if (args.Length == 0 || !ValArgs(input))
             {
@@ -72,13 +73,48 @@ namespace du
         private static void PrintResults(Stopwatch sw, string mode, int[] info)
         {
             var elapsed = String.Format("{0:0}.{1:0}", sw.Elapsed.Seconds, sw.Elapsed.Milliseconds / 10);
-            Console.WriteLine("\n" + mode + "Calculated in: " + elapsed );
-            Console.WriteLine("{0:0} folders, {1:0} files, {2:0} bytes\n", info[0], info[1], info[2]);
+            Console.WriteLine("\n" + mode + " Calculated in: " + elapsed );
+            Console.WriteLine("{0:n0} folders, {1:n0} files, {2:n0} bytes\n", info[0], info[1], info[2]);
         }
 
-
+        
+        /// <summary>
+        ///
+        /// 0 folders
+        /// 1 files
+        /// 2 bytes
+        /// </summary>
+        /// <param name="src"></param>
+        /// <param name="info"></param>
+        /// <returns></returns>
         private static int[] ParseSeq(string src, int[] info)
         {
+            
+            Directory.SetCurrentDirectory(src);
+            foreach (var dir in Directory.GetDirectories(src))
+            {
+                info[0]++;
+                ParseSeq(dir, info);
+            }
+            
+            
+            foreach (var fileName in Directory.GetFiles(src))
+            {
+                // todo update count if can't read file?
+                info[1]++;
+
+                try
+                {
+                    var file = File.Open(fileName, FileMode.Open);
+                    info[2] += (int) file.Length;
+                    file.Close();
+                }
+                catch
+                {
+                    
+                }
+            }
+            
             return info;
         }
 
