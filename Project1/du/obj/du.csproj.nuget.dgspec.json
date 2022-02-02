@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Dgarcia\\Programming\\Rider\\CSCI-251\\Project1\\du\\du.csproj": {}
+    "C:\\Users\\Dgarc\\Programming\\Rider\\CSCI-251\\Project1\\du\\du.csproj": {}
   },
   "projects": {
-    "D:\\Dgarcia\\Programming\\Rider\\CSCI-251\\Project1\\du\\du.csproj": {
+    "C:\\Users\\Dgarc\\Programming\\Rider\\CSCI-251\\Project1\\du\\du.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Dgarcia\\Programming\\Rider\\CSCI-251\\Project1\\du\\du.csproj",
+        "projectUniqueName": "C:\\Users\\Dgarc\\Programming\\Rider\\CSCI-251\\Project1\\du\\du.csproj",
         "projectName": "du",
-        "projectPath": "D:\\Dgarcia\\Programming\\Rider\\CSCI-251\\Project1\\du\\du.csproj",
-        "packagesPath": "C:\\Users\\Derpe\\.nuget\\packages\\",
-        "outputPath": "D:\\Dgarcia\\Programming\\Rider\\CSCI-251\\Project1\\du\\obj\\",
+        "projectPath": "C:\\Users\\Dgarc\\Programming\\Rider\\CSCI-251\\Project1\\du\\du.csproj",
+        "packagesPath": "C:\\Users\\Dgarc\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Dgarc\\Programming\\Rider\\CSCI-251\\Project1\\du\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Derpe\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Dgarc\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
@@ -52,7 +52,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Users\\Derpe\\.dotnet\\sdk\\6.0.101\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Users\\Dgarc\\.dotnet\\sdk\\6.0.101\\RuntimeIdentifierGraph.json"
         }
       }
     }

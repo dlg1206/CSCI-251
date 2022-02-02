@@ -36,7 +36,7 @@ namespace du
                     ParsePar(input[1]);
                     break;
                 case "-b":
-                    // todo order? err says seq then par, but demo shows par then seq
+                    // todo order? err says seq then par, but demo shows par then seq : PAR -> SEQ
                     ParseSeq(input[1], new int[3]);
                     ParsePar(input[1]);
                     break;
@@ -72,6 +72,7 @@ namespace du
 
         private static void PrintResults(Stopwatch sw, string mode, int[] info)
         {
+            // .elapsed
             var elapsed = String.Format("{0:0}.{1:0}", sw.Elapsed.Seconds, sw.Elapsed.Milliseconds / 10);
             Console.WriteLine("\n" + mode + " Calculated in: " + elapsed + "s" );
             Console.WriteLine("{0:n0} folders, {1:n0} files, {2:n0} bytes\n", info[0], info[1], info[2]);
@@ -98,7 +99,7 @@ namespace du
                     ParseSeq(dir, info);
                 }
             }
-            catch
+            catch (Exception)
             {
                 
             }
@@ -107,7 +108,8 @@ namespace du
             
             foreach (var fileName in Directory.GetFiles(src))
             {
-                // todo update count if can't read file?
+                // todo update count if can't read file? - NO
+                
                 info[1]++;
 
                 try
@@ -116,7 +118,7 @@ namespace du
                     info[2] += (int) file.Length;
                     file.Close();
                 }
-                catch
+                catch(Exception)
                 {
                     
                 }
