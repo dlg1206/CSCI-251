@@ -73,7 +73,7 @@ namespace du
         private static void PrintResults(Stopwatch sw, string mode, int[] info)
         {
             var elapsed = String.Format("{0:0}.{1:0}", sw.Elapsed.Seconds, sw.Elapsed.Milliseconds / 10);
-            Console.WriteLine("\n" + mode + " Calculated in: " + elapsed );
+            Console.WriteLine("\n" + mode + " Calculated in: " + elapsed + "s" );
             Console.WriteLine("{0:n0} folders, {1:n0} files, {2:n0} bytes\n", info[0], info[1], info[2]);
         }
 
@@ -89,13 +89,20 @@ namespace du
         /// <returns></returns>
         private static int[] ParseSeq(string src, int[] info)
         {
-            
-            Directory.SetCurrentDirectory(src);
-            foreach (var dir in Directory.GetDirectories(src))
+            try
             {
-                info[0]++;
-                ParseSeq(dir, info);
+                Directory.SetCurrentDirectory(src);
+                foreach (var dir in Directory.GetDirectories(src))
+                {
+                    info[0]++;
+                    ParseSeq(dir, info);
+                }
             }
+            catch
+            {
+                
+            }
+        
             
             
             foreach (var fileName in Directory.GetFiles(src))
