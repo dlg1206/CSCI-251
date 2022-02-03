@@ -23,22 +23,23 @@ namespace du
                 return;
             }
             var sw = new Stopwatch();
+            long[] info;
             // Deter commands
             switch (args[0])
             {
                 case "-s":
                     sw.Start();
-                    uint[] info = ParseSeq(args[1], new uint[3]);
+                    info = ParseSeq(args[1], new long[3]);
                     sw.Stop();
                     PrintResults(sw, "Sequential", info);
                     break;
                 case "-p":
-                    ParsePar(args[1]);
+                   
                     break;
                 case "-b":
    
-                    ParseSeq(args[1], new uint[3]);
-                    ParsePar(args[1]);
+                    ParseSeq(args[1], new long[3]);
+                    // ParsePar(args[1], new long[3]);
                     break;
                 default:
                     return;
@@ -70,7 +71,7 @@ namespace du
           
         }
 
-        private static void PrintResults(Stopwatch sw, string mode, uint[] info)
+        private static void PrintResults(Stopwatch sw, string mode, long[] info)
         {
             // .elapsed
 
@@ -88,7 +89,7 @@ namespace du
         /// <param name="src"></param>
         /// <param name="info"></param>
         /// <returns></returns>
-        private static uint[] ParseSeq(string src, uint[] info)
+        private static long[] ParseSeq(string src, long[] info)
         {
             try
             {
@@ -101,10 +102,8 @@ namespace du
             }
             catch (Exception)
             {
-                
+               
             }
-        
-            
             
             foreach (var fileName in Directory.GetFiles(src))
             {
@@ -115,7 +114,8 @@ namespace du
                 try
                 {
                     var file = File.Open(fileName, FileMode.Open);
-                    info[2] += (uint) file.Length;
+                    info[2] += file.Length;
+                    // Console.WriteLine(fileName + " is {0:n0} bytes", file.Length);
                     file.Close();
                 }
                 catch(Exception)
@@ -127,10 +127,10 @@ namespace du
             return info;
         }
 
-        private static void ParsePar(string src)
-        {
-            Console.WriteLine("do //");
-        }
+        // private static long[] ParsePar(string src, long[] info)
+        // {
+        //    
+        // }
 
 
     }
