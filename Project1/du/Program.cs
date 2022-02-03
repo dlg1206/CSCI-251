@@ -84,15 +84,7 @@ namespace du
         }
 
         
-        /// <summary>
-        ///
-        /// 0 folders
-        /// 1 files
-        /// 2 bytes
-        /// </summary>
-        /// <param name="src"></param>
-        /// <param name="info"></param>
-        /// <returns></returns>
+        // TODO folders + files correct, byte count slightly off
         private static long[] ParseSeq(string src, long[] info)
         {
             try
@@ -130,53 +122,60 @@ namespace du
             return info;
         }
         
+        
+        
+        // TODO Folders, files, byte count All off - where to plac locks?
         private static Object _parLock = new Object();
         private static long[] ParsePar(string src, long[] info)
         {
             
             try
             {
-                Directory.SetCurrentDirectory(src);
-                Parallel.ForEach(Directory.GetDirectories(src), dir =>
+                lock (_parLock)
                 {
-                    lock (_parLock)
+                    Directory.SetCurrentDirectory(src);
+                    Parallel.ForEach(Directory.GetDirectories(src), dir =>
                     {
+
                         info[0]++;
-                    }
-                    ParseSeq(dir, info);
-                    
-                });
+
+                        ParseSeq(dir, info);
+
+                    });
+                }
             }
             catch (Exception)
             {
                
             }
 
-            Parallel.ForEach(Directory.GetFiles(src), fileName =>
+            lock (_parLock)
             {
-
-                lock (_parLock)
+                Parallel.ForEach(Directory.GetFiles(src), fileName =>
                 {
+
+
                     info[1]++;
-                }
-                
 
-                try
-                {
-                    var file = File.Open(fileName, FileMode.Open);
-                    lock (_parLock)
+
+
+                    try
                     {
-                        info[2] += file.Length;
-                    }
-                    
-                    file.Close();
-                }
-                catch (Exception)
-                {
+                        var file = File.Open(fileName, FileMode.Open);
+                        lock (_parLock)
+                        {
+                            info[2] += file.Length;
+                        }
 
-                }
-            });
-            
+                        file.Close();
+                    }
+                    catch (Exception)
+                    {
+
+                    }
+                });
+            }
+
             return info;
         }
 
