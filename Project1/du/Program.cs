@@ -9,7 +9,7 @@ namespace du
 
         public static void Main(string[] args)
         {
-            // todo account for spaces? ie "-b Program Files" -> [-b, Program, Files-
+     
             
             if (!ValArgs(args))
             {
@@ -36,7 +36,7 @@ namespace du
                     ParsePar(args[1]);
                     break;
                 case "-b":
-                    // todo order? err says seq then par, but demo shows par then seq : PAR -> SEQ
+   
                     ParseSeq(args[1], new uint[3]);
                     ParsePar(args[1]);
                     break;
@@ -108,7 +108,7 @@ namespace du
             
             foreach (var fileName in Directory.GetFiles(src))
             {
-                // todo update count if can't read file? - NO
+
                 
                 info[1]++;
 
