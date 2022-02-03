@@ -4,9 +4,10 @@ using System.Diagnostics;
 
 namespace du
 {
+    
     public class Program
     {
-
+        
         public static void Main(string[] args)
         {
      
@@ -34,12 +35,15 @@ namespace du
                     PrintResults(sw, "Sequential", info);
                     break;
                 case "-p":
-                   
+                    sw.Start();
+                    info = ParsePar(args[1], new long[3]);
+                    sw.Stop();
+                    PrintResults(sw, "Parallel", info);
                     break;
                 case "-b":
    
                     ParseSeq(args[1], new long[3]);
-                    // ParsePar(args[1], new long[3]);
+                    ParsePar(args[1], new long[3]);
                     break;
                 default:
                     return;
@@ -115,7 +119,6 @@ namespace du
                 {
                     var file = File.Open(fileName, FileMode.Open);
                     info[2] += file.Length;
-                    // Console.WriteLine(fileName + " is {0:n0} bytes", file.Length);
                     file.Close();
                 }
                 catch(Exception)
@@ -126,11 +129,56 @@ namespace du
             
             return info;
         }
+        
+        private static Object _parLock = new Object();
+        private static long[] ParsePar(string src, long[] info)
+        {
+            
+            try
+            {
+                Directory.SetCurrentDirectory(src);
+                Parallel.ForEach(Directory.GetDirectories(src), dir =>
+                {
+                    lock (_parLock)
+                    {
+                        info[0]++;
+                    }
+                    ParseSeq(dir, info);
+                    
+                });
+            }
+            catch (Exception)
+            {
+               
+            }
 
-        // private static long[] ParsePar(string src, long[] info)
-        // {
-        //    
-        // }
+            Parallel.ForEach(Directory.GetFiles(src), fileName =>
+            {
+
+                lock (_parLock)
+                {
+                    info[1]++;
+                }
+                
+
+                try
+                {
+                    var file = File.Open(fileName, FileMode.Open);
+                    lock (_parLock)
+                    {
+                        info[2] += file.Length;
+                    }
+                    
+                    file.Close();
+                }
+                catch (Exception)
+                {
+
+                }
+            });
+            
+            return info;
+        }
 
 
     }
