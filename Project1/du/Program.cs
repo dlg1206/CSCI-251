@@ -23,32 +23,51 @@ namespace du
                 Console.WriteLine("         Runs sequential followed by parallel mode");
                 return;
             }
-            var sw = new Stopwatch();
-            long[] info;
+            
             // Deter commands
             switch (args[0])
             {
                 case "-s":
-                    sw.Start();
-                    info = ParseSeq(args[1], new long[3]);
-                    sw.Stop();
-                    PrintResults(sw, "Sequential", info);
+                    DoSeq(args[1]);
                     break;
+                // TODO - wants to run a project when run -p
+                /*
+                 * ←[33mWarning NETSDK1174: The abbreviation of -p for --project is deprecated. Please use --project.←[39m
+                    Couldn't find a project to run. Ensure a project exists in C:\Program Files\JetBrains, 
+                    or pass the path to the project using --project.
+                 */
                 case "-p":
-                    sw.Start();
-                    info = ParsePar(args[1], new long[3]);
-                    sw.Stop();
-                    PrintResults(sw, "Parallel", info);
+                    DoPar(args[1]);
                     break;
                 case "-b":
-   
-                    ParseSeq(args[1], new long[3]);
-                    ParsePar(args[1], new long[3]);
+                    DoSeq(args[1]);
+                    DoPar(args[1]);
                     break;
                 default:
                     return;
             }
             
+            
+        }
+
+        private static void DoSeq(string src)
+        {
+            var sw = new Stopwatch();
+            long[] info;
+            sw.Start();
+            info = ParseSeq(src, new long[3]);
+            sw.Stop();
+            PrintResults(sw, "Sequential", info);
+        }
+        
+        private static void DoPar(string src)
+        {
+            var sw = new Stopwatch();
+            long[] info;
+            sw.Start();
+            info = ParsePar(src, new long[3]);
+            sw.Stop();
+            PrintResults(sw, "Parallel", info);
             
         }
         
@@ -128,16 +147,18 @@ namespace du
         private static Object _parLock = new Object();
         private static long[] ParsePar(string src, long[] info)
         {
-            
             try
             {
-                lock (_parLock)
+                
                 {
                     Directory.SetCurrentDirectory(src);
                     Parallel.ForEach(Directory.GetDirectories(src), dir =>
                     {
-
-                        info[0]++;
+                        lock (_parLock)
+                        {
+                            info[0]++;
+                        }
+                            
 
                         ParseSeq(dir, info);
 
@@ -149,25 +170,28 @@ namespace du
                
             }
 
-            lock (_parLock)
+            
             {
                 Parallel.ForEach(Directory.GetFiles(src), fileName =>
                 {
 
-
-                    info[1]++;
-
-
+                    lock (_parLock)
+                    {
+                        info[1]++;
+                    }
 
                     try
                     {
                         var file = File.Open(fileName, FileMode.Open);
                         lock (_parLock)
                         {
+                            
                             info[2] += file.Length;
+                            
                         }
-
                         file.Close();
+
+                        
                     }
                     catch (Exception)
                     {

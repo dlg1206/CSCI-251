@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Dgarcia\\Programming\\Rider\\CSCI-251\\Project1\\du\\du.csproj",
+      "projectUniqueName": "D:\\Dgarcia\\Programming\\IDEs\\Rider\\CSCI-251\\Project1\\du\\du.csproj",
       "projectName": "du",
-      "projectPath": "D:\\Dgarcia\\Programming\\Rider\\CSCI-251\\Project1\\du\\du.csproj",
+      "projectPath": "D:\\Dgarcia\\Programming\\IDEs\\Rider\\CSCI-251\\Project1\\du\\du.csproj",
       "packagesPath": "C:\\Users\\Derpe\\.nuget\\packages\\",
-      "outputPath": "D:\\Dgarcia\\Programming\\Rider\\CSCI-251\\Project1\\du\\obj\\",
+      "outputPath": "D:\\Dgarcia\\Programming\\IDEs\\Rider\\CSCI-251\\Project1\\du\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Derpe\\AppData\\Roaming\\NuGet\\NuGet.Config"
