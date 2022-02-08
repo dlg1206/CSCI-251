@@ -151,7 +151,11 @@ namespace du
             {
                 
                 {
-                    Directory.SetCurrentDirectory(src);
+                    lock (_parLock)
+                    {
+                        Directory.SetCurrentDirectory(src);
+                    }
+                    
                     Parallel.ForEach(Directory.GetDirectories(src), dir =>
                     {
                         lock (_parLock)
@@ -182,16 +186,15 @@ namespace du
 
                     try
                     {
-                        var file = File.Open(fileName, FileMode.Open);
+                        
                         lock (_parLock)
                         {
-                            
+                            var file = File.Open(fileName, FileMode.Open);
                             info[2] += file.Length;
-                            
+                            file.Close();
                         }
-                        file.Close();
-
                         
+
                     }
                     catch (Exception)
                     {
