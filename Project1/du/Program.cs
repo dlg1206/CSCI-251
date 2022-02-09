@@ -4,7 +4,6 @@ using System.Diagnostics;
 
 namespace du
 {
-    
     public class Program
     {
         /// <summary>
@@ -34,12 +33,6 @@ namespace du
                 case "-s":
                     DoSeq(args[1]);
                     break;
-                // TODO - wants to run a project when run -p
-                /*
-                 * ←[33mWarning NETSDK1174: The abbreviation of -p for --project is deprecated. Please use --project.←[39m
-                    Couldn't find a project to run. Ensure a project exists in C:\Program Files\JetBrains, 
-                    or pass the path to the project using --project.
-                 */
                 // Parallel
                 case "-p":
                     DoPar(args[1]);
@@ -177,7 +170,6 @@ namespace du
         }
         
         
-        // TODO byte count slightly off
         private static Object _parLock = new Object();          // Lock for threads
         /// <summary>
         /// Parallel parse with recursion
@@ -190,10 +182,7 @@ namespace du
             // Attempt to open directory
             try
             {
-                // lock (_parLock)
-                // {
-                //     Directory.SetCurrentDirectory(src);
-                // }
+
                 Directory.SetCurrentDirectory(src);
                 
                 Parallel.ForEach(Directory.GetDirectories(src), dir =>
@@ -226,14 +215,15 @@ namespace du
                 // Attempt to open file
                 try
                 {
-                    // TODO byte count always slightly off
                     // Open and read file
+                    
                     lock (_parLock)
                     {
                         var file = File.Open(fileName, FileMode.Open);
                         info[2] += file.Length;     // update byte count
                         file.Close();
                     }
+                    
                 }
                 // Catch if unable to open file
                 catch (Exception)
