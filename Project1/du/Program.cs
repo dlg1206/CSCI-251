@@ -7,11 +7,14 @@ namespace du
     
     public class Program
     {
-        
+        /// <summary>
+        /// Parses command line to count files and directories using
+        /// sequential or parallel methods
+        /// </summary>
+        /// <param name="args">summary method and root directory</param>
         public static void Main(string[] args)
         {
-     
-            
+            // Error if args aren't valid
             if (!ValArgs(args))
             {
                 Console.WriteLine("Usage: du [-s] [-p] [-b] <path>");
@@ -24,9 +27,10 @@ namespace du
                 return;
             }
             
-            // Deter commands
+            // Switches based on given summary method
             switch (args[0])
             {
+                // Sequential
                 case "-s":
                     DoSeq(args[1]);
                     break;
@@ -36,9 +40,11 @@ namespace du
                     Couldn't find a project to run. Ensure a project exists in C:\Program Files\JetBrains, 
                     or pass the path to the project using --project.
                  */
+                // Parallel
                 case "-p":
                     DoPar(args[1]);
                     break;
+                // Both
                 case "-b":
                     DoSeq(args[1]);
                     DoPar(args[1]);
@@ -46,168 +52,198 @@ namespace du
                 default:
                     return;
             }
-            
-            
-        }
-
-        private static void DoSeq(string src)
-        {
-            var sw = new Stopwatch();
-            long[] info;
-            sw.Start();
-            info = ParseSeq(src, new long[3]);
-            sw.Stop();
-            PrintResults(sw, "Sequential", info);
         }
         
-        private static void DoPar(string src)
-        {
-            var sw = new Stopwatch();
-            long[] info;
-            sw.Start();
-            info = ParsePar(src, new long[3]);
-            sw.Stop();
-            PrintResults(sw, "Parallel", info);
-            
-        }
         
+        /// <summary>
+        /// Validate input arguments
+        /// </summary>
+        /// <param name="args">input args by user</param>
+        /// <returns></returns>
         private static bool ValArgs(string[] args)
         {
-            // only expecting 2 args
+            // Only expecting 2 args
             if (args.Length != 2) { return false; }
    
-            // Check directory
+            // Check if directory exists
             if (!Directory.Exists(args[1])) { return false; }
         
-            // check if cmd is correct
+            // Check if valid parse method
             switch (args[0])
             {
+                // Sequential
                 case "-s":
                     return true;
+                // Parallel
                 case "-p":
                     return true;
+                // Both
                 case "-b":
                     return true;
+                // Command wasn't recognized
                 default:
                     return false;
             }
           
         }
-
+        
+        
+        /// <summary>
+        /// Encompasses stopwatch and output for Sequential parsing
+        /// </summary>
+        /// <param name="src">root directory</param>
+        private static void DoSeq(string src)
+        {
+            var sw = new Stopwatch();
+            sw.Start();
+            var info = ParseSeq(src, new long[3]);  // Sequential Parsing
+            sw.Stop();
+            PrintResults(sw, "Sequential", info);
+        }
+        
+        
+        /// <summary>
+        /// Encompasses stopwatch and output for Parallel parsing
+        /// </summary>
+        /// <param name="src"></param>
+        private static void DoPar(string src)
+        {
+            var sw = new Stopwatch();
+            sw.Start();
+            var info = ParsePar(src, new long[3]);  // Parallel Parsing
+            sw.Stop();
+            PrintResults(sw, "Parallel", info);
+        }
+        
+        /// <summary>
+        /// Print the results of a parse search
+        /// </summary>
+        /// <param name="sw">stopwatch</param>
+        /// <param name="mode">parsing mode</param>
+        /// <param name="info">data with directory, file, and byte information</param>
         private static void PrintResults(Stopwatch sw, string mode, long[] info)
         {
-            // .elapsed
-
             Console.WriteLine("\n" + mode + " Calculated in: {0}s, ", sw.Elapsed );
             Console.WriteLine("{0:n0} folders, {1:n0} files, {2:n0} bytes\n", info[0], info[1], info[2]);
         }
 
         
-        // TODO folders + files correct, byte count slightly off
+        /// <summary>
+        /// Sequentially parse with recursion
+        /// </summary>
+        /// <param name="src">root directory</param>
+        /// <param name="info">data with directory, file, and byte information</param>
+        /// <returns>data with directory, file, and byte information</returns>
         private static long[] ParseSeq(string src, long[] info)
         {
+            // Attempt to open directory
             try
             {
                 Directory.SetCurrentDirectory(src);
+                // Recursively go through directories
                 foreach (var dir in Directory.GetDirectories(src))
                 {
-                    info[0]++;
+                    info[0]++;      // update directory count
                     ParseSeq(dir, info);
                 }
             }
+            // Catch if unable to open directory
             catch (Exception)
             {
                
             }
             
+            // Count each file once no more directories to go into
             foreach (var fileName in Directory.GetFiles(src))
             {
-
+                info[1]++;  // update file count
                 
-                info[1]++;
-
+                // Attempt to open file
                 try
                 {
                     var file = File.Open(fileName, FileMode.Open);
-                    info[2] += file.Length;
+                    info[2] += file.Length;     // update byte count
                     file.Close();
                 }
+                // Catch if unable to open file
                 catch(Exception)
                 {
                     
                 }
             }
             
+            // Return the updated information
             return info;
         }
         
         
-        
-        // TODO Folders, files, byte count All off - where to plac locks?
-        private static Object _parLock = new Object();
+        // TODO byte count slightly off
+        private static Object _parLock = new Object();          // Lock for threads
+        /// <summary>
+        /// Parallel parse with recursion
+        /// </summary>
+        /// <param name="src">root directory</param>
+        /// <param name="info">data with directory, file, and byte information</param>
+        /// <returns>data with directory, file, and byte information</returns>
         private static long[] ParsePar(string src, long[] info)
         {
+            // Attempt to open directory
             try
             {
+                // lock (_parLock)
+                // {
+                //     Directory.SetCurrentDirectory(src);
+                // }
+                Directory.SetCurrentDirectory(src);
                 
+                Parallel.ForEach(Directory.GetDirectories(src), dir =>
                 {
+                    // Update directory count
                     lock (_parLock)
                     {
-                        Directory.SetCurrentDirectory(src);
+                        info[0]++;
                     }
                     
-                    Parallel.ForEach(Directory.GetDirectories(src), dir =>
-                    {
-                        lock (_parLock)
-                        {
-                            info[0]++;
-                        }
-                            
-
-                        ParseSeq(dir, info);
-
-                    });
-                }
+                    // Parse next directory
+                    ParseSeq(dir, info);
+                });
             }
+            // Catch if unable to open directory
             catch (Exception)
             {
                
             }
-
             
+            // Count each file once no more directories to go into
+            Parallel.ForEach(Directory.GetFiles(src), fileName =>
             {
-                Parallel.ForEach(Directory.GetFiles(src), fileName =>
+                // Update file count
+                lock (_parLock)
                 {
-
+                    info[1]++;
+                }
+                
+                // Attempt to open file
+                try
+                {
+                    // TODO byte count always slightly off
+                    // Open and read file
                     lock (_parLock)
                     {
-                        info[1]++;
+                        var file = File.Open(fileName, FileMode.Open);
+                        info[2] += file.Length;     // update byte count
+                        file.Close();
                     }
+                }
+                // Catch if unable to open file
+                catch (Exception)
+                {
 
-                    try
-                    {
-                        
-                        lock (_parLock)
-                        {
-                            var file = File.Open(fileName, FileMode.Open);
-                            info[2] += file.Length;
-                            file.Close();
-                        }
-                        
-
-                    }
-                    catch (Exception)
-                    {
-
-                    }
-                });
-            }
-
+                }
+            });
+            
+            // Return the updated information
             return info;
         }
-
-
     }
-
-
 }
