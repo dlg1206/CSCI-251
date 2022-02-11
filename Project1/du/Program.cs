@@ -52,7 +52,7 @@ namespace du
         /// Validate input arguments
         /// </summary>
         /// <param name="args">input args by user</param>
-        /// <returns></returns>
+        /// <returns>whether the input arguments are valid</returns>
         private static bool ValArgs(string[] args)
         {
             // Only expecting 2 args
