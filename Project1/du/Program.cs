@@ -1,4 +1,4 @@
-﻿
+﻿/// Project 1; @author Derek Garcia
 
 using System.Diagnostics;
 
@@ -166,9 +166,18 @@ namespace du
             return info;
         }
         
+        
+        
+        
+        
+        
+        
+        
+        
+        
         private class ParallelSearch
         {
-            private int _fileCount ;
+            private int _fileCount;
             private int _folderCount;
             private long _byteCount;
             
@@ -184,8 +193,8 @@ namespace du
                 sw.Stop();
 
                 // Print Results
-                Console.WriteLine("\n Parallel Calculated in: {0}s, ", sw.Elapsed);
-                Console.WriteLine("{0:n0} folders, {1:n0} files, {2:n0} bytes\n", _fileCount, _folderCount, _byteCount);
+                Console.WriteLine("\nParallel Calculated in: {0}s, ", sw.Elapsed);
+                Console.WriteLine("{0:n0} folders, {1:n0} files, {2:n0} bytes\n", _folderCount, _fileCount, _byteCount);
             }
 
             
@@ -196,18 +205,24 @@ namespace du
             /// <returns>data with directory, file, and byte information</returns>
             private void ParsePar(string src)
             {
+                // Attempt to open directory
+                var di = new DirectoryInfo(src);
+                
+                Console.WriteLine("pwd: " + di.Name);
+                
                 // Directory parsing
                 try
                 {
-                    // Attempt to open directory
-                    var di = new DirectoryInfo(src);
+                    
                     Parallel.ForEach(di.GetDirectories(), dir =>
                     {
                         // Update directory count
                         Interlocked.Add(ref _folderCount, 1);
+                        
+                        Console.WriteLine("Directory: " + dir.Name + "; Dir count {0:n0}", _folderCount);
 
                         // Parse next directory
-                        ParsePar(di.Name);
+                        ParsePar(dir.FullName);
                     });
                 }
                 // Catch if unable to open directory
@@ -220,7 +235,7 @@ namespace du
                 try
                 {
                     // Attempt to open directory
-                    var di = new DirectoryInfo(src);
+                    //var di = new DirectoryInfo(src);
 
                     // Count each file once no more directories to go into
                     Parallel.ForEach(di.GetFiles(), file =>
@@ -228,8 +243,12 @@ namespace du
                         // TODO what does ref mean?
 
                         Interlocked.Add(ref _fileCount, 1); // Update file count
+                        
+                        Console.WriteLine("\tFile: " + file.Name + "; File count {0:n0}", _fileCount);
 
                         Interlocked.Add(ref _byteCount, file.Length); // update byte count
+                        
+                        Console.WriteLine("\t\tByte count: {0:n0}", _fileCount);
 
                     });
 
