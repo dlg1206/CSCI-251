@@ -170,11 +170,6 @@ namespace du
         
         
         
-        
-        
-        
-        
-        
         private class ParallelSearch
         {
             private int _fileCount;
@@ -207,9 +202,7 @@ namespace du
             {
                 // Attempt to open directory
                 var di = new DirectoryInfo(src);
-                
-                Console.WriteLine("pwd: " + di.Name);
-                
+
                 // Directory parsing
                 try
                 {
@@ -218,8 +211,6 @@ namespace du
                     {
                         // Update directory count
                         Interlocked.Add(ref _folderCount, 1);
-                        
-                        Console.WriteLine("Directory: " + dir.Name + "; Dir count {0:n0}", _folderCount);
 
                         // Parse next directory
                         ParsePar(dir.FullName);
@@ -234,21 +225,14 @@ namespace du
                 // Files and File sizes
                 try
                 {
-                    // Attempt to open directory
-                    //var di = new DirectoryInfo(src);
-
                     // Count each file once no more directories to go into
                     Parallel.ForEach(di.GetFiles(), file =>
                     {
                         // TODO what does ref mean?
 
                         Interlocked.Add(ref _fileCount, 1); // Update file count
-                        
-                        Console.WriteLine("\tFile: " + file.Name + "; File count {0:n0}", _fileCount);
 
                         Interlocked.Add(ref _byteCount, file.Length); // update byte count
-                        
-                        Console.WriteLine("\t\tByte count: {0:n0}", _fileCount);
 
                     });
 
@@ -259,8 +243,5 @@ namespace du
                 }
             }
         }
-
-
-        
     }
 }
