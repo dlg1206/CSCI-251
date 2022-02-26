@@ -5,7 +5,7 @@ namespace PrimeGen
     {
         public static void Main(string[] args)
         {
-            // test commit
+            // test commit 2
             Console.WriteLine("Hello World!");
         }
     }
