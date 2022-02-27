@@ -57,19 +57,30 @@ namespace PrimeGen
         }
     }
     
+    /// <summary>
+    /// Class to find a given number of primes
+    /// </summary>
     public class PrimeFinder
     {
-        private RandomNumberGenerator _rng = RandomNumberGenerator.Create();
-        private byte[] _numBytes;
-        private int _count;
-        private Object _lock = new Object();
+        private readonly RandomNumberGenerator _rng = RandomNumberGenerator.Create();
+        private readonly byte[] _numBytes;  // for bigint creation
+        private readonly int _count;  
+        private readonly Object _lock = new Object();
 
+        /// <summary>
+        /// Constructor for finding primes
+        /// </summary>
+        /// <param name="numBits">number of bits of the prime</param>
+        /// <param name="count">number of primes to make</param>
         public PrimeFinder(int numBits, int count)
         {
             _numBytes = new Byte[numBits / 4];    // convert bits to bytes
             _count = count;
         }
         
+        /// <summary>
+        /// Finds prime with constructor parameters
+        /// </summary>
         public void FindPrime()
         {
             // get rnd bytes
@@ -78,44 +89,40 @@ namespace PrimeGen
             // print if prime
             // else loop
 
+            // init vars
             int curCount = 0;
             int end = _count;
             BigInteger bi;
 
+            // While number of primes not found, keep checking
             Parallel.For(0, end, prime =>
             {
-
-
+                // Make a new big int
                 lock (_lock)
                 {
                     _rng.GetBytes(_numBytes);
                      bi = new BigInteger(_numBytes);
                 }
-
                 
+                // Basic prime checking (if even then not prime)
+                // TODO IsProbablyPrime implementation
                 if ( !bi.IsEven )
                 {
-                    Interlocked.Add(ref curCount, 1);
-                    Console.WriteLine("{0}: {1}", curCount, bi);
+                    Interlocked.Add(ref curCount, 1);   // update count
+                    Console.WriteLine("{0}: {1}", curCount, bi);    // report prime
                 }
                 
-                
+                // if number of primes met, "move" end condition to be met
                 if (_count == curCount)
                 {
                     Interlocked.Decrement(ref end);
                 }
+                // else "move" end condition forward 1
                 else
                 {
                     Interlocked.Add(ref end, 1);
                 }
-                
-                
-
-                
             });
-
-           
-
         }
     }
     
