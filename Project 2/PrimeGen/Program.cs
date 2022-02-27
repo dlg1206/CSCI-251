@@ -6,45 +6,40 @@ namespace PrimeGen
     /// </summary>
     public class Program
     {
-        private static int MAX_ARGS = 2;
+        private const int MaxArgs = 2;
         /// <summary>
         /// Main that takes in args
         /// </summary>
         /// <param name="args">input arguments</param>
         public static void Main(string[] args)
         {
-            if (!IsValid(args))
+            // Check if correct arg count
+            if (args.Length != MaxArgs)
             {
-                Console.WriteLine("Usage: dotnet run <bits> <count=1>");
-                Console.WriteLine("\t- bits: the number of bits of the prime number, this must be a"); 
-                Console.WriteLine("\t  multiple of 8, and at least 32 bits.");
-                Console.WriteLine("\t- count - the number of prime numbers to generate, defaults to 1");
+                PrintUsage();
+                return;
+            }
+
+            // Check both inputs are valid ints
+            int numBits, count;
+            if (!int.TryParse(args[0], out numBits) || !int.TryParse(args[1], out count))
+            {
+                PrintUsage();
                 return;
             }
             
             Console.WriteLine("Ok");
-            
         }
 
-        private static bool IsValid(string[] args)
+        /// <summary>
+        /// Prints usage of the program
+        /// </summary>
+        private static void PrintUsage()
         {
-            if (args.Length != MAX_ARGS)
-            {
-                return false;
-            }
-
-            try
-            {
-                Int32.Parse(args[0]);
-                Int32.Parse(args[1]);
-
-            }
-            catch (FormatException)
-            {
-                return false;
-            }
-
-            return true;
+            Console.WriteLine("Usage: dotnet run <bits> <count=1>");
+            Console.WriteLine("\t- bits: the number of bits of the prime number, this must be a"); 
+            Console.WriteLine("\t  multiple of 8, and at least 32 bits.");
+            Console.WriteLine("\t- count - the number of prime numbers to generate, defaults to 1");
         }
     }
     
