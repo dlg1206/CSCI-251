@@ -1,6 +1,7 @@
 ﻿/// @author Derek Garcia
 
 
+using System.Diagnostics;
 using System.Numerics;
 using System.Security.Cryptography;
 
@@ -32,9 +33,16 @@ namespace PrimeGen
                 PrintUsage();
                 return;
             }
+            
+            Console.WriteLine("BitLength: {0} bits", numBits);
 
             var pf = new PrimeFinder(numBits, count);
+            var sw = new Stopwatch();
+            sw.Start();
             pf.FindPrime();
+            sw.Stop();
+            
+            Console.WriteLine("Time to Generate: {0}", sw.Elapsed);
         }
 
         /// <summary>
@@ -49,12 +57,12 @@ namespace PrimeGen
         }
     }
     
-    
     public class PrimeFinder
     {
         private RandomNumberGenerator _rng = RandomNumberGenerator.Create();
         private byte[] _numBytes;
         private int _count;
+        private Object _lock = new Object();
 
         public PrimeFinder(int numBits, int count)
         {
@@ -64,40 +72,49 @@ namespace PrimeGen
         
         public void FindPrime()
         {
-            int curCount = 0;
-            int end = _count + 1;
-
-            Parallel.For(0, end, prime =>
-            {
-                _rng.GetBytes(_numBytes);
-                BigInteger bi = new BigInteger(_numBytes);
-                
-                
-
-                if ( !bi.IsEven )
-                {
-                    Interlocked.Add(ref _count, 1);
-                    Console.WriteLine(bi);
-                }
-
-                if (_count == curCount)
-                {
-                    end--;
-                }
-                else
-                {
-                    end++;
-                }
-
-                
-            });
-
             // get rnd bytes
             // make big int
             // test int
             // print if prime
             // else loop
 
+            int curCount = 0;
+            int end = _count;
+            BigInteger bi;
+
+            Parallel.For(0, end, prime =>
+            {
+
+
+                lock (_lock)
+                {
+                    _rng.GetBytes(_numBytes);
+                     bi = new BigInteger(_numBytes);
+                }
+
+                
+                if ( !bi.IsEven )
+                {
+                    Interlocked.Add(ref curCount, 1);
+                    Console.WriteLine("{0}: {1}", curCount, bi);
+                }
+                
+                
+                if (_count == curCount)
+                {
+                    Interlocked.Decrement(ref end);
+                }
+                else
+                {
+                    Interlocked.Add(ref end, 1);
+                }
+                
+                
+
+                
+            });
+
+           
 
         }
     }
