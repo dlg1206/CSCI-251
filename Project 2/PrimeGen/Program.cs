@@ -78,6 +78,7 @@ namespace PrimeGen
             _count = count;
         }
         
+        
         /// <summary>
         /// Finds prime with constructor parameters
         /// </summary>
@@ -91,7 +92,7 @@ namespace PrimeGen
 
             // init vars
             int curCount = 0;
-            int end = _count;
+            int end = _count + 1;
             BigInteger bi;
 
             // While number of primes not found, keep checking
@@ -110,6 +111,8 @@ namespace PrimeGen
                 {
                     Interlocked.Add(ref curCount, 1);   // update count
                     Console.WriteLine("{0}: {1}", curCount, bi);    // report prime
+                    // TODO negative primes?
+                    // todo incorrect number of primes
                 }
                 
                 // if number of primes met, "move" end condition to be met
