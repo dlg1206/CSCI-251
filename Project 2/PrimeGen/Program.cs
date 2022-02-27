@@ -1,4 +1,9 @@
 ﻿/// @author Derek Garcia
+
+
+using System.Numerics;
+using System.Security.Cryptography;
+
 namespace PrimeGen
 {
     /// <summary>
@@ -27,8 +32,9 @@ namespace PrimeGen
                 PrintUsage();
                 return;
             }
-            
-            Console.WriteLine("Ok");
+
+            var pf = new PrimeFinder(numBits, count);
+            pf.FindPrime();
         }
 
         /// <summary>
@@ -40,6 +46,59 @@ namespace PrimeGen
             Console.WriteLine("\t- bits: the number of bits of the prime number, this must be a"); 
             Console.WriteLine("\t  multiple of 8, and at least 32 bits.");
             Console.WriteLine("\t- count - the number of prime numbers to generate, defaults to 1");
+        }
+    }
+    
+    
+    public class PrimeFinder
+    {
+        private RandomNumberGenerator _rng = RandomNumberGenerator.Create();
+        private byte[] _numBytes;
+        private int _count;
+
+        public PrimeFinder(int numBits, int count)
+        {
+            _numBytes = new Byte[numBits / 4];    // convert bits to bytes
+            _count = count;
+        }
+        
+        public void FindPrime()
+        {
+            int curCount = 0;
+            int end = _count + 1;
+
+            Parallel.For(0, end, prime =>
+            {
+                _rng.GetBytes(_numBytes);
+                BigInteger bi = new BigInteger(_numBytes);
+                
+                
+
+                if ( !bi.IsEven )
+                {
+                    Interlocked.Add(ref _count, 1);
+                    Console.WriteLine(bi);
+                }
+
+                if (_count == curCount)
+                {
+                    end--;
+                }
+                else
+                {
+                    end++;
+                }
+
+                
+            });
+
+            // get rnd bytes
+            // make big int
+            // test int
+            // print if prime
+            // else loop
+
+
         }
     }
     
