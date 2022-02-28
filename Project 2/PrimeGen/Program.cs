@@ -38,10 +38,10 @@ namespace PrimeGen
             
             Console.WriteLine("BitLength: {0} bits", numBits);
 
-            var pf = new PrimeFinder(numBits, count);
+            var pf = new PrimeFinder();
             var sw = new Stopwatch();
             sw.Start();
-            pf.FindPrime();
+            pf.FindPrime(numBits, count);
             sw.Stop();
             
             Console.WriteLine("Time to Generate: {0}", sw.Elapsed);
@@ -65,27 +65,13 @@ namespace PrimeGen
     /// </summary>
     public class PrimeFinder
     {
-        private readonly RandomNumberGenerator _rng = RandomNumberGenerator.Create();
-        private readonly byte[] _numBytes;  // for bigint creation
-        private readonly int _count;  
         private readonly object _lock = new object();
 
-        /// <summary>
-        /// Constructor for finding primes
-        /// </summary>
-        /// <param name="numBits">number of bits of the prime</param>
-        /// <param name="count">number of primes to make</param>
-        public PrimeFinder(int numBits, int count)
-        {
-            _numBytes = new Byte[numBits / 4];    // convert bits to bytes
-            _count = count;
-        }
-        
-        
+
         /// <summary>
         /// Finds prime with constructor parameters
         /// </summary>
-        public void FindPrime()
+        public void FindPrime(int numBits, int count)
         {
             // get rnd bytes
             // make big int
@@ -94,26 +80,31 @@ namespace PrimeGen
             // else loop
 
             // init vars
-            int curCount = 0;
+            var curCount = 0;
+            var rng = RandomNumberGenerator.Create();
+            var numBytes = new byte[numBits / 4];
+            
+
             BigInteger bi;
 
             // While number of primes not found, keep checking
             Parallel.For(0, Int64.MaxValue,  (i, state) =>
             {
-                if (curCount == _count)
+                if (curCount == count)
                 {
                     state.Break();
                 }
                 // Make a new big int
               
-                _rng.GetBytes(_numBytes);
-                 bi = new BigInteger(_numBytes);
+                 rng.GetBytes(numBytes);
+                
+                 bi = new BigInteger(numBytes);
                  bi = BigInteger.Abs(bi);
                 
                 
                 // Basic prime checking (if even then not prime)
                 // TODO IsProbablyPrime implementation
-                if ( !bi.IsEven &&  curCount != _count)
+                if ( !bi.IsEven &&  curCount != count)
                 {
                     Interlocked.Add(ref curCount, 1);   // update count
 
