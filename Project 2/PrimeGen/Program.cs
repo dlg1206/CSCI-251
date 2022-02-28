@@ -40,10 +40,10 @@ namespace PrimeGen
             
             Console.WriteLine("BitLength: {0} bits", numBits);
 
-            var pf = new PrimeFinder();
+  
             var sw = new Stopwatch();
             sw.Start();
-            pf.FindPrime(numBits, count);
+            FindPrime(numBits, count);
             sw.Stop();
             
             Console.WriteLine("Time to Generate: {0}", sw.Elapsed);
@@ -59,23 +59,9 @@ namespace PrimeGen
             Console.WriteLine("\t  multiple of 8, and at least 32 bits.");
             Console.WriteLine("\t- count - the number of prime numbers to generate, defaults to 1");
         }
-        
-    }
-    
 
-
-    /// <summary>
-    /// Class to find a given number of primes
-    /// </summary>
-    public class PrimeFinder
-    {
-        private readonly object _lock = new object();
-
-
-        /// <summary>
-        /// Finds prime with constructor parameters
-        /// </summary>
-        public void FindPrime(int numBits, int count)
+        private static readonly object Lock = new object();
+        public static void FindPrime(int numBits, int count)
         {
             // get rnd bytes
             // make big int
@@ -100,10 +86,10 @@ namespace PrimeGen
                 }
                 // Make a new big int
               
-                 rng.GetBytes(numBytes);
+                rng.GetBytes(numBytes);
                 
-                 bi = new BigInteger(numBytes);
-                 bi = BigInteger.Abs(bi);
+                bi = new BigInteger(numBytes);
+                bi = BigInteger.Abs(bi);
                 
                 
                 // Basic prime checking (if even then not prime)
@@ -112,7 +98,7 @@ namespace PrimeGen
                 {
                     Interlocked.Add(ref curCount, 1);   // update count
 
-                    lock (_lock)
+                    lock (Lock)
                     {
                         Console.WriteLine("{0}: {1}", curCount, bi);    // report prime
                     }
@@ -121,13 +107,9 @@ namespace PrimeGen
 
             });
         }
-        
-        private bool IsProbablyPrime(BigInteger value, int k = 10)
-        {
 
-            return false;
-        }
+        
+        
     }
-    
     
 }
