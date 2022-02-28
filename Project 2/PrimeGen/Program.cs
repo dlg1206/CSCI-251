@@ -60,112 +60,117 @@ namespace PrimeGen
             Console.WriteLine("\t- count - the number of prime numbers to generate, defaults to 1");
         }
 
-        private static readonly object Lock = new object();
+        private static readonly object Lock = new object();     // lock object for printing
+        
+        /// <summary>
+        /// Finds numerous primes
+        /// </summary>
+        /// <param name="numBits">size of the prime</param>
+        /// <param name="count">number of primes to make</param>
         private static void FindPrime(int numBits, int count)
         {
-            // get rnd bytes
-            // make big int
-            // test int
-            // print if prime
-            // else loop
-
+            
             // init vars
             var curCount = 0;
             var rng = RandomNumberGenerator.Create();
-            var numBytes = new byte[numBits / 4];
-            
-
+            var numBytes = new byte[numBits / 4];   // convert bits to bytes
             BigInteger bi;
 
             // While number of primes not found, keep checking
             Parallel.For(0, Int64.MaxValue,  (i, state) =>
             {
+                // If meet count, break
                 if (curCount == count)
-                {
                     state.Break();
-                }
-                // Make a new big int
-              
-                rng.GetBytes(numBytes);
                 
+                // Make a randing big int
+                rng.GetBytes(numBytes);
                 bi = new BigInteger(numBytes);
                 bi = BigInteger.Abs(bi);
                 
                 
-                // Basic prime checking (if even then not prime)
-                // TODO IsProbablyPrime implementation
+                // Even isn't prime / skip if found all primes
                 if ( !bi.IsEven && curCount != count)
                 {
+                    // Further Prime checking
                     var probPrime = true;
                     if (bi > 3)
-                    {
-                        probPrime = bi.IsProbablyPrime();
-                    }
-
+                        probPrime = bi.IsProbablyPrime();   // TODO Causes problems
+                    
+                    // If probably prime
                     if (probPrime)
                     {
                         Interlocked.Add(ref curCount, 1);   // update count
                         lock (Lock)
                         {
-                            Console.WriteLine("{0}: {1}", curCount, bi);    // report prime
+                            Console.WriteLine("{0}: {1}", curCount, bi);    // print prime
                         }
                     }
                 }
 
             });
             
-            Console.WriteLine("done");
+        
         }
 
+        /// <summary>
+        /// Miller–Rabin algorithm to test if the given number is probably
+        /// prime
+        /// </summary>
+        /// <param name="value">number to test</param>
+        /// <param name="k">number of witnesses</param>
+        /// <returns></returns>
         private static bool IsProbablyPrime(this BigInteger value, int k = 10)
         {
-
             
+            // Init values
             var n = value - 1;
-            var r = -1;
-            var mod = n % 2 ^ ++r;
+            var r = 0;
+            var mod = n % 2 ^ r;
 
+            // find largest factor n that is a power of 2
             while (mod == 0)
             {
                 Interlocked.Increment(ref r);
                 mod = n % 2 ^ r;
             }
         
+            // Get odd coefficient
             var d = n / 2 ^ r;
 
+            // Witness Loop
             for (var i = 0; i <= k; i++)
             {
+                // Get a random big int in the range of 2 < a < n - 2
                 BigInteger a;
                 do
                 {
                     byte[] rand = new byte[n.GetByteCount()];
                     RandomNumberGenerator.Create().GetBytes(rand);
                     a = new BigInteger(rand);
-                } while (a < 2 || a > n - 2);
+                } while (a < 2 || a >= n - 2);
 
+                // get x value
                 var x = BigInteger.ModPow(a, d, n);
 
-                if (x == 1 || x == n - 1)
-                {
-                    continue;
-                }
                 
+                if (x == 1 || x == n - 1)
+                    continue;
+
+                // repeat for r - 1 times
                 for(var m = 0; m < r; m++)
                 {
                     x = BigInteger.ModPow(x, 2, n);
+                    // if true, continue Witness Loop
                     if (x == n - 1)
-                    {
                         break;
-                    }
                 }
-                
+                // if true, return composite
                 if (x != n - 1)
-                {
                     return false;
-                }
-                
+
             }
-            
+            // Pass all tests, probably prime
             return true;
         }
 
