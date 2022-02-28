@@ -5,8 +5,10 @@ using System.Diagnostics;
 using System.Numerics;
 using System.Security.Cryptography;
 
+
 namespace PrimeGen
 {
+    
     /// <summary>
     /// Main Function that takes in args
     /// </summary>
@@ -57,6 +59,7 @@ namespace PrimeGen
         }
     }
     
+
     /// <summary>
     /// Class to find a given number of primes
     /// </summary>
@@ -65,7 +68,7 @@ namespace PrimeGen
         private readonly RandomNumberGenerator _rng = RandomNumberGenerator.Create();
         private readonly byte[] _numBytes;  // for bigint creation
         private readonly int _count;  
-        private readonly Object _lock = new Object();
+        private readonly object _lock = new object();
 
         /// <summary>
         /// Constructor for finding primes
@@ -92,39 +95,38 @@ namespace PrimeGen
 
             // init vars
             int curCount = 0;
-            int end = _count + 1;
             BigInteger bi;
 
             // While number of primes not found, keep checking
-            Parallel.For(0, end, prime =>
+            Parallel.For(0, Int64.MaxValue,  (i, state) =>
             {
-                // Make a new big int
-                lock (_lock)
+                if (curCount == _count)
                 {
-                    _rng.GetBytes(_numBytes);
-                     bi = new BigInteger(_numBytes);
+                    state.Break();
                 }
+                // Make a new big int
+              
+                _rng.GetBytes(_numBytes);
+                 bi = new BigInteger(_numBytes);
+                 bi = BigInteger.Abs(bi);
+                
                 
                 // Basic prime checking (if even then not prime)
                 // TODO IsProbablyPrime implementation
-                if ( !bi.IsEven )
+                if ( !bi.IsEven &&  curCount != _count)
                 {
                     Interlocked.Add(ref curCount, 1);   // update count
-                    Console.WriteLine("{0}: {1}", curCount, bi);    // report prime
-                    // TODO negative primes?
-                    // todo incorrect number of primes
+
+                    lock (_lock)
+                    {
+                        Console.WriteLine("{0}: {1}", curCount, bi);    // report prime
+                    }
+                    
                 }
+
                 
-                // if number of primes met, "move" end condition to be met
-                if (_count == curCount)
-                {
-                    Interlocked.Decrement(ref end);
-                }
-                // else "move" end condition forward 1
-                else
-                {
-                    Interlocked.Add(ref end, 1);
-                }
+                
+                
             });
         }
     }
