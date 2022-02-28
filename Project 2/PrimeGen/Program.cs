@@ -14,7 +14,7 @@ namespace PrimeGen
     /// <summary>
     /// Main Function that takes in args
     /// </summary>
-    public class Program
+    public static class Program
     {
         private const int MaxArgs = 2;
         /// <summary>
@@ -61,7 +61,7 @@ namespace PrimeGen
         }
 
         private static readonly object Lock = new object();
-        public static void FindPrime(int numBits, int count)
+        private static void FindPrime(int numBits, int count)
         {
             // get rnd bytes
             // make big int
@@ -94,21 +94,82 @@ namespace PrimeGen
                 
                 // Basic prime checking (if even then not prime)
                 // TODO IsProbablyPrime implementation
-                if ( !bi.IsEven &&  curCount != count)
+                if ( !bi.IsEven && curCount != count)
                 {
-                    Interlocked.Add(ref curCount, 1);   // update count
-
-                    lock (Lock)
+                    var probPrime = true;
+                    if (bi > 3)
                     {
-                        Console.WriteLine("{0}: {1}", curCount, bi);    // report prime
+                        probPrime = bi.IsProbablyPrime();
                     }
-                    
+
+                    if (probPrime)
+                    {
+                        Interlocked.Add(ref curCount, 1);   // update count
+                        lock (Lock)
+                        {
+                            Console.WriteLine("{0}: {1}", curCount, bi);    // report prime
+                        }
+                    }
                 }
 
             });
+            
+            Console.WriteLine("done");
         }
 
+        private static bool IsProbablyPrime(this BigInteger value, int k = 10)
+        {
+
+            
+            var n = value - 1;
+            var r = -1;
+            var mod = n % 2 ^ ++r;
+
+            while (mod == 0)
+            {
+                Interlocked.Increment(ref r);
+                mod = n % 2 ^ r;
+            }
         
+            var d = n / 2 ^ r;
+
+            for (var i = 0; i <= k; i++)
+            {
+                BigInteger a;
+                do
+                {
+                    byte[] rand = new byte[n.GetByteCount()];
+                    RandomNumberGenerator.Create().GetBytes(rand);
+                    a = new BigInteger(rand);
+                } while (a < 2 || a > n - 2);
+
+                var x = BigInteger.ModPow(a, d, n);
+
+                if (x == 1 || x == n - 1)
+                {
+                    continue;
+                }
+                
+                for(var m = 0; m < r; m++)
+                {
+                    x = BigInteger.ModPow(x, 2, n);
+                    if (x == n - 1)
+                    {
+                        break;
+                    }
+                }
+                
+                if (x != n - 1)
+                {
+                    return false;
+                }
+                
+            }
+            
+            return true;
+        }
+
+
         
     }
     
