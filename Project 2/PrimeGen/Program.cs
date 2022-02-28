@@ -9,6 +9,8 @@ using System.Security.Cryptography;
 namespace PrimeGen
 {
     
+
+    
     /// <summary>
     /// Main Function that takes in args
     /// </summary>
@@ -57,8 +59,10 @@ namespace PrimeGen
             Console.WriteLine("\t  multiple of 8, and at least 32 bits.");
             Console.WriteLine("\t- count - the number of prime numbers to generate, defaults to 1");
         }
+        
     }
     
+
 
     /// <summary>
     /// Class to find a given number of primes
@@ -115,10 +119,13 @@ namespace PrimeGen
                     
                 }
 
-                
-                
-                
             });
+        }
+        
+        private bool IsProbablyPrime(BigInteger value, int k = 10)
+        {
+
+            return false;
         }
     }
     
