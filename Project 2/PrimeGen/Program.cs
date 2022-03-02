@@ -37,7 +37,7 @@ namespace PrimeGen
                 PrintUsage();
                 return;
             }
-            
+            // TODO takes a bit to print
             Console.WriteLine("BitLength: {0} bits", numBits);
 
   
@@ -82,7 +82,7 @@ namespace PrimeGen
             {
                 // If meet count, break
                 if (curCount == count)
-                    state.Break();
+                    state.Stop();
                 
                 // Make a randing big int
                 rng.GetBytes(numBytes);

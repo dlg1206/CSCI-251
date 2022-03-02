@@ -1,25 +1,27 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Dgarcia\\Programming\\IDEs\\Rider\\CSCI-251\\Project 2\\PrimeGen\\PrimeGen.csproj": {}
+    "C:\\Users\\Dgarc\\Programming\\Rider\\CSCI-251\\Project 2\\PrimeGen\\PrimeGen.csproj": {}
   },
   "projects": {
-    "D:\\Dgarcia\\Programming\\IDEs\\Rider\\CSCI-251\\Project 2\\PrimeGen\\PrimeGen.csproj": {
+    "C:\\Users\\Dgarc\\Programming\\Rider\\CSCI-251\\Project 2\\PrimeGen\\PrimeGen.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Dgarcia\\Programming\\IDEs\\Rider\\CSCI-251\\Project 2\\PrimeGen\\PrimeGen.csproj",
+        "projectUniqueName": "C:\\Users\\Dgarc\\Programming\\Rider\\CSCI-251\\Project 2\\PrimeGen\\PrimeGen.csproj",
         "projectName": "PrimeGen",
-        "projectPath": "D:\\Dgarcia\\Programming\\IDEs\\Rider\\CSCI-251\\Project 2\\PrimeGen\\PrimeGen.csproj",
-        "packagesPath": "C:\\Users\\Derpe\\.nuget\\packages\\",
-        "outputPath": "D:\\Dgarcia\\Programming\\IDEs\\Rider\\CSCI-251\\Project 2\\PrimeGen\\obj\\",
+        "projectPath": "C:\\Users\\Dgarc\\Programming\\Rider\\CSCI-251\\Project 2\\PrimeGen\\PrimeGen.csproj",
+        "packagesPath": "C:\\Users\\Dgarc\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Dgarc\\Programming\\Rider\\CSCI-251\\Project 2\\PrimeGen\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Derpe\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Dgarc\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -52,7 +54,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files (x86)\\dotnet\\sdk\\6.0.101\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.200\\RuntimeIdentifierGraph.json"
         }
       }
     }
