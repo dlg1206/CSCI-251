@@ -44,8 +44,9 @@ namespace PrimeGen
             var sw = new Stopwatch();
             sw.Start();
             FindPrime(numBits, count);
-            sw.Stop();
             
+            // TODO doesn't terminate and reach here
+            sw.Stop();
             Console.WriteLine("Time to Generate: {0}", sw.Elapsed);
         }
 
@@ -101,6 +102,7 @@ namespace PrimeGen
                     if (probPrime)
                     {
                         Interlocked.Add(ref curCount, 1);   // update count
+                        // TODO dotnet run 5 5, count print is off
                         lock (Lock)
                         {
                             Console.WriteLine("{0}: {1}", curCount, bi);    // print prime
