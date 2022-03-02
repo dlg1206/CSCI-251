@@ -43,8 +43,11 @@ namespace PrimeGen
   
             var sw = new Stopwatch();
             sw.Start();
-            FindPrime(numBits, count);
-            
+            for (var i = 0; i < count; i++)
+            {
+                BigInteger prime = FindPrime(numBits);
+                Console.WriteLine("{0}: {1}", i + 1, prime);    // print prime
+            }
             // TODO doesn't terminate and reach here
             sw.Stop();
             Console.WriteLine("Time to Generate: {0}", sw.Elapsed);
@@ -67,22 +70,28 @@ namespace PrimeGen
         /// Finds numerous primes
         /// </summary>
         /// <param name="numBits">size of the prime</param>
-        /// <param name="count">number of primes to make</param>
-        private static void FindPrime(int numBits, int count)
+        /// <returns>Prime number of give bits</returns>
+        private static BigInteger FindPrime(int numBits)
         {
             
             // init vars
-            var curCount = 0;
+            var primeFound = 0;
             var rng = RandomNumberGenerator.Create();
-            var numBytes = new byte[numBits / 4];   // convert bits to bytes
+            var numBytes = new byte[numBits / 8];   // convert bits to bytes
             BigInteger bi;
+            BigInteger prime = 0;
 
             // While number of primes not found, keep checking
             Parallel.For(0, Int64.MaxValue,  (i, state) =>
             {
+                
                 // If meet count, break
-                if (curCount == count)
-                    state.Stop();
+                if (primeFound > 0)
+                {
+                    Console.WriteLine("\tbreak Stopping . . .");
+                    state.Stop();   
+                }
+                    
                 
                 // Make a randing big int
                 rng.GetBytes(numBytes);
@@ -91,28 +100,37 @@ namespace PrimeGen
                 
                 
                 // Even isn't prime / skip if found all primes
-                if ( !bi.IsEven && curCount != count)
+                if (!bi.IsEven)
                 {
                     // Further Prime checking
                     var probPrime = true;
                     if (bi > 3)
-                        probPrime = bi.IsProbablyPrime();   // TODO Causes problems
-                    
+                        probPrime = bi.IsProbablyPrime(); // TODO Causes problems
+
                     // If probably prime
                     if (probPrime)
                     {
-                        Interlocked.Add(ref curCount, 1);   // update count
-                        // TODO dotnet run 5 5, count print is off
+                        Console.WriteLine("Prime was found");
+                        Interlocked.Add(ref primeFound, 1); // primeFound = true
+
                         lock (Lock)
                         {
-                            Console.WriteLine("{0}: {1}", curCount, bi);    // print prime
+                            Console.WriteLine("bi is {0}", bi);
+                            prime = bi; // set prime to bi
+                            Console.WriteLine("prime is set to {0}", prime);
                         }
+                        
+                        Console.WriteLine("\tprobPrime Stopping . . .");
+                        state.Stop();
                     }
                 }
 
+
             });
-            
-        
+            // bug Not reached
+            Console.WriteLine("Returning prime");
+            return prime;
+
         }
 
         /// <summary>
