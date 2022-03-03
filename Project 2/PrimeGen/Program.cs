@@ -72,45 +72,58 @@ namespace PrimeGen
         /// </summary>
         /// <param name="numBits">size of the prime</param>
         /// <returns>Prime number of give bits</returns>
-        private static BigInteger FindPrime(int numBits)
+        private static BigInteger? FindPrime(int numBits)
         {
             
             // init vars
             BigInteger bi = 0;
-            
+            BigInteger? prime = null;
             var bytes = numBits / 8;
-            
 
             // While number of primes not found, keep checking
             Parallel.For(0, Int32.MaxValue, (i, state) =>
             {
-                if (!state.IsStopped)
-                {
+                // If unlocked bi is changed while checking
+                // lock (_lock)
+                // {
                     var numBytes = new byte[bytes];   // convert bits to bytes
                     var rng = RandomNumberGenerator.Create();
                     // Make a randing big int
                     rng.GetBytes(numBytes);
                     bi = new BigInteger(numBytes);
                     bi = BigInteger.Abs(bi);
-                }
-                
-                
-                
-                // Even isn't prime
-                //InitialPrimeCheck(bi)
-                //Console.WriteLine("{0}", bi);
-               
-                  //  Console.WriteLine("\t{0}", bi);
-                    // If probably prime, stop all threads
-                    //Console.WriteLine("");
-                if ( bi.InitialPrimeCheck() && bi.IsProbablyPrime() )
+                // }
+
+
+
+                lock (_lock)
                 {
-                    state.Stop();
+                    if (bi.InitialPrimeCheck() && bi.IsProbablyPrime())
+                    {
+
+                        Console.WriteLine("{0} has found prime {1}", Task.CurrentId, bi);
+                        Console.WriteLine("\t{0} init check result: {1}", Task.CurrentId, bi.InitialPrimeCheck());
+                        Console.WriteLine("\t{0} Is prob check result: {1}", Task.CurrentId, bi.IsProbablyPrime());
+
+
+                        if (prime == null)
+                        {
+
+                            Console.WriteLine("\t\tPrime is {0}", prime);
+                            prime = bi;
+                            Console.WriteLine("\t\t{0} is assigning bi {1} to prime {2}", Task.CurrentId, bi,
+                                prime);
+
+
+                            state.Stop();
+                        }
+
+                    }
                 }
-                
+
             });
-            // bug Not reached
-            return bi;
+            Console.WriteLine("\t\t\tReturning prime {0}", prime);
+            return prime;
         }
 
 

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "RgUvOCWSjJZSbjJSy/na5EIt1GEas7Wl7bIm3y/sLMbnpr/dmLm2IFh0U2X5rFAgFSszWCFu79db90cSLfjF6g==",
+  "dgSpecHash": "B62Qk6xiKsK6K2RSuZOvKDz+0bdJMWXmskn4YsFOAfWl2Z9JEMacLLKU8WF8b7hKitEwrcYdkXhrT7yCLAK6kA==",
   "success": true,
-  "projectFilePath": "D:\\Dgarcia\\Programming\\IDEs\\Rider\\CSCI-251\\Project 2\\PrimeGen\\PrimeGen.csproj",
+  "projectFilePath": "D:\\Dgarcia\\Programming\\IDEs\\Rider\\CSCI-251\\Project 2\\primeGen\\PrimeGen.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }
