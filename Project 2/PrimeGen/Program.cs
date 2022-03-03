@@ -37,16 +37,22 @@ namespace PrimeGen
                 PrintUsage();
                 return;
             }
-            // TODO takes a bit to print
-            Console.WriteLine("BitLength: {0} bits", numBits);
 
-  
+            Console.WriteLine("BitLength: {0} bits", numBits);
+            
             var sw = new Stopwatch();
+            var curCount = 0;
             sw.Start();
-            for (var i = 0; i < count; i++)
+            while (curCount < count)
             {
                 BigInteger prime = FindPrime(numBits);
-                Console.WriteLine("{0}: {1}", i + 1, prime);    // print prime
+
+                // if (!prime.IsEven)
+                // {
+                //     Console.WriteLine("{0}: {1}", ++curCount, prime);    // print prime
+                // }
+                Console.WriteLine("{0}: {1}", ++curCount, prime);    // print prime
+
             }
             // TODO doesn't terminate and reach here
             sw.Stop();
@@ -64,8 +70,7 @@ namespace PrimeGen
             Console.WriteLine("\t- count - the number of prime numbers to generate, defaults to 1");
         }
 
-        private static readonly object Lock = new object();     // lock object for printing
-        
+        private static object _lock = new object();
         /// <summary>
         /// Finds numerous primes
         /// </summary>
@@ -75,31 +80,61 @@ namespace PrimeGen
         {
             
             // init vars
-            var primeFound = 0;
-            var rng = RandomNumberGenerator.Create();
-            var numBytes = new byte[numBits / 8];   // convert bits to bytes
-            BigInteger bi;
-            BigInteger prime = 0;
+            BigInteger bi = 0;
+            var bytes = numBits / 8;
+            var biTwo = new BigInteger(2);
+
+
 
             // While number of primes not found, keep checking
-            Parallel.For(0, Int64.MaxValue,  (i, state) =>
+            Parallel.For(0, Int32.MaxValue, (i, state) =>
             {
-                
-                // If meet count, break
-                if (primeFound > 0)
-                {
-                    Console.WriteLine("\tbreak Stopping . . .");
-                    state.Stop();   
-                }
-                    
-                
+                var rng = RandomNumberGenerator.Create();
+                var numBytes = new byte[bytes];   // convert bits to bytes
+                var isOdd = false;
+
                 // Make a randing big int
                 rng.GetBytes(numBytes);
                 bi = new BigInteger(numBytes);
                 bi = BigInteger.Abs(bi);
                 
                 
-                // Even isn't prime / skip if found all primes
+                // Even isn't prime
+                //bi % biTwo == 1;
+                //Console.WriteLine(bi);
+                if ( true )
+                {
+                   
+                    // If probably prime, stop all threads
+                    if ( bi <= 2 || bi.IsProbablyPrime() )
+                    {
+                        state.Stop();
+                    }
+                }
+            });
+            // bug Not reached
+            return bi;
+        }
+        
+        // TODO Delete this!
+        private static BigInteger GetPrime2(int numBits)
+        {
+            // init vars
+            var rng = RandomNumberGenerator.Create();
+            var numBytes = new byte[numBits / 8]; // convert bits to bytes
+
+            // While number of primes not found, keep checking
+            for (;;)
+            {
+
+
+                // Make a randing big int
+                rng.GetBytes(numBytes);
+                BigInteger bi = new BigInteger(numBytes);
+                bi = BigInteger.Abs(bi);
+
+
+                // Even isn't prime
                 if (!bi.IsEven)
                 {
                     // Further Prime checking
@@ -110,27 +145,11 @@ namespace PrimeGen
                     // If probably prime
                     if (probPrime)
                     {
-                        Console.WriteLine("Prime was found");
-                        Interlocked.Add(ref primeFound, 1); // primeFound = true
-
-                        lock (Lock)
-                        {
-                            Console.WriteLine("bi is {0}", bi);
-                            prime = bi; // set prime to bi
-                            Console.WriteLine("prime is set to {0}", prime);
-                        }
+                        return bi;
                         
-                        Console.WriteLine("\tprobPrime Stopping . . .");
-                        state.Stop();
                     }
                 }
-
-
-            });
-            // bug Not reached
-            Console.WriteLine("Returning prime");
-            return prime;
-
+            }
         }
 
         /// <summary>
@@ -144,19 +163,15 @@ namespace PrimeGen
         {
             
             // Init values
-            var n = value - 1;
             var r = 0;
-            var mod = n % 2 ^ r;
+            var d = value - 1;
 
             // find largest factor n that is a power of 2
-            while (mod == 0)
+            while (d % 2 == 0)
             {
-                Interlocked.Increment(ref r);
-                mod = n % 2 ^ r;
+                r++;
+                d /= 2;
             }
-        
-            // Get odd coefficient
-            var d = n / 2 ^ r;
 
             // Witness Loop
             for (var i = 0; i <= k; i++)
@@ -165,28 +180,34 @@ namespace PrimeGen
                 BigInteger a;
                 do
                 {
-                    byte[] rand = new byte[n.GetByteCount()];
+                    byte[] rand = new byte[value.GetByteCount()];
                     RandomNumberGenerator.Create().GetBytes(rand);
                     a = new BigInteger(rand);
-                } while (a < 2 || a >= n - 2);
+                } while (a < 2 || a >= value - 2);
 
                 // get x value
-                var x = BigInteger.ModPow(a, d, n);
+                var x = BigInteger.ModPow(a, d, value);
 
                 
-                if (x == 1 || x == n - 1)
+                if (x == 1 || x == value - 1)
                     continue;
 
                 // repeat for r - 1 times
-                for(var m = 0; m < r; m++)
+                for(var m = 1; m < r; m++)
                 {
-                    x = BigInteger.ModPow(x, 2, n);
+                    x = BigInteger.ModPow(x, 2, value);
+    
+                    if (x == 1)
+                    {
+                        return false;
+                    }
+                    
                     // if true, continue Witness Loop
-                    if (x == n - 1)
+                    if (x == value - 1)
                         break;
                 }
                 // if true, return composite
-                if (x != n - 1)
+                if (x != value - 1)
                     return false;
 
             }
