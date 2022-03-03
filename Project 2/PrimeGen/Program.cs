@@ -77,31 +77,37 @@ namespace PrimeGen
             
             // init vars
             BigInteger bi = 0;
+            
             var bytes = numBits / 8;
+            
 
             // While number of primes not found, keep checking
             Parallel.For(0, Int32.MaxValue, (i, state) =>
             {
-                var rng = RandomNumberGenerator.Create();
-                var numBytes = new byte[bytes];   // convert bits to bytes
-
-                // Make a randing big int
-                rng.GetBytes(numBytes);
-                bi = new BigInteger(numBytes);
-                bi = BigInteger.Abs(bi);
+                if (!state.IsStopped)
+                {
+                    var numBytes = new byte[bytes];   // convert bits to bytes
+                    var rng = RandomNumberGenerator.Create();
+                    // Make a randing big int
+                    rng.GetBytes(numBytes);
+                    bi = new BigInteger(numBytes);
+                    bi = BigInteger.Abs(bi);
+                }
+                
                 
                 
                 // Even isn't prime
                 //InitialPrimeCheck(bi)
-                if ( bi.InitialPrimeCheck() )
-                {
-                   
+                //Console.WriteLine("{0}", bi);
+               
+                  //  Console.WriteLine("\t{0}", bi);
                     // If probably prime, stop all threads
-                    if ( bi.IsProbablyPrime() )
-                    {
-                        state.Stop();
-                    }
+                    //Console.WriteLine("");
+                if ( bi.InitialPrimeCheck() && bi.IsProbablyPrime() )
+                {
+                    state.Stop();
                 }
+                
             });
             // bug Not reached
             return bi;
@@ -145,7 +151,7 @@ namespace PrimeGen
             
             // bug Only works if either of these are uncommented
             // bug Needs newline?
-            //Console.WriteLine("\t{0}", value);
+            
             //Console.WriteLine();
             //Console.Write("\n");
             return true;
