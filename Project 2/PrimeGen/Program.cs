@@ -46,9 +46,12 @@ namespace PrimeGen
             for (int i = 0; i < count; i++)
             {
                 var prime = FindPrime(numBits);
-                
-                
                 Console.WriteLine("{0}: {1}", i+1, prime);    // print prime
+
+                if (prime % new BigInteger(2) == 0)
+                {
+                    Console.WriteLine("\tEVEN");
+                }
             }
             // TODO doesn't terminate and reach here
             sw.Stop();
@@ -144,38 +147,43 @@ namespace PrimeGen
                 return true;
             }
             
-            // check if can divide by other primes
-            if (value % new BigInteger(2) == 0)
-            {
-                return false;
-            }
+            // // check if can divide by other primes
+            // if (value % new BigInteger(2) == 0)
+            // {
+            //     return false;
+            // }
+            //
+            // if (value % new BigInteger(3) == 0)
+            // {
+            //     return false;
+            // }
+            //
+            // if (value % new BigInteger(5) == 0)
+            // {
+            //     return false;
+            // }
+            //
+            // if (value % new BigInteger(7) == 0)
+            // {
+            //     return false;
+            // }
+            //
+            // if (value % new BigInteger(11) == 0)
+            // {
+            //     return false;
+            // }
+
+            return (value % new BigInteger(2) != 0 &&
+                    value % new BigInteger(3) != 0 &&
+                    value % new BigInteger(5) != 0 &&
+                    value % new BigInteger(7) != 0 &&
+                    value % new BigInteger(11) != 0 &&
+                    value % new BigInteger(13) != 0 &&
+                    value % new BigInteger(17) != 0 &&
+                    value % new BigInteger(19) != 0 &&
+                    value % new BigInteger(23) != 0 &&
+                    value % new BigInteger(29) != 0);
             
-            if (value % new BigInteger(3) == 0)
-            {
-                return false;
-            }
-            
-            if (value % new BigInteger(5) == 0)
-            {
-                return false;
-            }
-            
-            if (value % new BigInteger(7) == 0)
-            {
-                return false;
-            }
-            
-            if (value % new BigInteger(11) == 0)
-            {
-                return false;
-            }
-            
-            // bug Only works if either of these are uncommented
-            // bug Needs newline?
-            
-            //Console.WriteLine();
-            //Console.Write("\n");
-            return true;
         }
         
         /// <summary>
