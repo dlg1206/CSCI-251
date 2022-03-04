@@ -16,6 +16,8 @@ namespace PrimeGen
     {
         // For error checking
         private const int MaxArgs = 2;
+        private const int MinArgs = 1;
+        private const int MinBits = 32;
         
         // For FindPrime
         private const int BitsPerByte = 8;
@@ -31,20 +33,42 @@ namespace PrimeGen
         public static void Main(string[] args)
         {
             // Check if correct arg count
-            if (args.Length != MaxArgs)
-            {
-                PrintUsage();
-                return;
-            }
-            // todo check if numBits mult of 8, min 32
-            // todo dotnet run 32 ok? count default to 1
-            // Check both inputs are valid ints
-            if (!int.TryParse(args[0], out var numBits) || !int.TryParse(args[1], out var count))
+            if (args.Length is > MaxArgs or < MinArgs)
             {
                 PrintUsage();
                 return;
             }
             
+            // Check if bits are a number
+            if (!int.TryParse(args[0], out var numBits))
+            {
+                PrintUsage();
+                return;
+            }
+            
+            // Check if bits are >= 32 and a multiple of 8
+            if (numBits < 32 || numBits % BitsPerByte != 0)
+            {
+                PrintUsage();
+                return;
+            }
+            
+            // Checks if count is a number, defaults to 1 (since if reach here numBits is valid)
+            int count;
+            // no count defaults to 1
+            if (args.Length == MinArgs)
+            {
+                count = 1;
+            }
+            // Else test valid input
+            else  if (!int.TryParse(args[1], out count))
+            {
+                PrintUsage();
+                return;
+            }
+            
+           
+
             // Write bit information
             Console.WriteLine("BitLength: {0} bits", numBits);
             
@@ -68,12 +92,13 @@ namespace PrimeGen
                     Console.WriteLine("\tEVEN");
                 }
             }
-            // TODO Performance issues; 1 8192 ran several minutes and nothing
+            // TODO Performance issues; 1 8192 ran several minutes and nothing; target 42 sec
             // Stop timer and report elapsed time
             sw.Stop();
             Console.WriteLine("Time to Generate: {0}", sw.Elapsed);
         }
-
+        
+        
         /// <summary>
         /// Prints the correct usage of the program
         /// </summary>
