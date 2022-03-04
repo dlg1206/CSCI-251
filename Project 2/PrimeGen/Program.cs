@@ -32,43 +32,18 @@ namespace PrimeGen
         /// <param name="args">input arguments</param>
         public static void Main(string[] args)
         {
-            // Check if correct arg count
-            if (args.Length is > MaxArgs or < MinArgs)
+            
+            // Validate input args
+            var result = ValidateArgs(args);
+            if (result == null)
             {
                 PrintUsage();
                 return;
             }
+            // Else assign values
+            var numBits = result[0];
+            var count = result[1];
             
-            // Check if bits are a number
-            if (!int.TryParse(args[0], out var numBits))
-            {
-                PrintUsage();
-                return;
-            }
-            
-            // Check if bits are >= 32 and a multiple of 8
-            if (numBits < 32 || numBits % BitsPerByte != 0)
-            {
-                PrintUsage();
-                return;
-            }
-            
-            // Checks if count is a number, defaults to 1 (since if reach here numBits is valid)
-            int count;
-            // no count defaults to 1
-            if (args.Length == MinArgs)
-            {
-                count = 1;
-            }
-            // Else test valid input
-            else  if (!int.TryParse(args[1], out count))
-            {
-                PrintUsage();
-                return;
-            }
-            
-           
-
             // Write bit information
             Console.WriteLine("BitLength: {0} bits", numBits);
             
@@ -96,6 +71,48 @@ namespace PrimeGen
             // Stop timer and report elapsed time
             sw.Stop();
             Console.WriteLine("Time to Generate: {0}", sw.Elapsed);
+        }
+
+        /// <summary>
+        /// Validates given arguments to ensure they are correct
+        /// </summary>
+        /// <param name="args">args to check</param>
+        /// <returns>null if failed, else an int[] with numBits and count</returns>
+        private static int[]? ValidateArgs(string[] args)
+        {
+            // Check if correct arg count
+            if (args.Length is > MaxArgs or < MinArgs)
+            {
+                return null;
+            }
+            
+            // Check if bits are a number
+            if (!int.TryParse(args[0], out var numBits))
+            {
+                return null;
+            }
+            
+            // Check if bits are >= 32 and a multiple of 8
+            if (numBits < 32 || numBits % BitsPerByte != 0)
+            {
+                return null;
+            }
+            
+            // Checks if count is a number, defaults to 1 (since if reach here numBits is valid)
+            int count;
+            // no count defaults to 1
+            if (args.Length == MinArgs)
+            {
+                count = 1;
+            }
+            // Else test valid input
+            else  if (!int.TryParse(args[1], out count))
+            {
+                return null;
+            }
+            
+            // Args are value, return them in an int array
+            return new int[] {numBits, count};
         }
         
         
