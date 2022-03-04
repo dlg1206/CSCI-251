@@ -22,6 +22,13 @@ namespace PrimeGen
         // For FindPrime
         private const int BitsPerByte = 8;
         
+        // For Initial Prime Test
+        // first 15 primes
+        private static readonly int[] Primes = new int[]
+            {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 
+                107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199, 211, 223,
+                227, 229, 233, 239, 241, 251, 257, 263, 269, 271, 277, 281, 283, 293, 307, 311, 313, 317, 331, 337,	347};
+        
         // For Miller-Rabin Algorithm
         private const bool Composite = false;
         private const bool ProbablyPrime = true;
@@ -93,7 +100,7 @@ namespace PrimeGen
             }
             
             // Check if bits are >= 32 and a multiple of 8
-            if (numBits < 32 || numBits % BitsPerByte != 0)
+            if (numBits < MinBits || numBits % BitsPerByte != 0)
             {
                 return null;
             }
@@ -176,26 +183,7 @@ namespace PrimeGen
         private static bool InitialPrimeCheck(this BigInteger value)
         {
             // 2 is the only even prime number
-            if (value == 2)
-                return true;
-            
-            // Check if value can be divided by the first 15 primes
-            return (value % new BigInteger(2) != 0 &&
-                    value % new BigInteger(3) != 0 &&
-                    value % new BigInteger(5) != 0 &&
-                    value % new BigInteger(7) != 0 &&
-                    value % new BigInteger(11) != 0 &&
-                    value % new BigInteger(13) != 0 &&
-                    value % new BigInteger(17) != 0 &&
-                    value % new BigInteger(19) != 0 &&
-                    value % new BigInteger(23) != 0 &&
-                    value % new BigInteger(29) != 0 &&
-                    value % new BigInteger(31) != 0 &&
-                    value % new BigInteger(37) != 0 &&
-                    value % new BigInteger(41) != 0 &&
-                    value % new BigInteger(43) != 0 &&
-                    value % new BigInteger(47) != 0);
-            
+            return value == 2 || Primes.All(prime => value % prime != 0);
         }
         
         
