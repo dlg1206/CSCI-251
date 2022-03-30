@@ -1,0 +1,15 @@
+D:\Dgarcia\Programming\IDEs\Rider\CSCI-251\Project 3\Messenger\bin\Debug\net6.0\Messenger.exe
+D:\Dgarcia\Programming\IDEs\Rider\CSCI-251\Project 3\Messenger\bin\Debug\net6.0\Messenger.deps.json
+D:\Dgarcia\Programming\IDEs\Rider\CSCI-251\Project 3\Messenger\bin\Debug\net6.0\Messenger.runtimeconfig.json
+D:\Dgarcia\Programming\IDEs\Rider\CSCI-251\Project 3\Messenger\bin\Debug\net6.0\Messenger.dll
+D:\Dgarcia\Programming\IDEs\Rider\CSCI-251\Project 3\Messenger\bin\Debug\net6.0\ref\Messenger.dll
+D:\Dgarcia\Programming\IDEs\Rider\CSCI-251\Project 3\Messenger\bin\Debug\net6.0\Messenger.pdb
+D:\Dgarcia\Programming\IDEs\Rider\CSCI-251\Project 3\Messenger\obj\Debug\net6.0\Messenger.csproj.AssemblyReference.cache
+D:\Dgarcia\Programming\IDEs\Rider\CSCI-251\Project 3\Messenger\obj\Debug\net6.0\Messenger.GeneratedMSBuildEditorConfig.editorconfig
+D:\Dgarcia\Programming\IDEs\Rider\CSCI-251\Project 3\Messenger\obj\Debug\net6.0\Messenger.AssemblyInfoInputs.cache
+D:\Dgarcia\Programming\IDEs\Rider\CSCI-251\Project 3\Messenger\obj\Debug\net6.0\Messenger.AssemblyInfo.cs
+D:\Dgarcia\Programming\IDEs\Rider\CSCI-251\Project 3\Messenger\obj\Debug\net6.0\Messenger.csproj.CoreCompileInputs.cache
+D:\Dgarcia\Programming\IDEs\Rider\CSCI-251\Project 3\Messenger\obj\Debug\net6.0\Messenger.dll
+D:\Dgarcia\Programming\IDEs\Rider\CSCI-251\Project 3\Messenger\obj\Debug\net6.0\ref\Messenger.dll
+D:\Dgarcia\Programming\IDEs\Rider\CSCI-251\Project 3\Messenger\obj\Debug\net6.0\Messenger.pdb
+D:\Dgarcia\Programming\IDEs\Rider\CSCI-251\Project 3\Messenger\obj\Debug\net6.0\Messenger.genruntimeconfig.cache

@@ -1,3 +1,18 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿/*
+ * Project 2
+ * Finds Primes of a given bit size
+ * 
+ * @author Derek Garcia
+ */
 
-Console.WriteLine("Hello, World!");
+
+namespace Messenger
+{
+    public static class Program
+    {
+        public static void Main(string[] args)
+        {
+            Console.WriteLine("hello world");
+        }
+    }
+}
