@@ -17,7 +17,32 @@ namespace Messenger
         
         private static bool ParseInput(string[] args)
         {
-            return false;
+            if (args.Length == 0)
+                return false;
+            
+            switch (args[0])
+            {
+                case "keyGen":
+                    return args.Length == 2;
+                
+                case "sendKey":
+                    return args.Length == 2;
+                
+                case "getKey":
+                    return args.Length == 2;
+                
+                case "sendMsg":
+                    return args.Length == 3;
+                
+                case "getMsg":
+                    return args.Length == 2;
+                
+                default:
+                    return false;
+                
+                
+                    
+            }
         }
 
         public static async Task Main(string[] args)
