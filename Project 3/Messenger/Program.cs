@@ -7,6 +7,7 @@
 
 
 using System.Net;
+using System.Numerics;
 using System.Text.Json;
 
 namespace Messenger
@@ -53,10 +54,32 @@ namespace Messenger
         {
             var jsonDict = JsonSerializer.Deserialize<Dictionary<string, string>>(json);
 
-            byte[] keyBytes = Convert.FromBase64String(jsonDict["key"]);
+            if (jsonDict == null)
+                return;
+            
+            var keyBytes = Convert.FromBase64String(jsonDict["key"]);
 
+            // convert 1st 4 bytes to 'e'
+            var e = BitConverter.ToInt32(GetNBytes(keyBytes, 0, 4), 0);
+            var E = new BigInteger(GetNBytes(keyBytes, 4, e));
+            
+            var n = BitConverter.ToInt32(GetNBytes(keyBytes, e+4, 4), 0);
+            var N = new BigInteger(GetNBytes(keyBytes, e+8, n));
+            
+        }
 
-            Console.WriteLine();
+        private byte[] GetNBytes(byte[] source, int startIndex, int numBytes)
+        {
+            
+            var section = new byte[numBytes];
+
+            Array.Copy(source, startIndex, section, 0, numBytes);
+
+            // always return little endian form
+            if (BitConverter.IsLittleEndian)
+                Array.Reverse(section);
+                
+            return section;
         }
             
     }
