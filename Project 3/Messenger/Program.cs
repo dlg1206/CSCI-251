@@ -51,15 +51,12 @@ namespace Messenger
 
         private void ParseJson(string json)
         {
-            var test = JsonSerializer.Deserialize<Dictionary<string, string>>(json);
-            
-            foreach (var foo in test)
-            {
-                Console.WriteLine("Key: " + foo.Key);
-                Console.WriteLine("val: " + foo.Value);
-                Console.WriteLine();
-            }
-            
+            var jsonDict = JsonSerializer.Deserialize<Dictionary<string, string>>(json);
+
+            byte[] keyBytes = Convert.FromBase64String(jsonDict["key"]);
+
+
+            Console.WriteLine();
         }
             
     }
