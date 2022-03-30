@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Dgarcia\\Programming\\IDEs\\Rider\\CSCI-251\\Project 2\\primegen\\PrimeGen.csproj": {}
+    "D:\\Dgarcia\\Programming\\IDEs\\Rider\\CSCI-251\\Project 2\\PrimeGen\\PrimeGen.csproj": {}
   },
   "projects": {
-    "D:\\Dgarcia\\Programming\\IDEs\\Rider\\CSCI-251\\Project 2\\primegen\\PrimeGen.csproj": {
+    "D:\\Dgarcia\\Programming\\IDEs\\Rider\\CSCI-251\\Project 2\\PrimeGen\\PrimeGen.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Dgarcia\\Programming\\IDEs\\Rider\\CSCI-251\\Project 2\\primegen\\PrimeGen.csproj",
+        "projectUniqueName": "D:\\Dgarcia\\Programming\\IDEs\\Rider\\CSCI-251\\Project 2\\PrimeGen\\PrimeGen.csproj",
         "projectName": "PrimeGen",
-        "projectPath": "D:\\Dgarcia\\Programming\\IDEs\\Rider\\CSCI-251\\Project 2\\primegen\\PrimeGen.csproj",
+        "projectPath": "D:\\Dgarcia\\Programming\\IDEs\\Rider\\CSCI-251\\Project 2\\PrimeGen\\PrimeGen.csproj",
         "packagesPath": "C:\\Users\\Derpe\\.nuget\\packages\\",
-        "outputPath": "D:\\Dgarcia\\Programming\\IDEs\\Rider\\CSCI-251\\Project 2\\primegen\\obj\\",
+        "outputPath": "D:\\Dgarcia\\Programming\\IDEs\\Rider\\CSCI-251\\Project 2\\PrimeGen\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Derpe\\AppData\\Roaming\\NuGet\\NuGet.Config"
