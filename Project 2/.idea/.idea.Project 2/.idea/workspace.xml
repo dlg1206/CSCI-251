@@ -5,51 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d879b4c7-d833-413b-9894-e2df33cddcf3" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.Project 2.dir/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.Project 2.dir/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.Project 2.dir/.idea/indexLayout.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.Project 2.dir/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.Project 2/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.Project 2/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.Project 2/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PrimeGen/PrimeGen.csproj" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PrimeGen/Program.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PrimeGen/bin/Debug/net6.0/PrimeGen.deps.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PrimeGen/bin/Debug/net6.0/PrimeGen.dll" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PrimeGen/bin/Debug/net6.0/PrimeGen.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PrimeGen/bin/Debug/net6.0/PrimeGen.pdb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PrimeGen/bin/Debug/net6.0/PrimeGen.runtimeconfig.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PrimeGen/bin/Debug/net6.0/ref/PrimeGen.dll" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PrimeGen/obj/Debug/net6.0/.NETCoreApp,Version=v6.0.AssemblyAttributes.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PrimeGen/obj/Debug/net6.0/PrimeGen.AssemblyInfo.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PrimeGen/obj/Debug/net6.0/PrimeGen.AssemblyInfoInputs.cache" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PrimeGen/obj/Debug/net6.0/PrimeGen.GeneratedMSBuildEditorConfig.editorconfig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PrimeGen/obj/Debug/net6.0/PrimeGen.GlobalUsings.g.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PrimeGen/obj/Debug/net6.0/PrimeGen.assets.cache" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PrimeGen/obj/Debug/net6.0/PrimeGen.csproj.AssemblyReference.cache" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PrimeGen/obj/Debug/net6.0/PrimeGen.csproj.CoreCompileInputs.cache" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PrimeGen/obj/Debug/net6.0/PrimeGen.csproj.FileListAbsolute.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PrimeGen/obj/Debug/net6.0/PrimeGen.dll" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PrimeGen/obj/Debug/net6.0/PrimeGen.genruntimeconfig.cache" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PrimeGen/obj/Debug/net6.0/PrimeGen.pdb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PrimeGen/obj/Debug/net6.0/apphost.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PrimeGen/obj/Debug/net6.0/ref/PrimeGen.dll" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PrimeGen/obj/Debug/net6.0/refint/PrimeGen.dll" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PrimeGen/obj/PrimeGen.csproj.nuget.dgspec.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PrimeGen/obj/PrimeGen.csproj.nuget.g.props" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PrimeGen/obj/PrimeGen.csproj.nuget.g.targets" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PrimeGen/obj/project.assets.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PrimeGen/obj/project.nuget.cache" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PrimeGen/obj/project.packagespec.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PrimeGen/obj/rider.project.restore.info" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Project 2.sln" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Project 2.sln.DotSettings.user" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Project1/du/Project 1 Revised.zip" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Project 2/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Project 2/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project1/du/obj/Debug/net6.0/apphost.exe" beforeDir="false" afterPath="$PROJECT_DIR$/../Project1/du/obj/Debug/net6.0/apphost.exe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project1/du/obj/Debug/net6.0/du.csproj.AssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../Project1/du/obj/Debug/net6.0/du.csproj.AssemblyReference.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project1/du/obj/rider.project.restore.info" beforeDir="false" afterPath="$PROJECT_DIR$/../Project1/du/obj/rider.project.restore.info" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project1/project1.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Project 3/Messenger/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Project 3/Messenger/Program.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -114,6 +70,7 @@
       <workItem from="1645107554751" duration="71000" />
       <workItem from="1648607586155" duration="108000" />
       <workItem from="1648607950732" duration="63000" />
+      <workItem from="1648608407034" duration="688000" />
     </task>
     <task id="LOCAL-00001" summary="init Project 2">
       <created>1644851895650</created>
