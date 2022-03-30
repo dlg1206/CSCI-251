@@ -15,7 +15,7 @@ namespace Messenger
     public static class Program
     {
         
-        private static bool ParseInput(string[] args)
+        private static bool ValidateInput(string[] args)
         {
             if (args.Length == 0)
                 return false;
@@ -39,9 +39,30 @@ namespace Messenger
                 
                 default:
                     return false;
+            }
+        }
+
+        private static void ParseInput(string[] args)
+        {
+            switch (args[0])
+            {
+                case "keyGen":
+                    return;
                 
+                case "sendKey":
+                    return;
                 
-                    
+                case "getKey":
+                    return;
+                
+                case "sendMsg":
+                    return;
+                
+                case "getMsg":
+                    return;
+                
+                default:
+                    return;
             }
         }
 
@@ -49,7 +70,7 @@ namespace Messenger
         {
             
             // Print error if 
-            if (!ParseInput(args))
+            if (!ValidateInput(args))
             {
                 Console.WriteLine("usage: dotnet run <option> <other arguments>");
                 
