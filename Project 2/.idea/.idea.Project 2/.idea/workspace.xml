@@ -5,18 +5,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d879b4c7-d833-413b-9894-e2df33cddcf3" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/PrimeGen/obj/Debug/net6.0/PrimeGen.csproj.AssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/PrimeGen/obj/Debug/net6.0/PrimeGen.csproj.AssemblyReference.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Project 3/Messenger/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Project 3/Messenger/Program.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/184721741f1cbf7b652ab87e592df39ce069dbafd53b4c4d315218be55b12/Parallel.cs" root0="SKIP_HIGHLIGHTING" />
+  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="256dkLcYA7YFQpakXN3CRjFGWS5" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -63,6 +68,9 @@
       <workItem from="1644851756680" duration="66000" />
       <workItem from="1644851862297" duration="645000" />
       <workItem from="1645107554751" duration="71000" />
+      <workItem from="1648607586155" duration="108000" />
+      <workItem from="1648607950732" duration="63000" />
+      <workItem from="1648608407034" duration="688000" />
     </task>
     <task id="LOCAL-00001" summary="init Project 2">
       <created>1644851895650</created>

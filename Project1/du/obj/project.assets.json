@@ -8,26 +8,24 @@
     "net6.0": []
   },
   "packageFolders": {
-    "C:\\Users\\Dgarc\\.nuget\\packages\\": {}
+    "C:\\Users\\Derpe\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Dgarc\\Programming\\Rider\\CSCI-251\\Project1\\du\\du.csproj",
+      "projectUniqueName": "D:\\Dgarcia\\Programming\\IDEs\\Rider\\CSCI-251\\Project1\\du\\du.csproj",
       "projectName": "du",
-      "projectPath": "C:\\Users\\Dgarc\\Programming\\Rider\\CSCI-251\\Project1\\du\\du.csproj",
-      "packagesPath": "C:\\Users\\Dgarc\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Dgarc\\Programming\\Rider\\CSCI-251\\Project1\\du\\obj\\",
+      "projectPath": "D:\\Dgarcia\\Programming\\IDEs\\Rider\\CSCI-251\\Project1\\du\\du.csproj",
+      "packagesPath": "C:\\Users\\Derpe\\.nuget\\packages\\",
+      "outputPath": "D:\\Dgarcia\\Programming\\IDEs\\Rider\\CSCI-251\\Project1\\du\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Dgarc\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "C:\\Users\\Derpe\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net6.0"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -60,7 +58,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.200\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files (x86)\\dotnet\\sdk\\6.0.101\\RuntimeIdentifierGraph.json"
       }
     }
   }
