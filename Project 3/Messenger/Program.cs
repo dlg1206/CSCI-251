@@ -14,11 +14,42 @@ namespace Messenger
 {
     public static class Program
     {
+        
+        private static bool ParseInput(string[] args)
+        {
+            return false;
+        }
+
         public static async Task Main(string[] args)
         {
-            var ws = new WebClient();   // init web client
+            
+            // Print error if 
+            if (!ParseInput(args))
+            {
+                Console.WriteLine("usage: dotnet run <option> <other arguments>");
+                
+                Console.WriteLine(
+                    "\t- keyGen <keySize>: generate a keypair of size keySize bits (public and private keys) and " +
+                    "store them locally on the disk");
+                
+                Console.WriteLine(
+                    "\t- sendKey <email>: sends the public key that was generated in the keyGen phase and send it to " +
+                    "the server, with the email address given");
 
-            await ws.Connect("http://kayrun.cs.rit.edu:5000/Key/jsb@cs.rit.edu");
+                Console.WriteLine(
+                    "\t- getKey <email>: this will retrieve public key for a particular user with that email");
+
+                Console.WriteLine(
+                    "\t- sendMsg <email> <plaintext>: this will take a plaintext message, encrypt it using the public" +
+                    " key of the person you are sending it to, based on their email address.");
+
+                Console.WriteLine(
+                    "\t- getMsg <email>: this will retrieve a message for a particular user.");
+            }
+            //var ws = new WebClient();   // init web client
+
+            //await ws.Connect("http://kayrun.cs.rit.edu:5000/Key/jsb@cs.rit.edu");
+            Console.WriteLine("foo");
         }
         
     }
