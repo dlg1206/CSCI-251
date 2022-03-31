@@ -1,3 +1,9 @@
 ﻿KeyGen:
     Overwrite existing keys?
-    
+   
+SendKey:
+    error msg for send key - ie pub/private key not generated?
+   
+main:
+    Keymananger / client should be static?
+    too many static?

@@ -7,7 +7,9 @@
 
 
 using System.Numerics;
+using System.Text;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 
 namespace Messenger
@@ -15,32 +17,10 @@ namespace Messenger
     public static class Program
     {
         private const int E = 5113;
-        private static bool ValidateInput(string[] args)
-        {
-           
-            
-            switch (args[0])
-            {
-                case "keyGen":
-                    return args.Length == 2;
-                
-                case "sendKey":
-                    return args.Length == 2;
-                
-                case "getKey":
-                    return args.Length == 2;
-                
-                case "sendMsg":
-                    return args.Length == 3;
-                
-                case "getMsg":
-                    return args.Length == 2;
-                
-                default:
-                    return false;
-            }
-        }
-        
+
+        private static readonly KeyManager KeyManager = new KeyManager();
+        private static readonly HttpClient Client = new HttpClient();
+
         private static bool ParseInput(string[] args)
         {
             if (args.Length == 0)
@@ -60,6 +40,14 @@ namespace Messenger
                     break;
                 
                 case "sendKey":
+                    if (args.Length != 2)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        DoSendKey(args[1]);
+                    }
                     break;
                 
                 case "getKey":
@@ -116,10 +104,35 @@ namespace Messenger
             var publicKey = new Key(nonce, new BigInteger(E), true);
             var privateKey = new Key(nonce, new BigInteger(E).ModInverse(r), false);
 
-            var km = new KeyManager();
+            KeyManager.StoreKey(publicKey);
+            KeyManager.StoreKey(privateKey);
+        }
+
+        private static async Task DoSendKey(string email)
+        {
+            // send public
+            // add email to private key email
+            // http://kayrun.cs.rit.edu:5000/Key/email
             
-            km.StoreKey(publicKey);
-            km.StoreKey(privateKey);
+            try
+            {
+                // var content = new StringContent(
+                //     KeyManager.GetJsonKey(true), Encoding.UTF8, "application/json");
+                var foo = KeyManager.GetJsonKey(true);
+                var response = 
+                    await Client.PostAsync(foo, "PUT http://kayrun.cs.rit.edu:5000/Key/email");
+            
+            }
+            // report err
+            catch(HttpRequestException e)
+            {
+                Console.WriteLine("\nException Caught!");	
+                Console.WriteLine("Message :{0} ",e.Message);
+            }
+            
+            
+            
+            
         }
 
         public static void Main(string[] args)
@@ -133,7 +146,6 @@ namespace Messenger
             if (!ParseInput(args))
             {
                 PrintUsage();
-                return;
             }
 
             // var web = "AAAAAwEAAQAAAQB7w4yJG+kH5BXhL9lgeCxkNqKeIIyC0zzG0FYJu5/WVa7xCdXGSmG3pEEpyEPhe81L9zb1qWpnn" +
@@ -256,6 +268,15 @@ namespace Messenger
             sw.WriteLine(JsonSerializer.Serialize(jsonKey));
             
         }
+
+        public string? GetJsonKey(bool isPublic)
+        {
+            var fileName = isPublic ? PublicKey : PrivateKey;
+            // var foo = new JsonObject.Parse()
+            return File.ReadAllText(fileName);
+                
+
+        }
         
         
     }
@@ -274,6 +295,7 @@ namespace Messenger
             try	
             {
                 var json = await _client.GetStringAsync(url);
+                
                 ParseJson(json);
                 
             }
