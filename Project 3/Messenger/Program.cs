@@ -8,6 +8,7 @@
 
 using System.Numerics;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Messenger
 {
@@ -48,7 +49,7 @@ namespace Messenger
             switch (args[0])
             {
                 case "keyGen":
-                    if (args.Length == 2 || !int.TryParse(args[1], out var keySize))
+                    if (args.Length != 2 || !int.TryParse(args[1], out var keySize))
                     {
                         return false;
                     }
@@ -116,6 +117,9 @@ namespace Messenger
             var privateKey = new Key(nonce, new BigInteger(E).ModInverse(r), false);
 
             var km = new KeyManager();
+            
+            km.StoreKey(publicKey);
+            km.StoreKey(privateKey);
         }
 
         public static void Main(string[] args)
@@ -132,10 +136,10 @@ namespace Messenger
                 return;
             }
 
-            var web = "AAAAAwEAAQAAAQB7w4yJG+kH5BXhL9lgeCxkNqKeIIyC0zzG0FYJu5/WVa7xCdXGSmG3pEEpyEPhe81L9zb1qWpnn" +
-                      "9yoiMPPawtDoZ26Um0LA/MAx/n4UdBENyWYd807+ex1h/uJ/GHgeZI/8yZ5LapCTNXaAwXvTfSY4OTG9hEgTJ6uK7cM11hn/q" +
-                      "K07EnH1beaGoj/FOATFPqpLkDaz/fOkRQIQr6F41ks0PIJXjzmMeIJdUhBsluJaU/pllHqjTDFk2uBOSQr5g0WFeCVLfss0E" +
-                      "Ybkbx3BsLtvThDgphBc98KOU2gx3o+Tm5U1oTT/tZdUjrWq8iPWzI+JMrG1RtZEVVeewOFT5sn";
+            // var web = "AAAAAwEAAQAAAQB7w4yJG+kH5BXhL9lgeCxkNqKeIIyC0zzG0FYJu5/WVa7xCdXGSmG3pEEpyEPhe81L9zb1qWpnn" +
+            //           "9yoiMPPawtDoZ26Um0LA/MAx/n4UdBENyWYd807+ex1h/uJ/GHgeZI/8yZ5LapCTNXaAwXvTfSY4OTG9hEgTJ6uK7cM11hn/q" +
+            //           "K07EnH1beaGoj/FOATFPqpLkDaz/fOkRQIQr6F41ks0PIJXjzmMeIJdUhBsluJaU/pllHqjTDFk2uBOSQr5g0WFeCVLfss0E" +
+            //           "Ybkbx3BsLtvThDgphBc98KOU2gx3o+Tm5U1oTT/tZdUjrWq8iPWzI+JMrG1RtZEVVeewOFT5sn";
             
 
             /*
@@ -145,7 +149,12 @@ namespace Messenger
         }
         
     }
-
+    public class JsonKey
+    {
+        public string[]? Emails { get; set; }
+        public string? EncodedKey { get; set; }
+        public bool IsPublic { get; set; }
+    }
     public class Key
     {
         private readonly BigInteger _nonce; // N
@@ -175,6 +184,8 @@ namespace Messenger
 
     public class KeyManager
     {
+        private const string PublicKey = "public.key";
+        private const string PrivateKey = "private.key";
 
         private byte[] GetNBytes(byte[] source, int startIndex, int numBytes)
         {
@@ -224,10 +235,29 @@ namespace Messenger
             return new Key(N, E, true);
         }
 
-        public void storeKey(Key key)
+        public void StoreKey(Key key)
         {
+            var jsonKey = new JsonKey
+            {
+                Emails = Array.Empty<string>(),
+                EncodedKey = Base64Encode(key),
+                IsPublic = key.IsPublic
+            };
+            
+            
+            var fileName = key.IsPublic ? PublicKey : PrivateKey;
+            
+            if (File.Exists(fileName))
+            {
+                File.Delete(fileName);
+            }
+
+            using StreamWriter sw = File.CreateText(fileName);
+            sw.WriteLine(JsonSerializer.Serialize(jsonKey));
             
         }
+        
+        
     }
     
     public class WebClient

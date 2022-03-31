@@ -190,6 +190,9 @@ public class PrimeGen
             // prime has been assigned, can stop threads
             state.Stop();
         });
+
+        if (prime == null)
+            return 0;
         
         // return prime that was found
         return (BigInteger) prime;
