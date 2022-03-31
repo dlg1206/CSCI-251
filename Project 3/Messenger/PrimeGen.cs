@@ -131,6 +131,23 @@ public static class BigIntExtensions
         return ProbablyPrime;
     }
     
+    
+    public static BigInteger ModInverse(this BigInteger a, BigInteger n)
+    {
+        BigInteger i = n, v = 0, d = 1;
+        while (a>0) {
+            BigInteger t = i/a, x = a;
+            a = i % x;
+            i = x;
+            x = d;
+            d = v - t*x;
+            v = x;
+        }
+        v %= n;
+        if (v<0) v = (v+n)%n;
+        return v;
+    }
+    
 }
 
 
@@ -146,7 +163,7 @@ public class PrimeGen
     /// </summary>
     /// <param name="numBits">size of the prime</param>
     /// <returns>A probably prime number</returns>
-    public BigInteger? FindPrime(int numBits)
+    public BigInteger FindPrime(int numBits)
     {
         // init vars
         BigInteger? prime = null;
@@ -175,7 +192,7 @@ public class PrimeGen
         });
         
         // return prime that was found
-        return prime;
+        return (BigInteger) prime;
     }
 
         

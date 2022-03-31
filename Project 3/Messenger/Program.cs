@@ -110,6 +110,10 @@ namespace Messenger
             //var ws = new WebClient();   // init web client
 
             //await ws.Connect("http://kayrun.cs.rit.edu:5000/Key/jsb@cs.rit.edu");
+            /*
+             * private key emails: list of all emails that I have sent to sever using that private key
+             * pub key email: NONE< don't touch
+             */
         }
         
     }
@@ -135,7 +139,7 @@ namespace Messenger
             _publicKey = 7;   // TODO E; better way to get rand prime? Idea: get bit size of r and gen rand primes until 
                                 // number > 3 and < r
 
-            _privateKey = BigInteger.ModPow(_publicKey, 1, (BigInteger) r);    // todo mod inverse correct?
+            _privateKey = BigInteger.ModPow(_publicKey, 1,  r);    // todo mod inverse correct?
 
 
         }
