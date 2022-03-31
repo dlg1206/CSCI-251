@@ -135,7 +135,7 @@ namespace Messenger
             _publicKey = 7;   // TODO E; better way to get rand prime? Idea: get bit size of r and gen rand primes until 
                                 // number > 3 and < r
 
-            _privateKey = BigInteger.ModPow(_publicKey, -1, (BigInteger) r);    // todo mod inverse correct?
+            _privateKey = BigInteger.ModPow(_publicKey, 1, (BigInteger) r);    // todo mod inverse correct?
 
 
         }
