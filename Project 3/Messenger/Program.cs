@@ -13,7 +13,7 @@ namespace Messenger
 {
     public static class Program
     {
-        
+        private const int E = 5113;
         private static bool ValidateInput(string[] args)
         {
             if (args.Length == 0)
@@ -43,6 +43,8 @@ namespace Messenger
 
         private static void ParseInput(string[] args)
         {
+            
+                
             switch (args[0])
             {
                 case "keyGen":
@@ -52,7 +54,18 @@ namespace Messenger
                     }
                     else
                     {
-                        var foo = new KeyPair(keySize);
+                        var pg = new PrimeGen();
+    
+                        var lenP = (int) (keySize / 2 + keySize * 0.2);
+
+                        var p = pg.FindPrime(lenP);
+                        var q = pg.FindPrime(keySize - lenP);
+
+                        var nonce = p * q;
+                        var r =  (p - 1) * (q - 1);
+
+                        var publicKey = new Key(nonce, new BigInteger(E), true);
+                        var privateKey = new Key(nonce, new BigInteger(E).ModInverse(r), false);
                     }
                     return;
                 
@@ -117,34 +130,18 @@ namespace Messenger
         }
         
     }
-
-    public class KeyPair
+    public class Key
     {
-        private BigInteger? _Nonce;      // N
-        private BigInteger _publicKey;  // E
-        private BigInteger _privateKey; // D
-        // key size in bits
-        public KeyPair(int keySize)
+        private BigInteger _nonce;      // N
+        private BigInteger _prime;      // E or D
+
+        public Key(BigInteger nonce, BigInteger prime, bool isPublic)
         {
-            var pg = new PrimeGen();
-
-            var lenP = (int) (keySize / 2 + keySize * 0.2);
-
-            var p = pg.FindPrime(lenP);
-            var q = pg.FindPrime(keySize - lenP);
-
-            _Nonce = p * q;
-            var r =  (p - 1) * (q - 1);
-
-            _publicKey = 7;   // TODO E; better way to get rand prime? Idea: get bit size of r and gen rand primes until 
-                                // number > 3 and < r
-
-            _privateKey = BigInteger.ModPow(_publicKey, 1,  r);    // todo mod inverse correct?
-
-
+            _nonce = nonce;
+            _prime = prime;
+            IsPublic = isPublic;
         }
-        
-        
+        public bool IsPublic { get; }
     }
     
     public class WebClient
