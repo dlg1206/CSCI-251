@@ -116,10 +116,28 @@ namespace Messenger
 
     public class KeyPair
     {
-
+        private BigInteger? _Nonce;      // N
+        private BigInteger _publicKey;  // E
+        private BigInteger _privateKey; // D
+        // key size in bits
         public KeyPair(int keySize)
         {
-            
+            var pg = new PrimeGen();
+
+            var lenP = (int) (keySize / 2 + keySize * 0.2);
+
+            var p = pg.FindPrime(lenP);
+            var q = pg.FindPrime(keySize - lenP);
+
+            _Nonce = p * q;
+            var r =  (p - 1) * (q - 1);
+
+            _publicKey = 7;   // TODO E; better way to get rand prime? Idea: get bit size of r and gen rand primes until 
+                                // number > 3 and < r
+
+            _privateKey = BigInteger.ModPow(_publicKey, -1, (BigInteger) r);    // todo mod inverse correct?
+
+
         }
         
         
