@@ -69,8 +69,6 @@ namespace Messenger
 
                         var km = new KeyManager();
                         
-                        km.StoreKey(publicKey);
-                        km.StoreKey(privateKey);
                     }
                     return;
                 
@@ -114,20 +112,35 @@ namespace Messenger
                 "\t- getMsg <email>: this will retrieve a message for a particular user.");
         }
 
-        public static async Task Main(string[] args)
+        public static void Main(string[] args)
         {
-            var ws = new WebClient();   // init web client
+            
+            
+            // var ws = new WebClient();   // init web client
 
-            await ws.Connect("http://kayrun.cs.rit.edu:5000/Key/jsb@cs.rit.edu");
+            // await ws.Connect("http://kayrun.cs.rit.edu:5000/Key/jsb@cs.rit.edu");
             // Print error if 
             if (!ValidateInput(args))
             {
                 PrintUsage();
                 return;
             }
+
+            var web = "AAAAAwEAAQAAAQB7w4yJG+kH5BXhL9lgeCxkNqKeIIyC0zzG0FYJu5/WVa7xCdXGSmG3pEEpyEPhe81L9zb1qWpnn" +
+                      "9yoiMPPawtDoZ26Um0LA/MAx/n4UdBENyWYd807+ex1h/uJ/GHgeZI/8yZ5LapCTNXaAwXvTfSY4OTG9hEgTJ6uK7cM11hn/q" +
+                      "K07EnH1beaGoj/FOATFPqpLkDaz/fOkRQIQr6F41ks0PIJXjzmMeIJdUhBsluJaU/pllHqjTDFk2uBOSQr5g0WFeCVLfss0E" +
+                      "Ybkbx3BsLtvThDgphBc98KOU2gx3o+Tm5U1oTT/tZdUjrWq8iPWzI+JMrG1RtZEVVeewOFT5sn";
             
             ParseInput(args);
-            
+            var km = new KeyManager();
+
+            var key = km.Base64Decode(web);
+            var encoding = km.Base64Encode(key);
+
+            Console.WriteLine(web.Equals(encoding));
+            Console.WriteLine(web);
+            Console.WriteLine(encoding);
+
             /*
              * private key emails: list of all emails that I have sent to sever using that private key
              * pub key email: NONE< don't touch
@@ -165,23 +178,57 @@ namespace Messenger
 
     public class KeyManager
     {
-        public void StoreKey(Key key)
+        private const int SizeOfLen = 4;
+        
+        private byte[] GetNBytes(byte[] source, int startIndex, int numBytes)
         {
-            Console.WriteLine(Base64Encode(key));
-        }
+            
+            var section = new byte[numBytes];
 
-        private string Base64Encode(Key key)
+            Array.Copy(source, startIndex, section, 0, numBytes);
+
+            // always return little endian form
+            if (BitConverter.IsLittleEndian)
+                Array.Reverse(section);
+                
+            return section;
+        }
+        
+
+        public string Base64Encode(Key key)
         {
             var E = key.GetPrime().ToByteArray();
+            Array.Reverse(E);
+            
+            var e = BitConverter.GetBytes(E.Length);
+            Array.Reverse(e);
 
-            var sizeofE = new BigInteger(E.Length).ToByteArray();
 
             var N = key.GetNonce().ToByteArray();
-            var sizeofN = new BigInteger(N.Length).ToByteArray();
+            Array.Reverse(N);
+            
+            var n = BitConverter.GetBytes(N.Length);
+            Array.Reverse(n);
 
-            var combined = Array.Empty<byte>().Concat(sizeofE).Concat(E).Concat(sizeofN).Concat(N).ToArray();
+            var combined = Array.Empty<byte>().Concat(e).Concat(E).Concat(n).Concat(N).ToArray();
 
             return Convert.ToBase64String(combined);
+            
+        }
+
+        public Key Base64Decode(string encoding)
+        {
+            var keyBytes = Convert.FromBase64String(encoding);
+
+            // convert 1st 4 bytes to 'e'
+            var e = BitConverter.ToInt32(GetNBytes(keyBytes, 0, 4), 0);
+            var E = new BigInteger(GetNBytes(keyBytes, 4, e));
+            
+            var n = BitConverter.ToInt32(GetNBytes(keyBytes, e+4, 4), 0);
+            var N = new BigInteger(GetNBytes(keyBytes, e+8, n));
+
+            return new Key(N, E, true);
+
         }
     }
     
@@ -229,16 +276,8 @@ namespace Messenger
             
             var n = BitConverter.ToInt32(GetNBytes(keyBytes, e+4, 4), 0);
             var N = new BigInteger(GetNBytes(keyBytes, e+8, n));
-
-            Console.WriteLine("e: " + e);
-            Console.WriteLine("E: " + E);
-            Console.WriteLine("n: " + n);
-            Console.WriteLine("N: " + N);
-
-            var foo = new KeyManager();
-
-            var key = new Key(N, E, true);
-            foo.StoreKey(key);
+            
+       
         }
 
         private byte[] GetNBytes(byte[] source, int startIndex, int numBytes)
