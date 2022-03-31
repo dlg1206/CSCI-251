@@ -66,6 +66,11 @@ namespace Messenger
 
                         var publicKey = new Key(nonce, new BigInteger(E), true);
                         var privateKey = new Key(nonce, new BigInteger(E).ModInverse(r), false);
+
+                        var km = new KeyManager();
+                        
+                        km.StoreKey(publicKey);
+                        km.StoreKey(privateKey);
                     }
                     return;
                 
@@ -109,9 +114,11 @@ namespace Messenger
                 "\t- getMsg <email>: this will retrieve a message for a particular user.");
         }
 
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
-            
+            var ws = new WebClient();   // init web client
+
+            await ws.Connect("http://kayrun.cs.rit.edu:5000/Key/jsb@cs.rit.edu");
             // Print error if 
             if (!ValidateInput(args))
             {
@@ -120,9 +127,7 @@ namespace Messenger
             }
             
             ParseInput(args);
-            //var ws = new WebClient();   // init web client
-
-            //await ws.Connect("http://kayrun.cs.rit.edu:5000/Key/jsb@cs.rit.edu");
+            
             /*
              * private key emails: list of all emails that I have sent to sever using that private key
              * pub key email: NONE< don't touch
@@ -130,10 +135,11 @@ namespace Messenger
         }
         
     }
+
     public class Key
     {
-        private BigInteger _nonce;      // N
-        private BigInteger _prime;      // E or D
+        private readonly BigInteger _nonce; // N
+        private readonly BigInteger _prime; // E or D
 
         public Key(BigInteger nonce, BigInteger prime, bool isPublic)
         {
@@ -141,7 +147,42 @@ namespace Messenger
             _prime = prime;
             IsPublic = isPublic;
         }
+
         public bool IsPublic { get; }
+
+        public BigInteger GetNonce()
+        {
+            return _nonce;
+        }
+
+        public BigInteger GetPrime()
+        {
+            return _prime;
+        }
+    
+
+    }
+
+    public class KeyManager
+    {
+        public void StoreKey(Key key)
+        {
+            Console.WriteLine(Base64Encode(key));
+        }
+
+        private string Base64Encode(Key key)
+        {
+            var E = key.GetPrime().ToByteArray();
+
+            var sizeofE = new BigInteger(E.Length).ToByteArray();
+
+            var N = key.GetNonce().ToByteArray();
+            var sizeofN = new BigInteger(N.Length).ToByteArray();
+
+            var combined = Array.Empty<byte>().Concat(sizeofE).Concat(E).Concat(sizeofN).Concat(N).ToArray();
+
+            return Convert.ToBase64String(combined);
+        }
     }
     
     public class WebClient
@@ -177,6 +218,8 @@ namespace Messenger
 
             if (jsonDict == null)
                 return;
+
+            Console.WriteLine(jsonDict["key"]);
             
             var keyBytes = Convert.FromBase64String(jsonDict["key"]);
 
@@ -186,7 +229,16 @@ namespace Messenger
             
             var n = BitConverter.ToInt32(GetNBytes(keyBytes, e+4, 4), 0);
             var N = new BigInteger(GetNBytes(keyBytes, e+8, n));
-            
+
+            Console.WriteLine("e: " + e);
+            Console.WriteLine("E: " + E);
+            Console.WriteLine("n: " + n);
+            Console.WriteLine("N: " + N);
+
+            var foo = new KeyManager();
+
+            var key = new Key(N, E, true);
+            foo.StoreKey(key);
         }
 
         private byte[] GetNBytes(byte[] source, int startIndex, int numBytes)
