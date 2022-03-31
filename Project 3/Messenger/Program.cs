@@ -16,8 +16,7 @@ namespace Messenger
         private const int E = 5113;
         private static bool ValidateInput(string[] args)
         {
-            if (args.Length == 0)
-                return false;
+           
             
             switch (args[0])
             {
@@ -40,53 +39,42 @@ namespace Messenger
                     return false;
             }
         }
-
-        private static void ParseInput(string[] args)
+        
+        private static bool ParseInput(string[] args)
         {
-            
+            if (args.Length == 0)
+                return false;
                 
             switch (args[0])
             {
                 case "keyGen":
-                    if (!int.TryParse(args[1], out var keySize))
+                    if (args.Length == 2 || !int.TryParse(args[1], out var keySize))
                     {
-                        PrintUsage();
+                        return false;
                     }
                     else
                     {
-                        var pg = new PrimeGen();
-    
-                        var lenP = (int) (keySize / 2 + keySize * 0.2);
-
-                        var p = pg.FindPrime(lenP);
-                        var q = pg.FindPrime(keySize - lenP);
-
-                        var nonce = p * q;
-                        var r =  (p - 1) * (q - 1);
-
-                        var publicKey = new Key(nonce, new BigInteger(E), true);
-                        var privateKey = new Key(nonce, new BigInteger(E).ModInverse(r), false);
-
-                        var km = new KeyManager();
-                        
+                        DoKeyGen(keySize);
                     }
-                    return;
+                    break;
                 
                 case "sendKey":
-                    return;
+                    break;
                 
                 case "getKey":
-                    return;
+                    break;
                 
                 case "sendMsg":
-                    return;
+                    break;
                 
                 case "getMsg":
-                    return;
+                    break;
                 
                 default:
-                    return;
+                    return false;
             }
+
+            return true;
         }
 
         private static void PrintUsage()
@@ -112,6 +100,24 @@ namespace Messenger
                 "\t- getMsg <email>: this will retrieve a message for a particular user.");
         }
 
+        private static void DoKeyGen(int keySize)
+        {
+            var pg = new PrimeGen();
+    
+            var lenP = (int) (keySize / 2 + keySize * 0.2);
+
+            var p = pg.FindPrime(lenP);
+            var q = pg.FindPrime(keySize - lenP);
+
+            var nonce = p * q;
+            var r =  (p - 1) * (q - 1);
+
+            var publicKey = new Key(nonce, new BigInteger(E), true);
+            var privateKey = new Key(nonce, new BigInteger(E).ModInverse(r), false);
+
+            var km = new KeyManager();
+        }
+
         public static void Main(string[] args)
         {
             
@@ -120,7 +126,7 @@ namespace Messenger
 
             // await ws.Connect("http://kayrun.cs.rit.edu:5000/Key/jsb@cs.rit.edu");
             // Print error if 
-            if (!ValidateInput(args))
+            if (!ParseInput(args))
             {
                 PrintUsage();
                 return;
@@ -131,15 +137,6 @@ namespace Messenger
                       "K07EnH1beaGoj/FOATFPqpLkDaz/fOkRQIQr6F41ks0PIJXjzmMeIJdUhBsluJaU/pllHqjTDFk2uBOSQr5g0WFeCVLfss0E" +
                       "Ybkbx3BsLtvThDgphBc98KOU2gx3o+Tm5U1oTT/tZdUjrWq8iPWzI+JMrG1RtZEVVeewOFT5sn";
             
-            ParseInput(args);
-            var km = new KeyManager();
-
-            var key = km.Base64Decode(web);
-            var encoding = km.Base64Encode(key);
-
-            Console.WriteLine(web.Equals(encoding));
-            Console.WriteLine(web);
-            Console.WriteLine(encoding);
 
             /*
              * private key emails: list of all emails that I have sent to sever using that private key
@@ -178,8 +175,7 @@ namespace Messenger
 
     public class KeyManager
     {
-        private const int SizeOfLen = 4;
-        
+
         private byte[] GetNBytes(byte[] source, int startIndex, int numBytes)
         {
             
@@ -194,15 +190,13 @@ namespace Messenger
             return section;
         }
         
-
-        public string Base64Encode(Key key)
+        private string Base64Encode(Key key)
         {
             var E = key.GetPrime().ToByteArray();
             Array.Reverse(E);
             
             var e = BitConverter.GetBytes(E.Length);
             Array.Reverse(e);
-
 
             var N = key.GetNonce().ToByteArray();
             Array.Reverse(N);
@@ -216,7 +210,7 @@ namespace Messenger
             
         }
 
-        public Key Base64Decode(string encoding)
+        private Key Base64Decode(string encoding)
         {
             var keyBytes = Convert.FromBase64String(encoding);
 
@@ -228,7 +222,11 @@ namespace Messenger
             var N = new BigInteger(GetNBytes(keyBytes, e+8, n));
 
             return new Key(N, E, true);
+        }
 
+        public void storeKey(Key key)
+        {
+            
         }
     }
     
