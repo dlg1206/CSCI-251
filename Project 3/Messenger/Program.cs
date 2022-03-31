@@ -6,7 +6,6 @@
  */
 
 
-using System.Net;
 using System.Numerics;
 using System.Text.Json;
 
@@ -47,6 +46,14 @@ namespace Messenger
             switch (args[0])
             {
                 case "keyGen":
+                    if (!int.TryParse(args[1], out var keySize))
+                    {
+                        PrintUsage();
+                    }
+                    else
+                    {
+                        var foo = new KeyPair(keySize);
+                    }
                     return;
                 
                 case "sendKey":
@@ -66,37 +73,55 @@ namespace Messenger
             }
         }
 
-        public static async Task Main(string[] args)
+        private static void PrintUsage()
+        {
+            Console.WriteLine("usage: dotnet run <option> <other arguments>");
+                
+            Console.WriteLine(
+                "\t- keyGen <keySize>: generate a keypair of size keySize bits (public and private keys) and " +
+                "store them locally on the disk");
+                
+            Console.WriteLine(
+                "\t- sendKey <email>: sends the public key that was generated in the keyGen phase and send it to " +
+                "the server, with the email address given");
+
+            Console.WriteLine(
+                "\t- getKey <email>: this will retrieve public key for a particular user with that email");
+
+            Console.WriteLine(
+                "\t- sendMsg <email> <plaintext>: this will take a plaintext message, encrypt it using the public" +
+                " key of the person you are sending it to, based on their email address.");
+
+            Console.WriteLine(
+                "\t- getMsg <email>: this will retrieve a message for a particular user.");
+        }
+
+        public static void Main(string[] args)
         {
             
             // Print error if 
             if (!ValidateInput(args))
             {
-                Console.WriteLine("usage: dotnet run <option> <other arguments>");
-                
-                Console.WriteLine(
-                    "\t- keyGen <keySize>: generate a keypair of size keySize bits (public and private keys) and " +
-                    "store them locally on the disk");
-                
-                Console.WriteLine(
-                    "\t- sendKey <email>: sends the public key that was generated in the keyGen phase and send it to " +
-                    "the server, with the email address given");
-
-                Console.WriteLine(
-                    "\t- getKey <email>: this will retrieve public key for a particular user with that email");
-
-                Console.WriteLine(
-                    "\t- sendMsg <email> <plaintext>: this will take a plaintext message, encrypt it using the public" +
-                    " key of the person you are sending it to, based on their email address.");
-
-                Console.WriteLine(
-                    "\t- getMsg <email>: this will retrieve a message for a particular user.");
+                PrintUsage();
+                return;
             }
+            
+            ParseInput(args);
             //var ws = new WebClient();   // init web client
 
             //await ws.Connect("http://kayrun.cs.rit.edu:5000/Key/jsb@cs.rit.edu");
-            Console.WriteLine("foo");
         }
+        
+    }
+
+    public class KeyPair
+    {
+
+        public KeyPair(int keySize)
+        {
+            
+        }
+        
         
     }
     

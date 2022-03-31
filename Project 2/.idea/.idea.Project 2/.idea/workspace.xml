@@ -5,6 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d879b4c7-d833-413b-9894-e2df33cddcf3" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../Project 3/Messenger/PrimeGen.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Project 2/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Project 2/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Project 3/Messenger/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Project 3/Messenger/Program.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -70,7 +72,8 @@
       <workItem from="1645107554751" duration="71000" />
       <workItem from="1648607586155" duration="108000" />
       <workItem from="1648607950732" duration="63000" />
-      <workItem from="1648608407034" duration="688000" />
+      <workItem from="1648608407034" duration="689000" />
+      <workItem from="1648701669758" duration="1081000" />
     </task>
     <task id="LOCAL-00001" summary="init Project 2">
       <created>1644851895650</created>
