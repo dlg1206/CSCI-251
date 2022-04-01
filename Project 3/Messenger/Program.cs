@@ -18,7 +18,7 @@ namespace Messenger
     {
         private const int E = 5113;
         private readonly KeyManager _keyManager = new KeyManager();
-        private readonly HttpClient _client = new HttpClient();
+        private readonly WebClient _webClient = new WebClient();
 
         private bool ParseInput(string[] args)
         {
@@ -45,7 +45,13 @@ namespace Messenger
                     }
                     else
                     {
+                        // send public
+                        // add email to private key email
+                        // http://kayrun.cs.rit.edu:5000/Key/email
+
                         DoSendKey(args[1]);
+                        
+
                     }
                     break;
                 
@@ -113,22 +119,7 @@ namespace Messenger
             // add email to private key email
             // http://kayrun.cs.rit.edu:5000/Key/email
             
-            try
-            {
-                
-                var content = new StringContent(_keyManager.GetJsonKey(true), Encoding.UTF8, "application/json");
-                var response = await _client.PutAsync(
-                    "http://kayrun.cs.rit.edu:5000/Key/email",
-                        content
-                    );
-
-            }
-            // report err
-            catch(HttpRequestException e)
-            {
-                Console.WriteLine("\nException Caught!");	
-                Console.WriteLine("Message :{0} ",e.Message);
-            }
+            await _webClient.Put(_webClient.KeyAddress, _keyManager.GetJsonKey(true));
             
             
             
@@ -163,7 +154,7 @@ namespace Messenger
     }
     public class JsonKey
     {
-        public string[]? Emails { get; set; }
+        public string[]? Email { get; set; }
         public string? EncodedKey { get; set; }
         public bool IsPublic { get; set; }
     }
@@ -199,6 +190,54 @@ namespace Messenger
         private const string PublicKey = "public.key";
         private const string PrivateKey = "private.key";
 
+        public void StoreKey(Key key)
+        {
+            var jsonKey = new JsonKey
+            {
+                Email = Array.Empty<string>(),
+                EncodedKey = Base64Encode(key),
+                IsPublic = key.IsPublic
+            };
+            
+            
+            var fileName = key.IsPublic ? PublicKey : PrivateKey;
+            
+            if (File.Exists(fileName))
+            {
+                File.Delete(fileName);
+            }
+
+            using StreamWriter sw = File.CreateText(fileName);
+            sw.WriteLine(JsonSerializer.Serialize(jsonKey));
+            
+        }
+
+        public void AddEmail(bool isPublic, string email)
+        {
+            var fileName = isPublic ? PublicKey : PrivateKey;
+            
+            var jsonDict = JsonSerializer.Deserialize<JsonObject>(File.ReadAllText(fileName));
+
+            if (jsonDict == null)
+                return;
+
+            // jsonDict[0].AsArray().Pu
+            
+            
+            
+            
+            
+        }
+
+        public string GetJsonKey(bool isPublic)
+        {
+            var fileName = isPublic ? PublicKey : PrivateKey;
+            // var foo = new JsonObject.Parse()
+            return File.ReadAllText(fileName);
+                
+
+        }
+        
         private byte[] GetNBytes(byte[] source, int startIndex, int numBytes)
         {
             
@@ -246,37 +285,6 @@ namespace Messenger
 
             return new Key(N, E, true);
         }
-
-        public void StoreKey(Key key)
-        {
-            var jsonKey = new JsonKey
-            {
-                Emails = Array.Empty<string>(),
-                EncodedKey = Base64Encode(key),
-                IsPublic = key.IsPublic
-            };
-            
-            
-            var fileName = key.IsPublic ? PublicKey : PrivateKey;
-            
-            if (File.Exists(fileName))
-            {
-                File.Delete(fileName);
-            }
-
-            using StreamWriter sw = File.CreateText(fileName);
-            sw.WriteLine(JsonSerializer.Serialize(jsonKey));
-            
-        }
-
-        public string GetJsonKey(bool isPublic)
-        {
-            var fileName = isPublic ? PublicKey : PrivateKey;
-            // var foo = new JsonObject.Parse()
-            return File.ReadAllText(fileName);
-                
-
-        }
         
         
     }
@@ -284,10 +292,13 @@ namespace Messenger
     public class WebClient
     {
         private readonly HttpClient _client = new HttpClient();
-
-        public const string MessageAddress = "http://kayrun.cs.rit.edu:5000/Message/email";
-        public const string KeyAddress = "http://kayrun.cs.rit.edu:5000/Key/email";
         
+        public string MessageAddress => "http://kayrun.cs.rit.edu:5000/Message/email";
+        public string KeyAddress => "http://kayrun.cs.rit.edu:5000/Key/email";
+        
+        
+
+
         public async Task Put(string destination, string message)
         {
             // send public
