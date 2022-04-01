@@ -8,3 +8,7 @@ SendKey:
 main:
     Keymananger / client should be static? -IGNORE
     too many static? - IGNORE
+    
+   // Client.GetAsync()
+   // get
+                   // Client.PutAsync()   // put

@@ -92,7 +92,7 @@ namespace Messenger
         {
             var pg = new PrimeGen();
     
-            var lenP = (int) (keySize / 2 + keySize * 0.2);
+            var lenP = (int) ((int) (keySize / 2) + keySize * 0.2);
 
             var p = pg.FindPrime(lenP);
             var q = pg.FindPrime(keySize - lenP);
@@ -115,13 +115,13 @@ namespace Messenger
             
             try
             {
-                var content = new StringContent(
-                    _keyManager.GetJsonKey(true), Encoding.UTF8, "application/json");
-                // var foo = KeyManager.GetJsonKey(true);
-                // Client.GetAsync()   // get
-                // Client.PutAsync()   // put
-               
-            
+                
+                var content = new StringContent(_keyManager.GetJsonKey(true), Encoding.UTF8, "application/json");
+                var response = await _client.PutAsync(
+                    "http://kayrun.cs.rit.edu:5000/Key/email",
+                        content
+                    );
+
             }
             // report err
             catch(HttpRequestException e)
@@ -269,7 +269,7 @@ namespace Messenger
             
         }
 
-        public string? GetJsonKey(bool isPublic)
+        public string GetJsonKey(bool isPublic)
         {
             var fileName = isPublic ? PublicKey : PrivateKey;
             // var foo = new JsonObject.Parse()
@@ -284,31 +284,46 @@ namespace Messenger
     public class WebClient
     {
         private readonly HttpClient _client = new HttpClient();
+
+        public const string MessageAddress = "http://kayrun.cs.rit.edu:5000/Message/email";
+        public const string KeyAddress = "http://kayrun.cs.rit.edu:5000/Key/email";
         
-        /// <summary>
-        /// Connect to given url
-        /// </summary>
-        /// <param name="url"></param>
-        public async Task Connect(string url)
+        public async Task Put(string destination, string message)
         {
-            // attempt to connect to server
-            try	
+            // send public
+            // add email to private key email
+
+            try
             {
-                var json = await _client.GetStringAsync(url);
-                
-                ParseJson(json);
-                
+
+                var content = new StringContent(message, Encoding.UTF8, "application/json");
+                var response = await _client.PutAsync(destination, content);
+
             }
             // report err
-            catch(HttpRequestException e)
+            catch (HttpRequestException e)
             {
-                Console.WriteLine("\nException Caught!");	
-                Console.WriteLine("Message :{0} ",e.Message);
+                Console.WriteLine("\nException Caught!");
+                Console.WriteLine("Message :{0} ", e.Message);
             }
-            
-            
+
+          
         }
 
+        public async Task Get(string destination)
+        {
+            try
+            {
+                var response = await _client.GetAsync(destination);
+            }
+            // report err
+            catch (HttpRequestException e)
+            {
+                Console.WriteLine("\nException Caught!");
+                Console.WriteLine("Message :{0} ", e.Message);
+            }
+        }
+        
         private void ParseJson(string json)
         {
             var jsonDict = JsonSerializer.Deserialize<Dictionary<string, string>>(json);
