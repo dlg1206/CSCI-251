@@ -119,8 +119,7 @@ namespace Messenger
                 // var content = new StringContent(
                 //     KeyManager.GetJsonKey(true), Encoding.UTF8, "application/json");
                 var foo = KeyManager.GetJsonKey(true);
-                var response = 
-                    await Client.PostAsync(foo, "PUT http://kayrun.cs.rit.edu:5000/Key/email");
+               
             
             }
             // report err
