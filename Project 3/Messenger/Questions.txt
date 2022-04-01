@@ -1,9 +1,10 @@
 ﻿KeyGen:
-    Overwrite existing keys?
+    Overwrite existing keys? - yes
    
 SendKey:
-    error msg for send key - ie pub/private key not generated?
+    error msg for send key - ie pub/private key not generated? -yes 
+    same w/ send message
    
 main:
-    Keymananger / client should be static?
-    too many static?
+    Keymananger / client should be static? -IGNORE
+    too many static? - IGNORE

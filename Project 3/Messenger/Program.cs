@@ -14,14 +14,13 @@ using System.Text.Json.Serialization;
 
 namespace Messenger
 {
-    public static class Program
+    public class Program
     {
         private const int E = 5113;
+        private readonly KeyManager _keyManager = new KeyManager();
+        private readonly HttpClient _client = new HttpClient();
 
-        private static readonly KeyManager KeyManager = new KeyManager();
-        private static readonly HttpClient Client = new HttpClient();
-
-        private static bool ParseInput(string[] args)
+        private bool ParseInput(string[] args)
         {
             if (args.Length == 0)
                 return false;
@@ -66,7 +65,7 @@ namespace Messenger
             return true;
         }
 
-        private static void PrintUsage()
+        private void PrintUsage()
         {
             Console.WriteLine("usage: dotnet run <option> <other arguments>");
                 
@@ -89,7 +88,7 @@ namespace Messenger
                 "\t- getMsg <email>: this will retrieve a message for a particular user.");
         }
 
-        private static void DoKeyGen(int keySize)
+        private void DoKeyGen(int keySize)
         {
             var pg = new PrimeGen();
     
@@ -104,11 +103,11 @@ namespace Messenger
             var publicKey = new Key(nonce, new BigInteger(E), true);
             var privateKey = new Key(nonce, new BigInteger(E).ModInverse(r), false);
 
-            KeyManager.StoreKey(publicKey);
-            KeyManager.StoreKey(privateKey);
+            _keyManager.StoreKey(publicKey);
+            _keyManager.StoreKey(privateKey);
         }
 
-        private static async Task DoSendKey(string email)
+        private async Task DoSendKey(string email)
         {
             // send public
             // add email to private key email
@@ -116,9 +115,11 @@ namespace Messenger
             
             try
             {
-                // var content = new StringContent(
-                //     KeyManager.GetJsonKey(true), Encoding.UTF8, "application/json");
-                var foo = KeyManager.GetJsonKey(true);
+                var content = new StringContent(
+                    _keyManager.GetJsonKey(true), Encoding.UTF8, "application/json");
+                // var foo = KeyManager.GetJsonKey(true);
+                // Client.GetAsync()   // get
+                // Client.PutAsync()   // put
                
             
             }
@@ -136,15 +137,15 @@ namespace Messenger
 
         public static void Main(string[] args)
         {
-            
-            
+
+            var p = new Program();
             // var ws = new WebClient();   // init web client
 
             // await ws.Connect("http://kayrun.cs.rit.edu:5000/Key/jsb@cs.rit.edu");
             // Print error if 
-            if (!ParseInput(args))
+            if (!p.ParseInput(args))
             {
-                PrintUsage();
+                p.PrintUsage();
             }
 
             // var web = "AAAAAwEAAQAAAQB7w4yJG+kH5BXhL9lgeCxkNqKeIIyC0zzG0FYJu5/WVa7xCdXGSmG3pEEpyEPhe81L9zb1qWpnn" +
