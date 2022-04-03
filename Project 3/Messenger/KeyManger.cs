@@ -27,9 +27,15 @@ public class Key
     {
         return _prime;
     }
-    
-
 }
+
+public class JsonKey
+{
+    public string[]? Email { get; set; }
+    public string? EncodedKey { get; set; }
+    public bool IsPublic { get; set; }
+}
+
 public class KeyManger
 {
     private const int E = 5113;
