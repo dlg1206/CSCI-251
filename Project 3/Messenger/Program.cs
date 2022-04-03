@@ -16,6 +16,11 @@ namespace Messenger
 
         private async Task ParseInput(string[] args)
         {
+            if (args.Length == 0)
+            {
+                PrintUsage();
+                return;
+            }
 
             switch (args[0])
             {
@@ -26,7 +31,7 @@ namespace Messenger
                     }
                     else
                     {
-                        _keyManager.keyGen(keySize);
+                        _keyManager.KeyGen(keySize);
                     }
                     break;
                 
@@ -39,7 +44,7 @@ namespace Messenger
                     {
                         // send public
                         // add email to private key email
-                        await _webClient.SendKey(args[1], _keyManager.GetJsonKey(true));
+                        await _webClient.SendKey(args[1], _keyManager);
                     }
                     break;
                 

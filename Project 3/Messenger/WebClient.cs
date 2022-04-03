@@ -68,13 +68,15 @@ public class WebClient
        
         }
         
-        public async Task SendKey(string email, string jsonMsg)
+        public async Task SendKey(string email, KeyManger keyManager)
         {
             // send public
             // add email to private key email
             // http://kayrun.cs.rit.edu:5000/Key/email
             
-            await Put(KeyAddress, jsonMsg);
+            // await Put(KeyAddress, keyManager.GetJsonKey(true));
+            
+            keyManager.AddEmail(true, email);
             
             
             

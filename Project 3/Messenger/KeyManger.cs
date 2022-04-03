@@ -112,7 +112,7 @@ public class KeyManger
         return new Key(N, E, true);
     }
     
-    public void keyGen(int keySize)
+    public void KeyGen(int keySize)
     {
         var pg = new PrimeGen();
     
@@ -135,12 +135,16 @@ public class KeyManger
     {
         var fileName = isPublic ? PublicKey : PrivateKey;
         
-        var jsonDict = JsonSerializer.Deserialize<JsonObject>(File.ReadAllText(fileName));
+        var jsonObj = JsonSerializer.Deserialize<JsonObject>(File.ReadAllText(fileName));
 
-        if (jsonDict == null)
+        if (jsonObj == null)
             return;
 
-        // jsonDict[0].AsArray().Pu
+        jsonObj[0]!.AsArray().Add(email);
+
+        using StreamWriter sw = File.CreateText(fileName);
+        sw.WriteLine(JsonSerializer.Serialize(jsonObj));
+        
 
     }
 
