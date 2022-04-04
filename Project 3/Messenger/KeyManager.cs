@@ -13,58 +13,21 @@ using System.Text.Json.Serialization;
 
 namespace Messenger;
 
-/// <summary>
-/// Key class used during key generation
-/// </summary>
-public class Key
+public abstract class JsonKey
 {
-    // Prime Value
-    private readonly BigInteger _nonce;     // N
-    private readonly BigInteger _prime;     // Public: E | Private: D
-
-    
-    /// <summary>
-    /// Key Constructor, makes a key
-    /// </summary>
-    /// <param name="nonce">N value for the key</param>
-    /// <param name="prime">E or D value for this key if its public or private respectivly</param>
-    /// <param name="isPublic">States whether this is a public or private key</param>
-    public Key(BigInteger nonce, BigInteger prime, bool isPublic)
+    public void SetValues(BigInteger nonce, BigInteger prime)
     {
-        _nonce = nonce;
-        _prime = prime;
-        IsPublic = isPublic;
+        Nonce = nonce;
+        Prime = prime;
     }
 
+    public BigInteger Nonce { get; private set; }
+
+    public BigInteger Prime { get; private set; }
     /// <summary>
     /// Gets key public / private status
     /// </summary>
-    public bool IsPublic { get; }
-
-    /// <summary>
-    /// Get N value
-    /// </summary>
-    /// <returns>N value</returns>
-    public BigInteger GetNonce()
-    {
-        return _nonce;
-    }
-
-    
-    /// <summary>
-    /// Gets Prime value
-    /// </summary>
-    /// <returns>Prime value</returns>
-    public BigInteger GetPrime()
-    {
-        return _prime;
-    }
-}
-
-
-
-public abstract class JsonKey
-{
+    public bool IsPublic { get; set; }
     
 }
 
@@ -192,7 +155,7 @@ public class KeyManager
     /// </summary>
     /// <param name="encoding">Base64 Encoding of a Key</param>
     /// <returns>Decoded Key</returns>
-    public Key Base64Decode(string encoding)
+    public JsonKey Base64Decode(string encoding)
     {
         var keyBytes = Convert.FromBase64String(encoding);      // get initial bytes
 
@@ -233,8 +196,11 @@ public class KeyManager
         var r =  (p - 1) * (q - 1);
 
         // create respective keys
-        var publicKey = new Key(nonce, new BigInteger(_E), true);
-        var privateKey = new Key(nonce, new BigInteger(_E).ModInverse(r), false);
+        // var publicKey = new JsonP(nonce, new BigInteger(_E), true);
+        var publicKey = new JsonPublicKey();
+        publicKey.SetValues(nonce, new BigInteger(_E));
+        var privateKey = new JsonPrivateKey();
+        privateKey.SetValues(nonce, new BigInteger(_E).ModInverse(r));
 
         // store each key
         StoreKey(publicKey, PublicKey);
