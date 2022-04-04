@@ -9,6 +9,7 @@
 using System.Numerics;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 
 namespace Messenger;
 
@@ -19,12 +20,12 @@ public class WebClient
         /// <summary>
         /// Getter for Message address
         /// </summary>
-        public string MessageAddress => "http://kayrun.cs.rit.edu:5000/Message/email";
+        public string MessageAddress => "http://kayrun.cs.rit.edu:5000/Message/";
         
         /// <summary>
         /// Getter for Key address
         /// </summary>
-        public string KeyAddress => "http://kayrun.cs.rit.edu:5000/Key/email";
+        public string KeyAddress => "http://kayrun.cs.rit.edu:5000/Key/";
 
         
         /// <summary>
@@ -59,7 +60,7 @@ public class WebClient
             // Attempt get
             try
             {
-                await _client.GetAsync(destination);
+                var jsonObj = await _client.GetAsync(destination);
             }
             // Report Error
             catch (HttpRequestException e)
@@ -90,14 +91,6 @@ public class WebClient
        
         }
         
-        
-        
-        public async Task SendKey(string email, KeyManger keyManager)
-        {
-            // await Put(KeyAddress, keyManager.GetJsonKey(true));
-            keyManager.AddEmail(false, email);
-        }
-
         private byte[] GetNBytes(byte[] source, int startIndex, int numBytes)
         {
             
@@ -111,5 +104,46 @@ public class WebClient
                 
             return section;
         }
+        
+        
+        
+        public async Task SendKey(string email, KeyManger keyManager)
+        {
+            // await Put(KeyAddress, keyManager.GetJsonKey(true));
+            keyManager.AddEmail(false, email);
+        }
+
+        public async Task GetKey(string email, KeyManger keyManger)
+        {
+            // Attempt get
+            try
+            {
+                var jsonString = await _client.GetStringAsync(KeyAddress + email);
+                var jsonObj = JsonSerializer.Deserialize<JsonObject>(jsonString);
+
+                var base64Key = jsonObj?["key"];
+                
+                if(base64Key == null)
+                    return;
+
+                var key = keyManger.Base64Decode(base64Key.AsValue().ToString());
+
+              
+                keyManger.StoreKey(key, email + ".key");
+                
+
+            }
+            // Report Error
+            catch (HttpRequestException e)
+            {
+                Console.WriteLine("\nException Caught!");
+                Console.WriteLine("Message :{0} ", e.Message);
+            }
+            
+            
+            
+        }
+
+       
             
     }

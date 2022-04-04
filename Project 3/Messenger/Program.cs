@@ -83,13 +83,19 @@ namespace Messenger
                     }
                     else
                     {
-                        // send public
-                        // add email to private key email
                         await webClient.SendKey(args[1], keyManager);   // send key
                     }
                     break;
                 
                 case "getKey":
+                    if (args.Length != 2)
+                    {
+                        p.PrintUsage();
+                    }
+                    else
+                    {
+                        await webClient.GetKey(args[1], keyManager);
+                    }
                     break;
                 
                 case "sendMsg":

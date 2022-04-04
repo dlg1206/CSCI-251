@@ -93,7 +93,7 @@ public class KeyManger
     /// Stores a given key locally
     /// </summary>
     /// <param name="key">key to store</param>
-    private void StoreKey(Key key)
+    public void StoreKey(Key key, string fileName)
     {
         // covert it into json key
         var jsonKey = new JsonKey
@@ -101,8 +101,6 @@ public class KeyManger
             Emails = Array.Empty<string>(),
             EncodedKey = Base64Encode(key),
         };
-        
-        var fileName = key.IsPublic ? PublicKey : PrivateKey;   // get correct file name
 
         // write it locally
         using var sw = File.CreateText(fileName);
@@ -166,7 +164,7 @@ public class KeyManger
     /// </summary>
     /// <param name="encoding">Base64 Encoding of a Key</param>
     /// <returns>Decoded Key</returns>
-    private Key Base64Decode(string encoding)
+    public Key Base64Decode(string encoding)
     {
         var keyBytes = Convert.FromBase64String(encoding);      // get initial bytes
 
@@ -211,8 +209,8 @@ public class KeyManger
         var privateKey = new Key(nonce, new BigInteger(_E).ModInverse(r), false);
 
         // store each key
-        StoreKey(publicKey);
-        StoreKey(privateKey);
+        StoreKey(publicKey, PublicKey);
+        StoreKey(privateKey, PrivateKey);
     }
 
     
