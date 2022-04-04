@@ -10,6 +10,7 @@ using System.Numerics;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Text.Json.Serialization;
 
 namespace Messenger;
 
@@ -133,6 +134,35 @@ public class WebClient
 
         public async Task GetMsg(KeyManager keyManager, string email)
         {
+            var privateKey = keyManager.GetPrivateKey(email);
+            
+            if(privateKey == "")
+                return;
+            
+            var pkey = keyManager.dec
+
+            try
+            {
+                var jsonString = await _client.GetStringAsync(KeyAddress + email);
+
+                if (jsonString == "")
+                    return;
+                
+                var jsonObj = JsonSerializer.Deserialize<JsonObject>(jsonString);
+
+                var sw = File.CreateText(email + ".key");
+                sw.WriteLine(jsonObj);
+                sw.Close();
+                
+            }
+            // Report Error
+            catch (HttpRequestException e)
+            {
+                Console.WriteLine("\nException Caught!");
+                Console.WriteLine("Message :{0} ", e.Message);
+            }
+            
+            
             
         }
 

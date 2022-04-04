@@ -195,8 +195,7 @@ public class KeyManager
         var emails = jsonObj?["email"];
         if(emails == null)
             return "";
-
-        // emails.AsValue() = JsonValue.Create(email);
+        
         if (!isPublic)
         {
             emails.AsArray().Add(email);
@@ -236,9 +235,35 @@ public class KeyManager
 
     }
 
-    public string GetPublicKey()
+    public string GetPrivateKey(string email)
     {
-        return null;
+        try
+        {
+            var jsonObj = JsonSerializer.Deserialize<JsonObject>(File.ReadAllText(PrivateKey));
+
+            var emails = jsonObj?["email"];
+            if(emails == null)
+                return "";
+
+            var haveKey = false;
+            // todo better way to check if in private
+            foreach (var storedEmail in emails.AsArray())
+            {
+                
+                haveKey = storedEmail.ToString().Equals(email);
+
+                if (haveKey)
+                    break;
+            }
+            return haveKey ? jsonObj["key"].ToString() : "";
+            
+        }
+        catch
+        {
+            Console.WriteLine("No private key found");
+            throw;
+        }
+ 
     }
     
 }
