@@ -94,7 +94,7 @@ namespace Messenger
                     }
                     else
                     {
-                        await webClient.GetKey(keyManager, args[1]);
+                        await webClient.GetKey(args[1]);
                     }
                     break;
                 

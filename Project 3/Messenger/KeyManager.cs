@@ -9,6 +9,7 @@ using System.Numerics;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Text.Json.Serialization;
 
 namespace Messenger;
 
@@ -61,10 +62,16 @@ public class Key
 }
 
 
+
+public abstract class JsonKey
+{
+    
+}
+
 /// <summary>
 /// Json interpretation of the key
 /// </summary>
-public class JsonPrivateKey
+public class JsonPrivateKey : JsonKey
 {
     /// <summary>
     /// Getter-Setter for Emails associated with this key
@@ -77,7 +84,7 @@ public class JsonPrivateKey
     public string? key { get; set; }
 }
 
-public class JsonPublicKey
+public class JsonPublicKey : JsonKey
 {
     public string? email { get; set; }
     
@@ -105,25 +112,26 @@ public class KeyManager
     public void StoreKey(Key key, string fileName)
     {
         using var sw = File.CreateText(fileName);
+        JsonKey jsonKey;
         // covert it into json key
         if (key.IsPublic)
         {
-            var jsonKey = new JsonPublicKey
+            jsonKey = new JsonPublicKey
             {
                 email = "",
                 key = Base64Encode(key),
             };
-            sw.WriteLine(JsonSerializer.Serialize(jsonKey));
         }
         else
         {
-            var jsonKey = new JsonPrivateKey
+            jsonKey = new JsonPrivateKey
             {
                 email = Array.Empty<string>(),
                 key = Base64Encode(key),
             };
-            sw.WriteLine(JsonSerializer.Serialize(jsonKey));
         }
+        
+        sw.WriteLine(JsonSerializer.Serialize(jsonKey));
 
     }
     

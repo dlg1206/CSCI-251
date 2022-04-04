@@ -39,7 +39,7 @@ public class WebClient
                     keyManager.AddEmail(true, email), 
                     Encoding.UTF8, "application/json"
                     );
-                // todo website address?
+          
                 var response = await _client.PutAsync(KeyAddress + email, content);    // send to server
 
                 Console.WriteLine(response.IsSuccessStatusCode ? "Key saved" : "Key was not saved");
@@ -54,7 +54,7 @@ public class WebClient
             keyManager.AddEmail(false, email);
         }
 
-        public async Task GetKey(KeyManager keyManager, string email)
+        public async Task GetKey(string email)
         {
             // Attempt get
             try
@@ -66,14 +66,10 @@ public class WebClient
                 
                 var jsonObj = JsonSerializer.Deserialize<JsonObject>(jsonString);
 
-                var base64Key = jsonObj?["key"];
+                var sw = File.CreateText(email + ".key");
+                sw.WriteLine(jsonObj);
+                sw.Close();
                 
-                if(base64Key == null)
-                    return;
-
-                var key = keyManager.Base64Decode(base64Key.AsValue().ToString());
-
-                keyManager.StoreKey(key, email + ".key");
             }
             // Report Error
             catch (HttpRequestException e)
