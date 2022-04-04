@@ -239,7 +239,7 @@ public class KeyManager
     /// </summary>
     /// <param name="isPublic">is the key public</param>
     /// <param name="email">email to add</param>
-    public void AddEmail(bool isPublic, string email)
+    public string AddEmail(bool isPublic, string email)
     {
         var fileName = isPublic ? PublicKey : PrivateKey;   // get file to update
         
@@ -247,17 +247,24 @@ public class KeyManager
         var jsonObj = JsonSerializer.Deserialize<JsonObject>(File.ReadAllText(fileName));
 
         // null reference check
-        var emails = jsonObj?["Emails"];
+        var emails = jsonObj?["email"];
         if(emails == null)
-            return;
+            return "";
 
-        // TODO check if email exists in email array
-        if (!emails.ToString().Contains(email))
+        // emails.AsValue() = JsonValue.Create(email);
+        if (!isPublic)
+        {
             emails.AsArray().Add(email);
-
-        // update local key
-        using var sw = File.CreateText(fileName);
-        sw.WriteLine(JsonSerializer.Serialize(jsonObj));
+            // update local key
+            using var sw = File.CreateText(fileName);
+            sw.WriteLine(JsonSerializer.Serialize(jsonObj));
+            return "";
+        }
+        
+        jsonObj["email"] = JsonValue.Create(email);
+        return JsonSerializer.Serialize(jsonObj);
+        
+        
     }
 
     public string Encrypt(Key publicKey, string plaintext)
@@ -269,7 +276,10 @@ public class KeyManager
         return Convert.ToBase64String(ciphertext.ToByteArray());
 
     }
-    
-  
+
+    public string GetPublicKey()
+    {
+        return null;
+    }
     
 }

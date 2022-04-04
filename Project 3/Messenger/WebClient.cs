@@ -30,13 +30,13 @@ public class WebClient
 
         public async Task SendKey(KeyManager keyManager, string email)
         {
-      
+    
             // Attempt to PUT
             try
             {
                 // single email to public key send, 
                 var content = new StringContent(
-                    File.ReadAllText(keyManager.PublicKey), 
+                    keyManager.AddEmail(true, email), 
                     Encoding.UTF8, "application/json"
                     );
                 // todo website address?

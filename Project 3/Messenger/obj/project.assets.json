@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Dgarc\\Programming\\Rider\\CSCI-251\\Project 3\\messenger\\Messenger.csproj",
+      "projectUniqueName": "C:\\Users\\Dgarc\\Programming\\Rider\\CSCI-251\\Project 3\\Messenger\\Messenger.csproj",
       "projectName": "Messenger",
-      "projectPath": "C:\\Users\\Dgarc\\Programming\\Rider\\CSCI-251\\Project 3\\messenger\\Messenger.csproj",
+      "projectPath": "C:\\Users\\Dgarc\\Programming\\Rider\\CSCI-251\\Project 3\\Messenger\\Messenger.csproj",
       "packagesPath": "C:\\Users\\Dgarc\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Dgarc\\Programming\\Rider\\CSCI-251\\Project 3\\messenger\\obj\\",
+      "outputPath": "C:\\Users\\Dgarc\\Programming\\Rider\\CSCI-251\\Project 3\\Messenger\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Dgarc\\AppData\\Roaming\\NuGet\\NuGet.Config",
