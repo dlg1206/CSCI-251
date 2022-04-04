@@ -133,8 +133,10 @@ public class KeyManger
         
         if(emails == null)
             return;
-        
-        emails.AsArray().Add(email);
+
+        // TODO check if email exists in email array
+        if (!emails.ToString().Contains(email))
+            emails.AsArray().Add(email);
 
 
         using var sw = File.CreateText(fileName);
