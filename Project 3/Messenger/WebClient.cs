@@ -13,6 +13,12 @@ using System.Text.Json.Nodes;
 
 namespace Messenger;
 
+public class JsonMessage
+{
+    public string email { get; set; }
+    public string content { get; set; }
+        
+}
 public class WebClient
     {
         private readonly HttpClient _client = new HttpClient();     // client that connects to server
@@ -39,7 +45,7 @@ public class WebClient
                     keyManager.AddEmail(true, email), 
                     Encoding.UTF8, "application/json"
                     );
-          
+               
                 var response = await _client.PutAsync(KeyAddress + email, content);    // send to server
 
                 Console.WriteLine(response.IsSuccessStatusCode ? "Key saved" : "Key was not saved");
@@ -54,7 +60,7 @@ public class WebClient
             keyManager.AddEmail(false, email);
         }
 
-        public async Task GetKey(string email)
+        public async Task GetKey(KeyManager keyManager, string email)
         {
             // Attempt get
             try
@@ -100,11 +106,18 @@ public class WebClient
                 return;
             
             var publicKey = keyManager.Base64Decode(base64Key.AsValue().ToString());
+            var jsonMsg = new JsonMessage
+            {
+                email = email,
+                content = keyManager.Encrypt(publicKey, plaintext)
+            };
+            
+            
 
             try
             {
                 var content = new StringContent(
-                    keyManager.Encrypt(publicKey, plaintext), 
+                    JsonSerializer.Serialize(jsonMsg), 
                     Encoding.UTF8, "application/json"
                 );
                 // todo website address?

@@ -13,46 +13,28 @@ using System.Text.Json.Serialization;
 
 namespace Messenger;
 
-public abstract class JsonKey
-{
-    // public void SetValues(BigInteger nonce, BigInteger prime)
-    // {
-    //     Nonce = nonce;
-    //     Prime = prime;
-    // }
-    //
-    // public bool IsPublic()
-    // {
-    //     return ReferenceEquals(GetType(), typeof(JsonPublicKey));
-    // }
-    //
-    // public BigInteger Nonce { get; private set; }
-    //
-    // public BigInteger Prime { get; private set; }
-
-}
 
 /// <summary>
 /// Json interpretation of the key
 /// </summary>
-public class JsonPrivateKey : JsonKey
+public class JsonPrivateKey
 {
     /// <summary>
     /// Getter-Setter for Emails associated with this key
     /// </summary>
-    public string[]? email { get; set; }
+    public string[] email { get; set; }
     
     /// <summary>
     /// Getter-Setter for Base64 encoded string for this key
     /// </summary>
-    public string? key { get; set; }
+    public string key { get; set; }
 }
 
-public class JsonPublicKey : JsonKey
+public class JsonPublicKey
 {
-    public string? email { get; set; }
+    public string email { get; set; }
     
-    public string? key { get; set; }
+    public string key { get; set; }
 }
 
 
@@ -140,16 +122,15 @@ public class KeyManager
         
         // convert 'n' bytes to N
         var N = new BigInteger(GetNBytes(keyBytes, e+8, n));
-
-        // var key = new JsonPublicKey
-        // {
-        //     // publicKey.SetValues(nonce, new BigInteger(_E));
-        //     email = "",
-        //     key = Base64Encode(nonce, new BigInteger(_E))
-        // };// all decoded keys will be public
+        
         // key.SetValues(N, E);
         // Return new key
-        return null;     
+        return new JsonPublicKey
+        {
+            // publicKey.SetValues(nonce, new BigInteger(_E));
+            email = "",
+            key = encoding
+        };   
     }
     
     
@@ -182,7 +163,6 @@ public class KeyManager
 
         var privateKey = new JsonPrivateKey
         {
-            // privateKey.SetValues(nonce, new BigInteger(_E).ModInverse(r));
             email = Array.Empty<string>(),
             key = Base64Encode(nonce, new BigInteger(_E).ModInverse(r))
         };
@@ -232,15 +212,27 @@ public class KeyManager
         
     }
 
-    public string Encrypt(JsonKey publicKey, string plaintext)
+    public string Encrypt(JsonPublicKey publicKey, string plaintext)
     {
         var P = new BigInteger(Encoding.ASCII.GetBytes(plaintext));
+        
+        var keyBytes = Convert.FromBase64String(publicKey.key);      // get initial bytes
 
-        // var ciphertext = BigInteger.ModPow(P, publicKey.Prime, publicKey.Nonce);
-        //
-        // return Convert.ToBase64String(ciphertext.ToByteArray());
+        // convert 1st 4 bytes to 'e'
+        var e = BitConverter.ToInt32(GetNBytes(keyBytes, 0, 4), 0);
+        
+        // convert 'e' bytes to E
+        var E = new BigInteger(GetNBytes(keyBytes, 4, e));
+        
+        // get n
+        var n = BitConverter.ToInt32(GetNBytes(keyBytes, e+4, 4), 0);
+        
+        // convert 'n' bytes to N
+        var N = new BigInteger(GetNBytes(keyBytes, e+8, n));
 
-        return null;
+        var ciphertext = BigInteger.ModPow(P, E, N);
+        
+        return Convert.ToBase64String(ciphertext.ToByteArray());
 
     }
 
