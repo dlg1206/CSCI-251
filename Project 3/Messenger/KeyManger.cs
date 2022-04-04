@@ -31,9 +31,8 @@ public class Key
 
 public class JsonKey
 {
-    public string[]? Email { get; set; }
+    public string[]? Emails { get; set; }
     public string? EncodedKey { get; set; }
-    public bool IsPublic { get; set; }
 }
 
 public class KeyManger
@@ -46,18 +45,11 @@ public class KeyManger
     {
         var jsonKey = new JsonKey
         {
-            Email = Array.Empty<string>(),
+            Emails = Array.Empty<string>(),
             EncodedKey = Base64Encode(key),
-            IsPublic = key.IsPublic
         };
-        
-        
+
         var fileName = key.IsPublic ? PublicKey : PrivateKey;
-        
-        if (File.Exists(fileName))
-        {
-            File.Delete(fileName);
-        }
 
         using StreamWriter sw = File.CreateText(fileName);
         sw.WriteLine(JsonSerializer.Serialize(jsonKey));
@@ -137,12 +129,15 @@ public class KeyManger
         
         var jsonObj = JsonSerializer.Deserialize<JsonObject>(File.ReadAllText(fileName));
 
-        if (jsonObj == null)
+        var emails = jsonObj?["Emails"];
+        
+        if(emails == null)
             return;
+        
+        emails.AsArray().Add(email);
 
-        jsonObj[0]!.AsArray().Add(email);
 
-        using StreamWriter sw = File.CreateText(fileName);
+        using var sw = File.CreateText(fileName);
         sw.WriteLine(JsonSerializer.Serialize(jsonObj));
         
 

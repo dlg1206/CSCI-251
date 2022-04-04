@@ -12,3 +12,6 @@ main:
    // Client.GetAsync()
    // get
                    // Client.PutAsync()   // put
+                   
+Storing keys:
+    Add duplicates?

@@ -76,7 +76,7 @@ public class WebClient
             
             // await Put(KeyAddress, keyManager.GetJsonKey(true));
             
-            keyManager.AddEmail(true, email);
+            keyManager.AddEmail(false, email);
             
             
             
