@@ -1,4 +1,12 @@
-﻿using System.Numerics;
+﻿/*
+ * file: WebClient.cs
+ * Description: Handles all client-server interactions
+ * 
+ * @author Derek Garcia
+ */
+
+
+using System.Numerics;
 using System.Text;
 using System.Text.Json;
 
@@ -6,40 +14,54 @@ namespace Messenger;
 
 public class WebClient
     {
-        private readonly HttpClient _client = new HttpClient();
-        
+        private readonly HttpClient _client = new HttpClient();     // client that connects to server
+
+        /// <summary>
+        /// Getter for Message address
+        /// </summary>
         public string MessageAddress => "http://kayrun.cs.rit.edu:5000/Message/email";
+        
+        /// <summary>
+        /// Getter for Key address
+        /// </summary>
         public string KeyAddress => "http://kayrun.cs.rit.edu:5000/Key/email";
 
+        
+        /// <summary>
+        /// PUT / POST method to server
+        /// </summary>
+        /// <param name="destination">Address to PUT to</param>
+        /// <param name="message">Information to PUT</param>
         private async Task Put(string destination, string message)
         {
-            // send public
-            // add email to private key email
-
+            // Attempt to PUT
             try
             {
 
                 var content = new StringContent(message, Encoding.UTF8, "application/json");
-                var response = await _client.PutAsync(destination, content);
+                await _client.PutAsync(destination, content);    // send to server
 
             }
-            // report err
+            // report error if one occurs
             catch (HttpRequestException e)
             {
                 Console.WriteLine("\nException Caught!");
                 Console.WriteLine("Message :{0} ", e.Message);
             }
-
-          
         }
 
+        /// <summary>
+        /// GET method to server
+        /// </summary>
+        /// <param name="destination">Address to GET from</param>
         private async Task Get(string destination)
         {
+            // Attempt get
             try
             {
-                var response = await _client.GetAsync(destination);
+                await _client.GetAsync(destination);
             }
-            // report err
+            // Report Error
             catch (HttpRequestException e)
             {
                 Console.WriteLine("\nException Caught!");
@@ -68,19 +90,12 @@ public class WebClient
        
         }
         
+        
+        
         public async Task SendKey(string email, KeyManger keyManager)
         {
-            // send public
-            // add email to private key email
-            // http://kayrun.cs.rit.edu:5000/Key/email
-            
             // await Put(KeyAddress, keyManager.GetJsonKey(true));
-            
             keyManager.AddEmail(false, email);
-            
-            
-            
-            
         }
 
         private byte[] GetNBytes(byte[] source, int startIndex, int numBytes)
