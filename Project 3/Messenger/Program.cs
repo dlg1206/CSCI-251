@@ -94,7 +94,7 @@ namespace Messenger
                     }
                     else
                     {
-                        await webClient.GetKey(keyManager, args[1]);
+                        await webClient.GetKey(args[1]);
                     }
                     break;
                 
@@ -110,6 +110,14 @@ namespace Messenger
                     break;
                 
                 case "getMsg":
+                    if (args.Length != 2)
+                    {
+                        p.PrintUsage();
+                    }
+                    else
+                    {
+                        await webClient.GetMsg(keyManager, args[1]);
+                    }
                     break;
                 
                 default:

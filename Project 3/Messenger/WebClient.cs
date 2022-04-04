@@ -60,7 +60,7 @@ public class WebClient
             keyManager.AddEmail(false, email);
         }
 
-        public async Task GetKey(KeyManager keyManager, string email)
+        public async Task GetKey(string email)
         {
             // Attempt get
             try
@@ -112,7 +112,6 @@ public class WebClient
                 content = keyManager.Encrypt(publicKey, plaintext)
             };
             
-            
 
             try
             {
@@ -120,10 +119,9 @@ public class WebClient
                     JsonSerializer.Serialize(jsonMsg), 
                     Encoding.UTF8, "application/json"
                 );
-                // todo website address?
                 var response = await _client.PutAsync(MessageAddress + email, content);    // send to server
 
-                Console.WriteLine(response.IsSuccessStatusCode ? "Ok" : "failed");
+                Console.WriteLine(response.IsSuccessStatusCode ? "Message Written" : "Error: Message was not written");
             }
             // Report Error
             catch (HttpRequestException e)
@@ -131,6 +129,11 @@ public class WebClient
                 Console.WriteLine("\nException Caught!");
                 Console.WriteLine("Message :{0} ", e.Message);
             }
+        }
+
+        public async Task GetMsg(KeyManager keyManager, string email)
+        {
+            
         }
 
 
