@@ -34,7 +34,7 @@ public class WebClient
             // Attempt to PUT
             try
             {
-
+                // single email to public key send, 
                 var content = new StringContent(
                     File.ReadAllText(keyManager.PublicKey), 
                     Encoding.UTF8, "application/json"

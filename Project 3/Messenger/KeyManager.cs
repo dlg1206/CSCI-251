@@ -64,7 +64,7 @@ public class Key
 /// <summary>
 /// Json interpretation of the key
 /// </summary>
-public class JsonKey
+public class JsonPrivateKey
 {
     /// <summary>
     /// Getter-Setter for Emails associated with this key
@@ -74,6 +74,13 @@ public class JsonKey
     /// <summary>
     /// Getter-Setter for Base64 encoded string for this key
     /// </summary>
+    public string? key { get; set; }
+}
+
+public class JsonPublicKey
+{
+    public string? email { get; set; }
+    
     public string? key { get; set; }
 }
 
@@ -97,16 +104,27 @@ public class KeyManager
     /// <param name="fileName">name of the storage file</param>
     public void StoreKey(Key key, string fileName)
     {
-        // covert it into json key
-        var jsonKey = new JsonKey
-        {
-            email = Array.Empty<string>(),
-            key = Base64Encode(key),
-        };
-
-        // write it locally
         using var sw = File.CreateText(fileName);
-        sw.WriteLine(JsonSerializer.Serialize(jsonKey));
+        // covert it into json key
+        if (key.IsPublic)
+        {
+            var jsonKey = new JsonPublicKey
+            {
+                email = "",
+                key = Base64Encode(key),
+            };
+            sw.WriteLine(JsonSerializer.Serialize(jsonKey));
+        }
+        else
+        {
+            var jsonKey = new JsonPrivateKey
+            {
+                email = Array.Empty<string>(),
+                key = Base64Encode(key),
+            };
+            sw.WriteLine(JsonSerializer.Serialize(jsonKey));
+        }
+
     }
     
     /// <summary>
@@ -251,5 +269,7 @@ public class KeyManager
         return Convert.ToBase64String(ciphertext.ToByteArray());
 
     }
+    
+  
     
 }
