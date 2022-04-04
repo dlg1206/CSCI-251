@@ -28,7 +28,7 @@ public class WebClient
         public string KeyAddress => "http://kayrun.cs.rit.edu:5000/Key/";
         
 
-        public async Task SendKey(string email, KeyManger keyManager)
+        public async Task SendKey(KeyManager keyManager, string email)
         {
       
             // Attempt to PUT
@@ -39,9 +39,10 @@ public class WebClient
                     File.ReadAllText(keyManager.PublicKey), 
                     Encoding.UTF8, "application/json"
                     );
-                
-                await _client.PutAsync(KeyAddress + email, content);    // send to server
+                // todo website address?
+                var response = await _client.PutAsync(KeyAddress + email, content);    // send to server
 
+                Console.WriteLine(response.IsSuccessStatusCode ? "Key saved" : "Key was not saved");
             }
             // report error if one occurs
             catch (HttpRequestException e)
@@ -53,7 +54,7 @@ public class WebClient
             keyManager.AddEmail(false, email);
         }
 
-        public async Task GetKey(string email, KeyManger keyManger)
+        public async Task GetKey(KeyManager keyManager, string email)
         {
             // Attempt get
             try
@@ -70,12 +71,9 @@ public class WebClient
                 if(base64Key == null)
                     return;
 
-                var key = keyManger.Base64Decode(base64Key.AsValue().ToString());
+                var key = keyManager.Base64Decode(base64Key.AsValue().ToString());
 
-              
-                keyManger.StoreKey(key, email + ".key");
-                
-
+                keyManager.StoreKey(key, email + ".key");
             }
             // Report Error
             catch (HttpRequestException e)
@@ -83,11 +81,49 @@ public class WebClient
                 Console.WriteLine("\nException Caught!");
                 Console.WriteLine("Message :{0} ", e.Message);
             }
-            
-            
-            
         }
 
-       
+        public async Task SendMsg(KeyManager keyManager, string email, string plaintext)
+        {
+            string jsonString;
+            try
+            {
+                jsonString = File.ReadAllText(email + ".key");
+            }
+            catch
+            {
+                Console.WriteLine("Key does not exist for " + email);
+                return;
+            }
             
+            var jsonObj = JsonSerializer.Deserialize<JsonObject>(jsonString);
+
+            var base64Key = jsonObj?["key"];
+                
+            if(base64Key == null)
+                return;
+            
+            var publicKey = keyManager.Base64Decode(base64Key.AsValue().ToString());
+
+            try
+            {
+                var content = new StringContent(
+                    keyManager.Encrypt(publicKey, plaintext), 
+                    Encoding.UTF8, "application/json"
+                );
+                // todo website address?
+                var response = await _client.PutAsync(MessageAddress + email, content);    // send to server
+
+                Console.WriteLine(response.IsSuccessStatusCode ? "Ok" : "failed");
+            }
+            // Report Error
+            catch (HttpRequestException e)
+            {
+                Console.WriteLine("\nException Caught!");
+                Console.WriteLine("Message :{0} ", e.Message);
+            }
+        }
+
+
+
     }

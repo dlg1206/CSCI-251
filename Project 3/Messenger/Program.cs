@@ -57,7 +57,7 @@ namespace Messenger
             }
 
             // Init managers for commands
-            var keyManager = new KeyManger();
+            var keyManager = new KeyManager();
             var webClient = new WebClient();
 
             // Attempt to execute the given commands
@@ -83,7 +83,7 @@ namespace Messenger
                     }
                     else
                     {
-                        await webClient.SendKey(args[1], keyManager);   // send key
+                        await webClient.SendKey(keyManager, args[1]);   // send key
                     }
                     break;
                 
@@ -94,11 +94,19 @@ namespace Messenger
                     }
                     else
                     {
-                        await webClient.GetKey(args[1], keyManager);
+                        await webClient.GetKey(keyManager, args[1]);
                     }
                     break;
                 
                 case "sendMsg":
+                    if (args.Length != 3)
+                    {
+                        p.PrintUsage();
+                    }
+                    else
+                    {
+                        await webClient.SendMsg(keyManager, args[1], args[2]);
+                    }
                     break;
                 
                 case "getMsg":

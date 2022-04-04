@@ -6,6 +6,7 @@
  */
 
 using System.Numerics;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 
@@ -68,12 +69,12 @@ public class JsonKey
     /// <summary>
     /// Getter-Setter for Emails associated with this key
     /// </summary>
-    public string[]? Emails { get; set; }
+    public string[]? email { get; set; }
     
     /// <summary>
     /// Getter-Setter for Base64 encoded string for this key
     /// </summary>
-    public string? EncodedKey { get; set; }
+    public string? key { get; set; }
 }
 
 
@@ -81,7 +82,7 @@ public class JsonKey
 /// <summary>
 /// Main key manager class. Handles key generation, storage, encoding and decoding
 /// </summary>
-public class KeyManger
+public class KeyManager
 {
     private const int _E = 5113;     // Constant 'E' value chosen
    
@@ -99,8 +100,8 @@ public class KeyManger
         // covert it into json key
         var jsonKey = new JsonKey
         {
-            Emails = Array.Empty<string>(),
-            EncodedKey = Base64Encode(key),
+            email = Array.Empty<string>(),
+            key = Base64Encode(key),
         };
 
         // write it locally
@@ -178,7 +179,7 @@ public class KeyManger
         // get n
         var n = BitConverter.ToInt32(GetNBytes(keyBytes, e+4, 4), 0);
         
-        // conver 'n' bytes to N
+        // convert 'n' bytes to N
         var N = new BigInteger(GetNBytes(keyBytes, e+8, n));
 
         // Return new key
@@ -241,4 +242,14 @@ public class KeyManger
         sw.WriteLine(JsonSerializer.Serialize(jsonObj));
     }
 
+    public string Encrypt(Key publicKey, string plaintext)
+    {
+        var P = new BigInteger(Encoding.ASCII.GetBytes(plaintext));
+
+        var ciphertext = BigInteger.ModPow(P, publicKey.GetPrime(), publicKey.GetNonce());
+
+        return Convert.ToBase64String(ciphertext.ToByteArray());
+
+    }
+    
 }
