@@ -86,13 +86,14 @@ public class KeyManger
     private const int _E = 5113;     // Constant 'E' value chosen
    
     // key storage file names
-    private const string PublicKey = "public.key";
-    private const string PrivateKey = "private.key";
+    public string PublicKey => "public.key";
+    public string PrivateKey => "private.key";
 
     /// <summary>
     /// Stores a given key locally
     /// </summary>
     /// <param name="key">key to store</param>
+    /// <param name="fileName">name of the storage file</param>
     public void StoreKey(Key key, string fileName)
     {
         // covert it into json key
