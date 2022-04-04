@@ -1,6 +1,6 @@
 ﻿/*
- * Project 2
- * Finds Primes of a given bit size
+ * file: Program.cs
+ * Description: Main driver program that handles command line arguments
  * 
  * @author Derek Garcia
  */
@@ -8,61 +8,15 @@
 
 namespace Messenger
 {
+    /// <summary>
+    /// Main driver program that handles command line arguments
+    /// </summary>
     public class Program
     {
-        
-        private readonly KeyManger _keyManager = new KeyManger();
-        private readonly WebClient _webClient = new WebClient();
 
-        private async Task ParseInput(string[] args)
-        {
-            if (args.Length == 0)
-            {
-                PrintUsage();
-                return;
-            }
-
-            switch (args[0])
-            {
-                case "keyGen":
-                    if (args.Length != 2 || !int.TryParse(args[1], out var keySize))
-                    {
-                        PrintUsage();
-                    }
-                    else
-                    {
-                        _keyManager.KeyGen(keySize);
-                    }
-                    break;
-                
-                case "sendKey":
-                    if (args.Length != 2)
-                    {
-                        PrintUsage();
-                    }
-                    else
-                    {
-                        // send public
-                        // add email to private key email
-                        await _webClient.SendKey(args[1], _keyManager);
-                    }
-                    break;
-                
-                case "getKey":
-                    break;
-                
-                case "sendMsg":
-                    break;
-                
-                case "getMsg":
-                    break;
-                
-                default:
-                    PrintUsage();
-                    return;
-            }
-        }
-
+        /// <summary>
+        /// Prints the correct usage of the command line commands
+        /// </summary>
         private void PrintUsage()
         {
             Console.WriteLine("usage: dotnet run <option> <other arguments>");
@@ -86,15 +40,68 @@ namespace Messenger
                 "\t- getMsg <email>: this will retrieve a message for a particular user.");
         }
 
+        /// <summary>
+        /// Parses command line inputs and executes their respective commands
+        /// </summary>
+        /// <param name="args">command line arguments</param>
         public static async Task Main(string[] args)
         {
-
+            
             var p = new Program();
-            // var ws = new WebClient();   // init web client
+            
+            // Check that command line args exist
+            if (args.Length == 0)
+            {
+                p.PrintUsage();
+                return;
+            }
 
-            // await ws.Connect("http://kayrun.cs.rit.edu:5000/Key/jsb@cs.rit.edu");
-            // Print error if 
-            await p.ParseInput(args);
+            // Init managers for commands
+            var keyManager = new KeyManger();
+            var webClient = new WebClient();
+
+            // Attempt to execute the given commands
+            switch (args[0])
+            {
+                // Attempt generate a public - private key
+                case "keyGen":
+                    if (args.Length != 2 || !int.TryParse(args[1], out var keySize))
+                    {
+                        p.PrintUsage();
+                    }
+                    else
+                    {
+                        keyManager.KeyGen(keySize);     // make key
+                    }
+                    break;
+                
+                // Attempt to send key to server
+                case "sendKey":
+                    if (args.Length != 2)
+                    {
+                        p.PrintUsage();
+                    }
+                    else
+                    {
+                        // send public
+                        // add email to private key email
+                        await webClient.SendKey(args[1], keyManager);   // send key
+                    }
+                    break;
+                
+                case "getKey":
+                    break;
+                
+                case "sendMsg":
+                    break;
+                
+                case "getMsg":
+                    break;
+                
+                default:
+                    p.PrintUsage();
+                    break;
+            }
             
 
             // var web = "AAAAAwEAAQAAAQB7w4yJG+kH5BXhL9lgeCxkNqKeIIyC0zzG0FYJu5/WVa7xCdXGSmG3pEEpyEPhe81L9zb1qWpnn" +
