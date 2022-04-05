@@ -327,7 +327,7 @@ public class KeyManager
         // attempt to return stored key contents
         try
         {
-            return File.ReadAllText(email + ".key");
+            return File.ReadAllText(email + KeyExtension);
         }
         // report if not found
         catch
