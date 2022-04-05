@@ -16,3 +16,10 @@ main:
 Storing keys:
     Add duplicates?
     Design, k
+    
+    
+Design:
+    method order?
+        attributes->constructor->private->public, where should get/set go?
+        
+       using stream writer correct?

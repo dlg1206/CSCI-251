@@ -31,13 +31,27 @@ public class Key
     }
 
     /// <summary>
-    /// Base64 Constructor. Decodes a Base64 Encoding
+    /// Base64 Constructor / DecodeFromBase64. Decodes a Base64 Encoding to get Prime and Nonce value,
+    /// which is then used to store in the key
     /// </summary>
-    /// <param name="base64Encoding"></param>
+    /// <param name="base64Encoding">Base64 Encoding of the Key</param>
     public Key(string base64Encoding)
     {
-        DecodeFromBase64(base64Encoding);
+        var keyBytes = Convert.FromBase64String(base64Encoding);      // get initial bytes
+
+        // convert 1st 4 bytes to 'e'
+        var e = BitConverter.ToInt32(GetNBytes(keyBytes, 0, 4), 0);
+        
+        // convert 'e' bytes to E
+        Prime = new BigInteger(GetNBytes(keyBytes, 4, e));
+        
+        // get n
+        var n = BitConverter.ToInt32(GetNBytes(keyBytes, e+4, 4), 0);
+        
+        // convert 'n' bytes to N
+        Nonce = new BigInteger(GetNBytes(keyBytes, e+8, n));
     }
+    
     
     /// <summary>
     /// Gets a set amount of bytes from a given byte array
@@ -45,7 +59,7 @@ public class Key
     /// <param name="source">Byte array to take section from</param>
     /// <param name="startIndex">Index to start at</param>
     /// <param name="numBytes">Number of bytes to copy</param>
-    /// <returns></returns>
+    /// <returns>Sub byte array of the source</returns>
     private byte[] GetNBytes(byte[] source, int startIndex, int numBytes)
     {
         var section = new byte[numBytes];   // init copy array
@@ -60,6 +74,11 @@ public class Key
         return section;
     }
     
+    
+    /// <summary>
+    /// Encodes this key to a Base64 Encoding
+    /// </summary>
+    /// <returns>Base64 Encoding of this Key</returns>
     private string EncodeToBase64()
     {
         // Get byte arrays and set them to little Endian form
@@ -83,30 +102,24 @@ public class Key
         return Convert.ToBase64String(combined);
         
     }
+
     
-    private void DecodeFromBase64(string encoding)
-    {
-        var keyBytes = Convert.FromBase64String(encoding);      // get initial bytes
-
-        // convert 1st 4 bytes to 'e'
-        var e = BitConverter.ToInt32(GetNBytes(keyBytes, 0, 4), 0);
-        
-        // convert 'e' bytes to E
-        Prime = new BigInteger(GetNBytes(keyBytes, 4, e));
-        
-        // get n
-        var n = BitConverter.ToInt32(GetNBytes(keyBytes, e+4, 4), 0);
-        
-        // convert 'n' bytes to N
-        Nonce = new BigInteger(GetNBytes(keyBytes, e+8, n));
-        
-        
-    }
-
-    public BigInteger Nonce { get; private set; }
+    /// <summary>
+    /// Getter for Prime (E for Public, D for Private) value
+    /// </summary>
+    public BigInteger Prime { get; }
     
-    public BigInteger Prime { get; private set; }
+    
+    /// <summary>
+    /// Getter for Nonce Value
+    /// </summary>
+    public BigInteger Nonce { get; }
 
+    
+    /// <summary>
+    /// Convert this key to a JsonPublicKey
+    /// </summary>
+    /// <returns>new JsonPublicKey</returns>
     public JsonPublicKey ToPublicKey()
     {
         return new JsonPublicKey
@@ -116,6 +129,11 @@ public class Key
         };
     }
 
+    
+    /// <summary>
+    /// Convert this key to a JsonPrivateKey
+    /// </summary>
+    /// <returns>new JsonPrivateKey</returns>
     public JsonPrivateKey ToPrivateKey()
     {
         return new JsonPrivateKey
@@ -126,8 +144,26 @@ public class Key
     }
 }
 
+
 /// <summary>
-/// Json interpretation of the key
+/// Json interpretation of a Public Key
+/// </summary>
+public class JsonPublicKey
+{
+    /// <summary>
+    /// Getter-Setter for email 'signature' associated with this key
+    /// </summary>
+    public string email { get; set; }
+    
+    /// <summary>
+    /// Getter-Setter for Base64 encoded string for this key
+    /// </summary>
+    public string key { get; set; }
+}
+
+
+/// <summary>
+/// Json interpretation of a Private Key
 /// </summary>
 public class JsonPrivateKey
 {
@@ -142,29 +178,21 @@ public class JsonPrivateKey
     public string key { get; set; }
 }
 
-public class JsonPublicKey
-{
-    public string email { get; set; }
-    
-    public string key { get; set; }
-}
-
 
 
 /// <summary>
-/// Main key manager class. Handles key generation, storage, encoding and decoding
+/// Main key manager class. Handles generation, storage, encoding / decoding,
+/// and encryption / decryption of keys
 /// </summary>
 public class KeyManager
 {
     private readonly BigInteger _E = new BigInteger(5113);     // Constant 'E' value chosen
    
     // key storage file names
-    public string PublicKey => "public.key";
-    public string PrivateKey => "private.key";
+    private const string PublicKey = "public.key";
+    private const string PrivateKey = "private.key";
 
     
-
-
     /// <summary>
     /// Generates a public-private key pair and stores them locally
     /// </summary>
@@ -188,20 +216,20 @@ public class KeyManager
         var publicKey = new Key( _E, nonce);
         var privateKey = new Key(_E.ModInverse(r), nonce);
 
+        // todo using stream writer correct?
         // store values
-        using var sw = File.CreateText(PublicKey);
-        sw.WriteLine(JsonSerializer.Serialize(publicKey.ToPublicKey()));
-        sw.Close();
+        using var sw1 = File.CreateText(PublicKey);
+        sw1.WriteLine(JsonSerializer.Serialize(publicKey.ToPublicKey()));
+        sw1.Close();
         
-        var sw2 = File.CreateText(PrivateKey);
+        using var sw2 = File.CreateText(PrivateKey);
         sw2.WriteLine(JsonSerializer.Serialize(privateKey.ToPrivateKey()));
         sw2.Close();
-      
     }
 
     
     /// <summary>
-    /// Adds an email associated with a public or private key
+    ///  'Signs' a public or private key with a given email
     /// </summary>
     /// <param name="isPublic">is the key public</param>
     /// <param name="email">email to add</param>
