@@ -98,21 +98,15 @@ public class WebClient
 
         public async Task SendMsg(KeyManager keyManager, string email, string plaintext)
         {
-            string jsonString;
-            try
-            {
-                jsonString = File.ReadAllText(email + ".key");
-            }
-            catch
-            {
-                Console.WriteLine("Key does not exist for " + email);
+
+            var jsonString = keyManager.GetPublicKey(email);
+            
+            if(jsonString.Equals(""))
                 return;
-            }
             
             var jsonObj = JsonSerializer.Deserialize<JsonObject>(jsonString);
 
             var base64Key = jsonObj?["key"];
-                
             if(base64Key == null)
                 return;
             
@@ -132,7 +126,7 @@ public class WebClient
                 );
                 var response = await _client.PutAsync(MessageAddress + email, content);    // send to server
 
-                Console.WriteLine(response.IsSuccessStatusCode ? "Message Written" : "Error: Message was not written");
+                Console.WriteLine(response.IsSuccessStatusCode ? "Message Written" : "Message was not written");
             }
             // Report Error
             catch (HttpRequestException e)

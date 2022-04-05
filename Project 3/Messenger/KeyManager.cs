@@ -257,6 +257,20 @@ public class KeyManager
 
     }
 
+    public string GetPublicKey(string email)
+    {
+        try
+        {
+            return File.ReadAllText(email + ".key");
+        }
+        catch
+        {
+            Console.WriteLine("Key does not exist for " + email);
+        }
+
+        return "";
+    }
+
     public string GetPrivateKey(string email)
     {
         try
@@ -271,7 +285,6 @@ public class KeyManager
             // todo better way to check if in private
             foreach (var storedEmail in emails.AsArray())
             {
-                
                 haveKey = storedEmail.ToString().Equals(email);
 
                 if (haveKey)
