@@ -15,10 +15,11 @@ namespace Messenger;
 
 public class Key
 {
-    public Key(BigInteger nonce, BigInteger prime)
+    public Key(BigInteger prime, BigInteger nonce)
     {
-        Nonce = nonce;
+        
         Prime = prime;
+        Nonce = nonce;
     }
 
     public Key(string base64Encoding)
@@ -172,8 +173,8 @@ public class KeyManager
         var r =  (p - 1) * (q - 1);
 
         // create respective keys
-        var publicKey = new Key(nonce, _E);
-        var privateKey = new Key(nonce, _E.ModInverse(r));
+        var publicKey = new Key( _E, nonce);
+        var privateKey = new Key(_E.ModInverse(r), nonce);
 
         // store values
         using var sw = File.CreateText(PublicKey);
