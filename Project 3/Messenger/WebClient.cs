@@ -41,9 +41,16 @@ public class WebClient
             // Attempt to PUT
             try
             {
+                var signedPublicKey = keyManager.SignPublicKey(email);
+
+                if (signedPublicKey.Equals(""))
+                {
+                    return;
+                }
+                
                 // single email to public key send, 
                 var content = new StringContent(
-                    keyManager.AddEmail(true, email), 
+                    keyManager.SignPublicKey(email), 
                     Encoding.UTF8, "application/json"
                     );
                
@@ -58,7 +65,7 @@ public class WebClient
                 Console.WriteLine("Message :{0} ", e.Message);
             }
            
-            keyManager.AddEmail(false, email);
+            // keyManager.SignPublicKey(false, email);
         }
 
         public async Task GetKey(string email)

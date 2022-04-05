@@ -21,6 +21,8 @@ public class Key
         Prime = prime;
     }
     
+    
+    
     private string EncodeToBase64()
     {
         // Get byte arrays and set them to little Endian form
@@ -126,10 +128,6 @@ public class KeyManager
     }
     
     
-    
-    
-
-    
     /// <summary>
     /// Decodes a Base64 Encoded key into a key
     /// </summary>
@@ -202,29 +200,43 @@ public class KeyManager
     /// </summary>
     /// <param name="isPublic">is the key public</param>
     /// <param name="email">email to add</param>
-    public string AddEmail(bool isPublic, string email)
+    public string SignPublicKey(string email)
     {
-        var fileName = isPublic ? PublicKey : PrivateKey;   // get file to update
-        
+        try
+        {
+            var jsonObj = JsonSerializer.Deserialize<JsonObject>(File.ReadAllText(PublicKey));
+            if (jsonObj != null)
+            {
+                jsonObj["email"] = JsonValue.Create(email);
+                return JsonSerializer.Serialize(jsonObj);
+            }
+        }
+        catch
+        {
+            Console.WriteLine("Error: No Public Key exists to send");
+        }
+        return "";
+
         // get JSON obj
-        var jsonObj = JsonSerializer.Deserialize<JsonObject>(File.ReadAllText(fileName));
+        
 
         // null reference check
-        var emails = jsonObj?["email"];
-        if(emails == null)
-            return "";
+        // var emails = jsonObj?["email"];
+        // if(emails == null)
+        //     return "";
         
-        if (!isPublic)
-        {
-            emails.AsArray().Add(email);
-            // update local key
-            using var sw = File.CreateText(fileName);
-            sw.WriteLine(JsonSerializer.Serialize(jsonObj));
-            return "";
-        }
         
-        jsonObj["email"] = JsonValue.Create(email);
-        return JsonSerializer.Serialize(jsonObj);
+        // if (!isPublic)
+        // {
+        //     emails.AsArray().Add(email);
+        //     // update local key
+        //     using var sw = File.CreateText(fileName);
+        //     sw.WriteLine(JsonSerializer.Serialize(jsonObj));
+        //     return "";
+        // }
+
+       
+      
         
         
     }
