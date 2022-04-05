@@ -200,45 +200,37 @@ public class KeyManager
     /// </summary>
     /// <param name="isPublic">is the key public</param>
     /// <param name="email">email to add</param>
-    public string SignPublicKey(string email)
+    public string SignKey(bool isPublic, string email)
     {
+        var fileName = isPublic ? PublicKey : PrivateKey;
         try
         {
-            var jsonObj = JsonSerializer.Deserialize<JsonObject>(File.ReadAllText(PublicKey));
+            
+            var jsonObj = JsonSerializer.Deserialize<JsonObject>(File.ReadAllText(fileName));
+            
             if (jsonObj != null)
             {
-                jsonObj["email"] = JsonValue.Create(email);
+                if (isPublic)
+                {
+                    jsonObj["email"] = JsonValue.Create(email);
+                }
+                else
+                {
+                    jsonObj["email"]?.AsArray().Add(email);
+                    // update local key
+                    using var sw = File.CreateText(fileName);
+                    sw.WriteLine(JsonSerializer.Serialize(jsonObj));
+                    sw.Close();
+                }
                 return JsonSerializer.Serialize(jsonObj);
             }
+            
         }
         catch
         {
-            Console.WriteLine("Error: No Public Key exists to send");
+            Console.WriteLine(fileName + " does not exist locally and cannot be signed");
         }
         return "";
-
-        // get JSON obj
-        
-
-        // null reference check
-        // var emails = jsonObj?["email"];
-        // if(emails == null)
-        //     return "";
-        
-        
-        // if (!isPublic)
-        // {
-        //     emails.AsArray().Add(email);
-        //     // update local key
-        //     using var sw = File.CreateText(fileName);
-        //     sw.WriteLine(JsonSerializer.Serialize(jsonObj));
-        //     return "";
-        // }
-
-       
-      
-        
-        
     }
 
     public string Encrypt(JsonPublicKey publicKey, string plaintext)

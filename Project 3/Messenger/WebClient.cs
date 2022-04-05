@@ -41,22 +41,22 @@ public class WebClient
             // Attempt to PUT
             try
             {
-                var signedPublicKey = keyManager.SignPublicKey(email);
+                var signedPublicKey = keyManager.SignKey(true,email);
 
                 if (signedPublicKey.Equals(""))
-                {
                     return;
-                }
-                
+
                 // single email to public key send, 
                 var content = new StringContent(
-                    keyManager.SignPublicKey(email), 
+                    signedPublicKey, 
                     Encoding.UTF8, "application/json"
                     );
                
                 var response = await _client.PutAsync(KeyAddress + email, content);    // send to server
 
                 Console.WriteLine(response.IsSuccessStatusCode ? "Key saved" : "Key was not saved");
+                
+                keyManager.SignKey(false, email);
             }
             // report error if one occurs
             catch (HttpRequestException e)
@@ -65,7 +65,7 @@ public class WebClient
                 Console.WriteLine("Message :{0} ", e.Message);
             }
            
-            // keyManager.SignPublicKey(false, email);
+            
         }
 
         public async Task GetKey(string email)
