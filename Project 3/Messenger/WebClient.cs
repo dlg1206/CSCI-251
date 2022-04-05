@@ -138,22 +138,25 @@ public class WebClient
             
             if(privateKey == "")
                 return;
-            
-            var pkey = keyManager.dec
 
             try
             {
-                var jsonString = await _client.GetStringAsync(KeyAddress + email);
+                var jsonString = await _client.GetStringAsync(MessageAddress + email);
 
                 if (jsonString == "")
                     return;
                 
                 var jsonObj = JsonSerializer.Deserialize<JsonObject>(jsonString);
 
-                var sw = File.CreateText(email + ".key");
-                sw.WriteLine(jsonObj);
-                sw.Close();
+                var base64Content = jsonObj?["content"];
+                if(base64Content == null)
+                    return;
+
+                var content = Convert.FromBase64String(base64Content.AsValue().ToString());
+
+                var cipherText = new BigInteger(content);
                 
+
             }
             // Report Error
             catch (HttpRequestException e)
