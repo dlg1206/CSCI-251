@@ -13,15 +13,27 @@ using System.Text.Json.Nodes;
 
 namespace Messenger;
 
+/// <summary>
+/// Enhanced Key storage class that holds the Prime / Nonce values
+/// and can encode / decode itself
+/// </summary>
 public class Key
 {
+    /// <summary>
+    /// Numeric constructor. Create Key when Prime and Nonce are known
+    /// </summary>
+    /// <param name="prime">E or D primes for public / private keys respectively</param>
+    /// <param name="nonce">N prime value</param>
     public Key(BigInteger prime, BigInteger nonce)
     {
-        
         Prime = prime;
         Nonce = nonce;
     }
 
+    /// <summary>
+    /// Base64 Constructor. Decodes a Base64 Encoding
+    /// </summary>
+    /// <param name="base64Encoding"></param>
     public Key(string base64Encoding)
     {
         DecodeFromBase64(base64Encoding);
