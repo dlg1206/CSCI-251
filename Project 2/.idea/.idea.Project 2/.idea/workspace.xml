@@ -5,10 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d879b4c7-d833-413b-9894-e2df33cddcf3" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../Project 3/Messenger/dlg1206@g.rit.edu.key" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project 3/Messenger/jsb@cs.rit.edu.key" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project 3/Messenger/private.key" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project 3/Messenger/public.key" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Project 2/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Project 2/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Project 3/Messenger/Questions.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../Project 3/Messenger/Questions.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Project 3/Messenger/bin/Debug/net6.0/Messenger.dll" beforeDir="false" afterPath="$PROJECT_DIR$/../Project 3/Messenger/bin/Debug/net6.0/Messenger.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Project 3/Messenger/bin/Debug/net6.0/Messenger.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/../Project 3/Messenger/bin/Debug/net6.0/Messenger.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Project 3/Messenger/obj/Debug/net6.0/Messenger.GeneratedMSBuildEditorConfig.editorconfig" beforeDir="false" afterPath="$PROJECT_DIR$/../Project 3/Messenger/obj/Debug/net6.0/Messenger.GeneratedMSBuildEditorConfig.editorconfig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Project 3/Messenger/obj/Debug/net6.0/Messenger.assets.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../Project 3/Messenger/obj/Debug/net6.0/Messenger.assets.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Project 3/Messenger/obj/Debug/net6.0/Messenger.csproj.AssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../Project 3/Messenger/obj/Debug/net6.0/Messenger.csproj.AssemblyReference.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Project 3/Messenger/obj/Debug/net6.0/Messenger.dll" beforeDir="false" afterPath="$PROJECT_DIR$/../Project 3/Messenger/obj/Debug/net6.0/Messenger.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Project 3/Messenger/obj/Debug/net6.0/Messenger.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/../Project 3/Messenger/obj/Debug/net6.0/Messenger.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Project 3/Messenger/obj/Messenger.csproj.nuget.dgspec.json" beforeDir="false" afterPath="$PROJECT_DIR$/../Project 3/Messenger/obj/Messenger.csproj.nuget.dgspec.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Project 3/Messenger/obj/project.assets.json" beforeDir="false" afterPath="$PROJECT_DIR$/../Project 3/Messenger/obj/project.assets.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Project 3/Messenger/obj/project.nuget.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../Project 3/Messenger/obj/project.nuget.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Project 3/Messenger/obj/project.packagespec.json" beforeDir="false" afterPath="$PROJECT_DIR$/../Project 3/Messenger/obj/project.packagespec.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Project 3/Messenger/obj/rider.project.restore.info" beforeDir="false" afterPath="$PROJECT_DIR$/../Project 3/Messenger/obj/rider.project.restore.info" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -75,7 +85,7 @@
       <workItem from="1648607950732" duration="63000" />
       <workItem from="1648608407034" duration="689000" />
       <workItem from="1648701669758" duration="1675000" />
-      <workItem from="1649187887717" duration="294000" />
+      <workItem from="1649187887717" duration="684000" />
     </task>
     <task id="LOCAL-00001" summary="init Project 2">
       <created>1644851895650</created>

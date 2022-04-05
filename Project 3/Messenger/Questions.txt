@@ -24,3 +24,4 @@ Design:
        using stream writer correct?
        Min 32 bit key like project 2?
        sendKey error check for email? ok sendKey Foo
+       get all msgs or just latest?

@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Dgarcia\\Programming\\IDEs\\Rider\\CSCI-251\\Project 3\\messenger\\Messenger.csproj",
+      "projectUniqueName": "D:\\Dgarcia\\Programming\\IDEs\\Rider\\CSCI-251\\Project 3\\Messenger\\Messenger.csproj",
       "projectName": "Messenger",
-      "projectPath": "D:\\Dgarcia\\Programming\\IDEs\\Rider\\CSCI-251\\Project 3\\messenger\\Messenger.csproj",
+      "projectPath": "D:\\Dgarcia\\Programming\\IDEs\\Rider\\CSCI-251\\Project 3\\Messenger\\Messenger.csproj",
       "packagesPath": "C:\\Users\\Derpe\\.nuget\\packages\\",
-      "outputPath": "D:\\Dgarcia\\Programming\\IDEs\\Rider\\CSCI-251\\Project 3\\messenger\\obj\\",
+      "outputPath": "D:\\Dgarcia\\Programming\\IDEs\\Rider\\CSCI-251\\Project 3\\Messenger\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Derpe\\AppData\\Roaming\\NuGet\\NuGet.Config"
