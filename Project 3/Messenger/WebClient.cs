@@ -76,7 +76,10 @@ public class WebClient
                 var jsonString = await _client.GetStringAsync(KeyAddress + email);
 
                 if (jsonString == "")
+                {
+                    Console.WriteLine("No key was found for " + email);
                     return;
+                }
                 
                 var jsonObj = JsonSerializer.Deserialize<JsonObject>(jsonString);
 
