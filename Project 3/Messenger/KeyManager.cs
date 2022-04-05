@@ -20,8 +20,32 @@ public class Key
         Nonce = nonce;
         Prime = prime;
     }
+
+    public Key(string base64Encoding)
+    {
+        DecodeFromBase64(base64Encoding);
+    }
     
-    
+    /// <summary>
+    /// Gets a set amount of bytes from a given byte array
+    /// </summary>
+    /// <param name="source">Byte array to take section from</param>
+    /// <param name="startIndex">Index to start at</param>
+    /// <param name="numBytes">Number of bytes to copy</param>
+    /// <returns></returns>
+    private byte[] GetNBytes(byte[] source, int startIndex, int numBytes)
+    {
+        var section = new byte[numBytes];   // init copy array
+
+        // copy section
+        Array.Copy(source, startIndex, section, 0, numBytes);
+
+        // always return little endian form
+        if (BitConverter.IsLittleEndian)
+            Array.Reverse(section);
+            
+        return section;
+    }
     
     private string EncodeToBase64()
     {
@@ -46,10 +70,29 @@ public class Key
         return Convert.ToBase64String(combined);
         
     }
-
-    public BigInteger Nonce { get; }
     
-    public BigInteger Prime { get; }
+    private void DecodeFromBase64(string encoding)
+    {
+        var keyBytes = Convert.FromBase64String(encoding);      // get initial bytes
+
+        // convert 1st 4 bytes to 'e'
+        var e = BitConverter.ToInt32(GetNBytes(keyBytes, 0, 4), 0);
+        
+        // convert 'e' bytes to E
+        Prime = new BigInteger(GetNBytes(keyBytes, 4, e));
+        
+        // get n
+        var n = BitConverter.ToInt32(GetNBytes(keyBytes, e+4, 4), 0);
+        
+        // convert 'n' bytes to N
+        Nonce = new BigInteger(GetNBytes(keyBytes, e+8, n));
+        
+        
+    }
+
+    public BigInteger Nonce { get; private set; }
+    
+    public BigInteger Prime { get; private set; }
 
     public JsonPublicKey ToPublicKey()
     {
@@ -106,60 +149,9 @@ public class KeyManager
     public string PublicKey => "public.key";
     public string PrivateKey => "private.key";
 
-    /// <summary>
-    /// Gets a set amount of bytes from a given byte array
-    /// </summary>
-    /// <param name="source">Byte array to take section from</param>
-    /// <param name="startIndex">Index to start at</param>
-    /// <param name="numBytes">Number of bytes to copy</param>
-    /// <returns></returns>
-    private byte[] GetNBytes(byte[] source, int startIndex, int numBytes)
-    {
-        var section = new byte[numBytes];   // init copy array
+    
 
-        // copy section
-        Array.Copy(source, startIndex, section, 0, numBytes);
 
-        // always return little endian form
-        if (BitConverter.IsLittleEndian)
-            Array.Reverse(section);
-            
-        return section;
-    }
-    
-    
-    /// <summary>
-    /// Decodes a Base64 Encoded key into a key
-    /// </summary>
-    /// <param name="encoding">Base64 Encoding of a Key</param>
-    /// <returns>Decoded Key</returns>
-    public JsonPublicKey Base64Decode(string encoding)
-    {
-        var keyBytes = Convert.FromBase64String(encoding);      // get initial bytes
-
-        // convert 1st 4 bytes to 'e'
-        var e = BitConverter.ToInt32(GetNBytes(keyBytes, 0, 4), 0);
-        
-        // convert 'e' bytes to E
-        var E = new BigInteger(GetNBytes(keyBytes, 4, e));
-        
-        // get n
-        var n = BitConverter.ToInt32(GetNBytes(keyBytes, e+4, 4), 0);
-        
-        // convert 'n' bytes to N
-        var N = new BigInteger(GetNBytes(keyBytes, e+8, n));
-        
-        // key.SetValues(N, E);
-        // Return new key
-        return new JsonPublicKey
-        {
-            // publicKey.SetValues(nonce, new BigInteger(_E));
-            email = "",
-            key = encoding
-        };   
-    }
-    
-    
     /// <summary>
     /// Generates a public-private key pair and stores them locally
     /// </summary>
@@ -233,28 +225,25 @@ public class KeyManager
         return "";
     }
 
-    public string Encrypt(JsonPublicKey publicKey, string plaintext)
+    public string Encrypt(Key publicKey, string plaintext)
     {
         var P = new BigInteger(Encoding.ASCII.GetBytes(plaintext));
-        
-        var keyBytes = Convert.FromBase64String(publicKey.key);      // get initial bytes
 
-        // convert 1st 4 bytes to 'e'
-        var e = BitConverter.ToInt32(GetNBytes(keyBytes, 0, 4), 0);
-        
-        // convert 'e' bytes to E
-        var E = new BigInteger(GetNBytes(keyBytes, 4, e));
-        
-        // get n
-        var n = BitConverter.ToInt32(GetNBytes(keyBytes, e+4, 4), 0);
-        
-        // convert 'n' bytes to N
-        var N = new BigInteger(GetNBytes(keyBytes, e+8, n));
-
-        var ciphertext = BigInteger.ModPow(P, E, N);
+        var ciphertext = BigInteger.ModPow(P, publicKey.Prime, publicKey.Nonce);
         
         return Convert.ToBase64String(ciphertext.ToByteArray());
 
+    }
+
+    public string Decrypt(Key privateKey, string ciphertext)
+    {
+        var contentBytes = Convert.FromBase64String(ciphertext);
+
+        var C = new BigInteger(contentBytes);
+
+        var P = BigInteger.ModPow(C, privateKey.Prime, privateKey.Nonce);
+
+        return Encoding.ASCII.GetString(P.ToByteArray());
     }
 
     public string GetPublicKey(string email)
@@ -276,29 +265,33 @@ public class KeyManager
         try
         {
             var jsonObj = JsonSerializer.Deserialize<JsonObject>(File.ReadAllText(PrivateKey));
-
-            var emails = jsonObj?["email"];
-            if(emails == null)
+            
+            if(jsonObj?["email"] == null)
                 return "";
 
             var haveKey = false;
             // todo better way to check if in private
-            foreach (var storedEmail in emails.AsArray())
+            foreach (var storedEmail in jsonObj["email"]?.AsArray()!)
             {
-                haveKey = storedEmail.ToString().Equals(email);
+                if(storedEmail != null)
+                    haveKey = storedEmail.ToString().Equals(email);
 
                 if (haveKey)
                     break;
             }
-            return haveKey ? jsonObj["key"].ToString() : "";
-            
+
+            if (haveKey && jsonObj["key"] != null)
+                return jsonObj["key"]?.ToString()!;
+
+            Console.WriteLine("Private key for " + email + " not found locally");
+
         }
         catch
         {
             Console.WriteLine("No private key found");
-            throw;
         }
- 
+
+        return "";
     }
     
 }

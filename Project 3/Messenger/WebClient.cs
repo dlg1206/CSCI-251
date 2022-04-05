@@ -110,7 +110,7 @@ public class WebClient
             if(base64Key == null)
                 return;
             
-            var publicKey = keyManager.Base64Decode(base64Key.AsValue().ToString());
+            var publicKey = new Key(base64Key.AsValue().ToString());
             var jsonMsg = new JsonMessage
             {
                 email = email,
@@ -138,11 +138,11 @@ public class WebClient
 
         public async Task GetMsg(KeyManager keyManager, string email)
         {
-            var privateKey = keyManager.GetPrivateKey(email);
+            var base64PrivateKey = keyManager.GetPrivateKey(email);
             
-            if(privateKey == "")
+            if(base64PrivateKey == "")
                 return;
-
+            var privateKey = new Key(base64PrivateKey);
             try
             {
                 var jsonString = await _client.GetStringAsync(MessageAddress + email);
@@ -155,11 +155,11 @@ public class WebClient
                 var base64Content = jsonObj?["content"];
                 if(base64Content == null)
                     return;
-
-                var content = Convert.FromBase64String(base64Content.AsValue().ToString());
-
-                var cipherText = new BigInteger(content);
                 
+
+                var plaintext = keyManager.Decrypt(privateKey, base64Content.AsValue().ToString());
+
+                Console.WriteLine(plaintext);
 
             }
             // Report Error
