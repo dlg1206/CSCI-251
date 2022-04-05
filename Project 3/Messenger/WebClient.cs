@@ -20,12 +20,12 @@ public class JsonMessage
     /// <summary>
     /// Getter / Setter for destination / source email
     /// </summary>
-    public string email { get; set; }
+    public string? email { get; set; }
     
     /// <summary>
     /// Getter / Setter for message content
     /// </summary>
-    public string content { get; set; }
+    public string? content { get; set; }
         
 }
 

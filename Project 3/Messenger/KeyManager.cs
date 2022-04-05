@@ -153,12 +153,12 @@ public class JsonPublicKey
     /// <summary>
     /// Getter-Setter for email 'signature' associated with this key
     /// </summary>
-    public string email { get; set; }
+    public string? email { get; set; }
     
     /// <summary>
     /// Getter-Setter for Base64 encoded string for this key
     /// </summary>
-    public string key { get; set; }
+    public string? key { get; set; }
 }
 
 
@@ -170,12 +170,12 @@ public class JsonPrivateKey
     /// <summary>
     /// Getter-Setter for Emails associated with this key
     /// </summary>
-    public string[] email { get; set; }
+    public string[]? email { get; set; }
     
     /// <summary>
     /// Getter-Setter for Base64 encoded string for this key
     /// </summary>
-    public string key { get; set; }
+    public string? key { get; set; }
 }
 
 
