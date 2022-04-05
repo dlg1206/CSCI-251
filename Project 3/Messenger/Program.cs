@@ -40,8 +40,10 @@ namespace Messenger
                 "\t- getMsg <email>: this will retrieve a message for a particular user.");
         }
 
+        
         /// <summary>
         /// Parses command line inputs and executes their respective commands
+        /// If the command is invalid or unrecognized, the correct usage is displayed
         /// </summary>
         /// <param name="args">command line arguments</param>
         public static async Task Main(string[] args)
@@ -63,7 +65,7 @@ namespace Messenger
             // Attempt to execute the given commands
             switch (args[0])
             {
-                // Attempt generate a public - private key
+                // Attempt generate a local public - private key
                 case "keyGen":
                     if (args.Length == 2 && int.TryParse(args[1], out var keySize))
                     {
@@ -83,26 +85,27 @@ namespace Messenger
                         
                     break;
 
+                // Attempt to get a key from the server
                 case "getKey":
                     if (args.Length == 2)
                     {
                         await webClient.GetKey(args[1]);
                     }
                     else { p.PrintUsage(); }
-                        
-
+                    
                     break;
 
+                // Attempt to send a message to the server
                 case "sendMsg":
                     if (args.Length == 3)
                     {
                         await webClient.SendMsg(keyManager, args[1], args[2]);
                     }
                     else { p.PrintUsage(); }
-                        
                     
                     break;
 
+                // Attempt to get a message from the server
                 case "getMsg":
                     if (args.Length == 2)
                     {
@@ -112,6 +115,7 @@ namespace Messenger
                         
                     break;
 
+                // The command was unrecognized
                 default:
                     p.PrintUsage();
                     break;
