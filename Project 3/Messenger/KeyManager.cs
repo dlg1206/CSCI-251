@@ -191,6 +191,13 @@ public class KeyManager
     // key storage file names
     private const string PublicKey = "public.key";
     private const string PrivateKey = "private.key";
+    
+    // Json Obj Access fields
+    private const string Email = "email";
+    private const string Key = "key";
+    
+    private const string Empty = "";                // String return values
+    private const string KeyExtension = ".key";     // Key extension for storing keys locally
 
     
     /// <summary>
@@ -233,86 +240,124 @@ public class KeyManager
     /// </summary>
     /// <param name="isPublic">is the key public</param>
     /// <param name="email">email to add</param>
+    /// <returns>'signed' key as Json string</returns>
     public string SignKey(bool isPublic, string email)
     {
-        var fileName = isPublic ? PublicKey : PrivateKey;
+        var fileName = isPublic ? PublicKey : PrivateKey;   // get correct file name 
+        
+        // attempt to get key and sign it
         try
         {
+            var jsonObj = JsonSerializer.Deserialize<JsonObject>(File.ReadAllText(fileName));   // get key
             
-            var jsonObj = JsonSerializer.Deserialize<JsonObject>(File.ReadAllText(fileName));
-            
+            // access if key exists
             if (jsonObj != null)
             {
+                // If public, sign a copy
                 if (isPublic)
                 {
-                    jsonObj["email"] = JsonValue.Create(email);
+                    jsonObj[Email] = JsonValue.Create(email);
                 }
+                // If private, sign private key and update the local private key
                 else
                 {
-                    jsonObj["email"]?.AsArray().Add(email);
+                    jsonObj[Email]?.AsArray().Add(email);   // add email
+                    
                     // update local key
                     using var sw = File.CreateText(fileName);
                     sw.WriteLine(JsonSerializer.Serialize(jsonObj));
                     sw.Close();
                 }
-                return JsonSerializer.Serialize(jsonObj);
+                return JsonSerializer.Serialize(jsonObj);   // return result
             }
             
         }
+        // catch if couldn't open file
         catch
         {
             Console.WriteLine(fileName + " does not exist locally and cannot be signed");
         }
-        return "";
+        return Empty;   // return nothing if jsonObj was null
     }
 
+    /// <summary>
+    /// Encrypts plaintext using a public key
+    /// </summary>
+    /// <param name="publicKey">public key to encrypt with</param>
+    /// <param name="plaintext">plaintext to encrypt</param>
+    /// <returns>Base64 encoded string of the ciphtertext</returns>
     public string Encrypt(Key publicKey, string plaintext)
     {
         var P = new BigInteger(Encoding.ASCII.GetBytes(plaintext));
 
+        // C = (P^E) mod N
         var C = BigInteger.ModPow(P, publicKey.Prime, publicKey.Nonce);
         
         return Convert.ToBase64String(C.ToByteArray());
-
     }
 
+    
+    /// <summary>
+    /// Decrypts a Base64 Encoded ciphertext to plaintext using
+    /// a private key
+    /// </summary>
+    /// <param name="privateKey">private key to decrypt with</param>
+    /// <param name="ciphertext">Base64 encoded ciphertext to decrypt</param>
+    /// <returns>Plaintext string</returns>
     public string Decrypt(Key privateKey, string ciphertext)
     {
-        var contentBytes = Convert.FromBase64String(ciphertext);
+        var contentBytes = Convert.FromBase64String(ciphertext);    // convert from Base64
 
         var C = new BigInteger(contentBytes);
 
+        // P = (C^D) mod N
         var P = BigInteger.ModPow(C, privateKey.Prime, privateKey.Nonce);
 
-        return Encoding.ASCII.GetString(P.ToByteArray());
+        return Encoding.ASCII.GetString(P.ToByteArray());   // convert bytes to ASCII string
     }
 
+    
+    /// <summary>
+    /// Get the JSON string of a locally stored Public Key
+    /// </summary>
+    /// <param name="email">email associated with the public key</param>
+    /// <returns>Json string of Public Key, if one exists</returns>
     public string GetPublicKey(string email)
     {
+        // attempt to return stored key contents
         try
         {
             return File.ReadAllText(email + ".key");
         }
+        // report if not found
         catch
         {
             Console.WriteLine("Key does not exist for " + email);
         }
 
-        return "";
+        return Empty;   // no public key was found
     }
 
+    /// <summary>
+    /// Get the JSON string of a locally stored Private Key
+    /// </summary>
+    /// <param name="email">email associated with the private key</param>
+    /// <returns>Json string of Private Key, if one exists</returns>
     public string GetPrivateKey(string email)
     {
+        // attempt to return stored key
         try
         {
             var jsonObj = JsonSerializer.Deserialize<JsonObject>(File.ReadAllText(PrivateKey));
             
-            if(jsonObj?["email"] == null)
-                return "";
+            // Check if Email isn't null
+            if(jsonObj?[Email] == null)
+                return Empty;
 
+            // Ensure have private key for the given email
             var haveKey = false;
             // todo better way to check if in private
-            foreach (var storedEmail in jsonObj["email"]?.AsArray()!)
+            foreach (var storedEmail in jsonObj[Email]?.AsArray()!)
             {
                 if(storedEmail != null)
                     haveKey = storedEmail.ToString().Equals(email);
@@ -320,19 +365,22 @@ public class KeyManager
                 if (haveKey)
                     break;
             }
+            
+            // If have private key for the given email, return json string
+            if (haveKey && jsonObj[Key] != null)
+                return jsonObj[Key]?.ToString()!;
 
-            if (haveKey && jsonObj["key"] != null)
-                return jsonObj["key"]?.ToString()!;
-
+            // Else report not found
             Console.WriteLine("Private key for " + email + " not found locally");
 
         }
+        // No local private exists
         catch
         {
             Console.WriteLine("No private key found");
         }
 
-        return "";
+        return Empty;   // no private key or no private key for the given email
     }
     
 }
