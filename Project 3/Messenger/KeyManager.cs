@@ -13,6 +13,60 @@ using System.Text.Json.Serialization;
 
 namespace Messenger;
 
+public class Key
+{
+    public Key(BigInteger nonce, BigInteger prime)
+    {
+        Nonce = nonce;
+        Prime = prime;
+    }
+    
+    private string EncodeToBase64()
+    {
+        // Get byte arrays and set them to little Endian form
+        
+        var E = Prime.ToByteArray();
+        Array.Reverse(E);
+        
+        var e = BitConverter.GetBytes(E.Length);
+        Array.Reverse(e);
+
+        var N = Nonce.ToByteArray();
+        Array.Reverse(N);
+        
+        var n = BitConverter.GetBytes(N.Length);
+        Array.Reverse(n);
+
+        // Combine results
+        var combined = Array.Empty<byte>().Concat(e).Concat(E).Concat(n).Concat(N).ToArray();
+
+        // convert to Base64
+        return Convert.ToBase64String(combined);
+        
+    }
+
+    public BigInteger Nonce { get; }
+    
+    public BigInteger Prime { get; }
+
+    public JsonPublicKey ToPublicKey()
+    {
+        return new JsonPublicKey
+        {
+            email = "",
+            key = EncodeToBase64()
+        };
+    }
+
+    public JsonPrivateKey ToPrivateKey()
+    {
+        return new JsonPrivateKey
+        {
+            email = Array.Empty<string>(),
+            key = EncodeToBase64()
+        };
+    }
+}
 
 /// <summary>
 /// Json interpretation of the key
@@ -44,7 +98,7 @@ public class JsonPublicKey
 /// </summary>
 public class KeyManager
 {
-    private const int _E = 5113;     // Constant 'E' value chosen
+    private readonly BigInteger _E = new BigInteger(5113);     // Constant 'E' value chosen
    
     // key storage file names
     public string PublicKey => "public.key";
@@ -72,34 +126,8 @@ public class KeyManager
     }
     
     
-    /// <summary>
-    /// Encodes a key to a Base64 Encoding
-    /// </summary>
-    /// <param name="key">key to encode</param>
-    /// <returns>Base64 encoding of the given key</returns>
-    private string Base64Encode(BigInteger nonce, BigInteger prime)
-    {
-        // Get byte arrays and set them to little Endian form
-        
-        var E = prime.ToByteArray();
-        Array.Reverse(E);
-        
-        var e = BitConverter.GetBytes(E.Length);
-        Array.Reverse(e);
-
-        var N = nonce.ToByteArray();
-        Array.Reverse(N);
-        
-        var n = BitConverter.GetBytes(N.Length);
-        Array.Reverse(n);
-
-        // Combine results
-        var combined = Array.Empty<byte>().Concat(e).Concat(E).Concat(n).Concat(N).ToArray();
-
-        // convert to Base64
-        return Convert.ToBase64String(combined);
-        
-    }
+    
+    
 
     
     /// <summary>
@@ -154,26 +182,16 @@ public class KeyManager
         var r =  (p - 1) * (q - 1);
 
         // create respective keys
-        var publicKey = new JsonPublicKey
-        {
-            // publicKey.SetValues(nonce, new BigInteger(_E));
-            email = "",
-            key = Base64Encode(nonce, new BigInteger(_E))
-        };
-
-        var privateKey = new JsonPrivateKey
-        {
-            email = Array.Empty<string>(),
-            key = Base64Encode(nonce, new BigInteger(_E).ModInverse(r))
-        };
+        var publicKey = new Key(nonce, _E);
+        var privateKey = new Key(nonce, _E.ModInverse(r));
 
         // store values
         using var sw = File.CreateText(PublicKey);
-        sw.WriteLine(JsonSerializer.Serialize(publicKey));
+        sw.WriteLine(JsonSerializer.Serialize(publicKey.ToPublicKey()));
         sw.Close();
         
         var sw2 = File.CreateText(PrivateKey);
-        sw2.WriteLine(JsonSerializer.Serialize(privateKey));
+        sw2.WriteLine(JsonSerializer.Serialize(privateKey.ToPrivateKey()));
         sw2.Close();
       
     }

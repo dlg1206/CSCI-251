@@ -66,30 +66,50 @@ namespace Messenger
                 // Attempt generate a public - private key
                 case "keyGen":
                     if (args.Length == 2 && int.TryParse(args[1], out var keySize))
+                    {
                         keyManager.KeyGen(keySize);
+                    } 
+                    else { p.PrintUsage(); }
+                        
                     break;
 
                 // Attempt to send key to server
                 case "sendKey":
                     if (args.Length == 2)
+                    {
                         await webClient.SendKey(keyManager, args[1]); // send key
+                    }
+                    else { p.PrintUsage(); }
+                        
                     break;
 
                 case "getKey":
                     if (args.Length == 2)
+                    {
                         await webClient.GetKey(args[1]);
+                    }
+                    else { p.PrintUsage(); }
+                        
 
                     break;
 
                 case "sendMsg":
                     if (args.Length == 3)
+                    {
                         await webClient.SendMsg(keyManager, args[1], args[2]);
+                    }
+                    else { p.PrintUsage(); }
+                        
                     
                     break;
 
                 case "getMsg":
                     if (args.Length == 2)
+                    {
                         await webClient.GetMsg(keyManager, args[1]);
+                    }
+                    else { p.PrintUsage(); }
+                        
                     break;
 
                 default:
