@@ -187,6 +187,7 @@ public class JsonPrivateKey
 public class KeyManager
 {
     private readonly BigInteger _E = new BigInteger(5113);     // Constant 'E' value chosen
+    private const int MinBits = 32;     // min bits for keyGen
    
     // key storage file names
     private const string PublicKey = "public.key";
@@ -206,6 +207,12 @@ public class KeyManager
     /// <param name="keySize">size of the key to generate</param>
     public void KeyGen(int keySize)
     {
+        // Check keySize valid size
+        if (keySize < MinBits)
+        {
+            Console.WriteLine("keySize must be >= 32 bits");
+            return;
+        }
         var pg = new PrimeGen();
         
         // find length of p

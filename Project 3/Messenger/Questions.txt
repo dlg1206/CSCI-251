@@ -20,6 +20,6 @@ Storing keys:
     
 Design:
     method order?
-        attributes->constructor->private->public, where should get/set go?
-        
+       attributes->constructor->private->public, where should get/set go?        
        using stream writer correct?
+       Min 32 bit key like project 2?
