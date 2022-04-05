@@ -384,7 +384,7 @@ public class KeyManager
         // No local private exists
         catch
         {
-            Console.WriteLine("No private key found");
+            Console.WriteLine("No local private key found");
         }
 
         return Empty;   // no private key or no private key for the given email
