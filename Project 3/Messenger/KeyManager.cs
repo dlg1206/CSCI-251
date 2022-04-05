@@ -229,9 +229,9 @@ public class KeyManager
     {
         var P = new BigInteger(Encoding.ASCII.GetBytes(plaintext));
 
-        var ciphertext = BigInteger.ModPow(P, publicKey.Prime, publicKey.Nonce);
+        var C = BigInteger.ModPow(P, publicKey.Prime, publicKey.Nonce);
         
-        return Convert.ToBase64String(ciphertext.ToByteArray());
+        return Convert.ToBase64String(C.ToByteArray());
 
     }
 
