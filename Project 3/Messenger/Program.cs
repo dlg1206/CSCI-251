@@ -20,11 +20,11 @@ namespace Messenger
         private void PrintUsage()
         {
             Console.WriteLine("usage: dotnet run <option> <other arguments>");
-                
+
             Console.WriteLine(
                 "\t- keyGen <keySize>: generate a keypair of size keySize bits (public and private keys) and " +
                 "store them locally on the disk");
-                
+
             Console.WriteLine(
                 "\t- sendKey <email>: sends the public key that was generated in the keyGen phase and send it to " +
                 "the server, with the email address given");
@@ -46,9 +46,9 @@ namespace Messenger
         /// <param name="args">command line arguments</param>
         public static async Task Main(string[] args)
         {
-            
+
             var p = new Program();
-            
+
             // Check that command line args exist
             if (args.Length == 0)
             {
@@ -65,83 +65,38 @@ namespace Messenger
             {
                 // Attempt generate a public - private key
                 case "keyGen":
-                    if (args.Length != 2 || !int.TryParse(args[1], out var keySize))
-                    {
-                        p.PrintUsage();
-                    }
-                    else
-                    {
-                        keyManager.KeyGen(keySize);     // make key
-                    }
+                    if (args.Length == 2 && int.TryParse(args[1], out var keySize))
+                        keyManager.KeyGen(keySize);
                     break;
-                
+
                 // Attempt to send key to server
                 case "sendKey":
-                    if (args.Length != 2)
-                    {
-                        p.PrintUsage();
-                    }
-                    else
-                    {
-                        await webClient.SendKey(keyManager, args[1]);   // send key
-                    }
+                    if (args.Length == 2)
+                        await webClient.SendKey(keyManager, args[1]); // send key
                     break;
-                
+
                 case "getKey":
-                    if (args.Length != 2)
-                    {
-                        p.PrintUsage();
-                    }
-                    else
-                    {
+                    if (args.Length == 2)
                         await webClient.GetKey(args[1]);
-                    }
+
                     break;
-                
+
                 case "sendMsg":
-                    if (args.Length != 3)
-                    {
-                        p.PrintUsage();
-                    }
-                    else
-                    {
+                    if (args.Length == 3)
                         await webClient.SendMsg(keyManager, args[1], args[2]);
-                    }
+                    
                     break;
-                
+
                 case "getMsg":
-                    if (args.Length != 2)
-                    {
-                        p.PrintUsage();
-                    }
-                    else
-                    {
+                    if (args.Length == 2)
                         await webClient.GetMsg(keyManager, args[1]);
-                    }
                     break;
-                
+
                 default:
                     p.PrintUsage();
                     break;
             }
-            
-
-            // var web = "AAAAAwEAAQAAAQB7w4yJG+kH5BXhL9lgeCxkNqKeIIyC0zzG0FYJu5/WVa7xCdXGSmG3pEEpyEPhe81L9zb1qWpnn" +
-            //           "9yoiMPPawtDoZ26Um0LA/MAx/n4UdBENyWYd807+ex1h/uJ/GHgeZI/8yZ5LapCTNXaAwXvTfSY4OTG9hEgTJ6uK7cM11hn/q" +
-            //           "K07EnH1beaGoj/FOATFPqpLkDaz/fOkRQIQr6F41ks0PIJXjzmMeIJdUhBsluJaU/pllHqjTDFk2uBOSQr5g0WFeCVLfss0E" +
-            //           "Ybkbx3BsLtvThDgphBc98KOU2gx3o+Tm5U1oTT/tZdUjrWq8iPWzI+JMrG1RtZEVVeewOFT5sn";
-
-
-            /*
-             * private key emails: list of all emails that I have sent to sever using that private key
-             * pub key email: NONE< don't touch
-             */
         }
-        
+
     }
-    
-
-
-    
-    
 }
