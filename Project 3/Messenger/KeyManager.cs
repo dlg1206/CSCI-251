@@ -40,16 +40,24 @@ public class Key
         var keyBytes = Convert.FromBase64String(base64Encoding);      // get initial bytes
 
         // convert 1st 4 bytes to 'e'
-        var e = BitConverter.ToInt32(GetNBytes(keyBytes, 0, 4), 0);
+        var f = GetNBytes(keyBytes, 0, 4);
+        Array.Reverse(f); // convert form BI -> LI
+        var e = BitConverter.ToInt32(f, 0);
         
         // convert 'e' bytes to E
-        Prime = new BigInteger(GetNBytes(keyBytes, 4, e));
+        var a = GetNBytes(keyBytes, 4, e);
+        // Array.Reverse(a);  // ALREADY in LI
+        Prime = new BigInteger(a);
         
         // get n
-        var n = BitConverter.ToInt32(GetNBytes(keyBytes, e+4, 4), 0);
+        var l = GetNBytes(keyBytes, e + 4, 4);
+        Array.Reverse(l);   // BI -> LI
+        var n = BitConverter.ToInt32(l, 0);
         
         // convert 'n' bytes to N
-        Nonce = new BigInteger(GetNBytes(keyBytes, e+8, n));
+        var b = GetNBytes(keyBytes, e + 8, n);
+        // ALREADY IN LI
+        Nonce = new BigInteger(b);
     }
     
     
@@ -67,9 +75,9 @@ public class Key
         // copy section
         Array.Copy(source, startIndex, section, 0, numBytes);
 
-        // always return little endian form
-        if (BitConverter.IsLittleEndian)
-            Array.Reverse(section);
+        // // always return little endian form
+        // if (BitConverter.IsLittleEndian)
+        //     Array.Reverse(section);
             
         return section;
     }
@@ -81,23 +89,28 @@ public class Key
     /// <returns>Base64 Encoding of this Key</returns>
     private string EncodeToBase64()
     {
+        
+        // 0, 1, ... n : BYTE ORDER
+        // TO byte array returns LI
         // Get byte arrays and set them to little Endian form
         
         var E = Prime.ToByteArray();
-        Array.Reverse(E);
+        // Array.Reverse(E);   // in LI
         
         var e = BitConverter.GetBytes(E.Length);
-        Array.Reverse(e);
+        Array.Reverse(e);   // BI -> LI
 
         var N = Nonce.ToByteArray();
-        Array.Reverse(N);
+        // Array.Reverse(N);   // in LI
         
         var n = BitConverter.GetBytes(N.Length);
-        Array.Reverse(n);
+        Array.Reverse(n);   // BI -> LI
 
         // Combine results
         var combined = Array.Empty<byte>().Concat(e).Concat(E).Concat(n).Concat(N).ToArray();
-
+        
+        
+        
         // convert to Base64
         return Convert.ToBase64String(combined);
         
@@ -231,13 +244,9 @@ public class KeyManager
         var privateKey = new Key(_E.ModInverse(r), nonce);
         
         // store values
-        var sw1 = File.CreateText(PublicKey);
-        sw1.WriteLine(JsonSerializer.Serialize(publicKey.ToPublicKey()));
-        sw1.Close();
-        
-        var sw2 = File.CreateText(PrivateKey);
-        sw2.WriteLine(JsonSerializer.Serialize(privateKey.ToPrivateKey()));
-        sw2.Close();
+   
+        File.WriteAllText(PublicKey, JsonSerializer.Serialize(publicKey.ToPublicKey()));
+        File.WriteAllText(PrivateKey, JsonSerializer.Serialize(privateKey.ToPrivateKey()));
     }
 
     
