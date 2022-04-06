@@ -111,12 +111,8 @@ public class WebClient
                 }
                 
                 // Else store Public Key locally
-                var jsonObj = JsonSerializer.Deserialize<JsonObject>(jsonString);
+                await File.WriteAllTextAsync(email + KeyExtension, jsonString);
 
-                var sw = File.CreateText(email + KeyExtension);
-                sw.WriteLine(jsonObj);
-                sw.Close();
-                
             }
             // Report Error
             catch (HttpRequestException e)
