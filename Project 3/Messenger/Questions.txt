@@ -20,8 +20,8 @@ Storing keys:
     
 Design:
     method order?
-       attributes->constructor->private->public, where should get/set go?        
-       using stream writer correct?
-       Min 32 bit key like project 2?
-       sendKey error check for email? ok sendKey Foo
-       get all msgs or just latest?
+       attributes->constructor->private->public, where should get/set go?  - where attributes are      
+       using stream writer correct? ok 
+       Min 32 bit key like project 2? yes
+       sendKey error check for email? ok sendKey Foo no
+       get all msgs or just latest? just latests

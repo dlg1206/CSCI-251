@@ -229,14 +229,13 @@ public class KeyManager
         // create respective keys
         var publicKey = new Key( _E, nonce);
         var privateKey = new Key(_E.ModInverse(r), nonce);
-
-        // todo using stream writer correct?
+        
         // store values
-        using var sw1 = File.CreateText(PublicKey);
+        var sw1 = File.CreateText(PublicKey);
         sw1.WriteLine(JsonSerializer.Serialize(publicKey.ToPublicKey()));
         sw1.Close();
         
-        using var sw2 = File.CreateText(PrivateKey);
+        var sw2 = File.CreateText(PrivateKey);
         sw2.WriteLine(JsonSerializer.Serialize(privateKey.ToPrivateKey()));
         sw2.Close();
     }
@@ -363,7 +362,6 @@ public class KeyManager
 
             // Ensure have private key for the given email
             var haveKey = false;
-            // todo better way to check if in private
             foreach (var storedEmail in jsonObj[Email]?.AsArray()!)
             {
                 if(storedEmail != null)
