@@ -10,7 +10,7 @@ using System.Text;
 using System.Text.Json.Nodes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using JsonSerializer = System.Text.Json.JsonSerializer;
+using JsonConverter = System.Text.Json.Serialization.JsonConverter;
 
 namespace Messenger;
 
@@ -141,7 +141,7 @@ public class WebClient
                 return;
             
             // Else attempt to convert jsonString to key
-            var jsonObj = JsonSerializer.Deserialize<JsonObject>(jsonString);
+            var jsonObj = JsonConvert.DeserializeObject<JsonObject>(jsonString);
             var base64Key = jsonObj?[Key];
             
             // break if key is null
@@ -162,7 +162,7 @@ public class WebClient
             {
                 // Create content to send
                 var content = new StringContent(
-                    JsonSerializer.Serialize(jsonMsg), 
+                    JsonConvert.SerializeObject(jsonMsg), 
                     Encoding.UTF8, 
                     MediaType
                 );
@@ -206,8 +206,9 @@ public class WebClient
                     return;
                 
                 // else get Base64 message
-                var jsonObj = (JObject) JsonConvert.DeserializeObject(jsonString)!;
-                var base64Content = jsonObj[Content];
+                var jsonObj = JsonConvert.DeserializeObject<JsonObject>(jsonString);
+
+                var base64Content = jsonObj?[Content];
 
                 // break if message is null
                 if(base64Content == null)
