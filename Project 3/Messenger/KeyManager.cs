@@ -7,8 +7,9 @@
 
 using System.Numerics;
 using System.Text;
-using System.Text.Json;
 using System.Text.Json.Nodes;
+using Newtonsoft.Json;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 
 namespace Messenger;
@@ -140,6 +141,12 @@ public class Key
             email = "",
             key = EncodeToBase64()
         };
+        
+        // return new
+        // {
+        //     email = "",
+        //     key = EncodeToBase64()
+        // }   
     }
 
     
@@ -244,10 +251,8 @@ public class KeyManager
         var privateKey = new Key(_E.ModInverse(r), nonce);
         
         // store values
-        // todo \u002 problem
-        var foo = JsonSerializer.Serialize(publicKey.ToPublicKey());
-        File.WriteAllText(PublicKey, JsonSerializer.Serialize(publicKey.ToPublicKey()));
-        File.WriteAllText(PrivateKey, JsonSerializer.Serialize(privateKey.ToPrivateKey()));
+        File.WriteAllText(PublicKey, JsonConvert.SerializeObject(publicKey.ToPublicKey()));
+        File.WriteAllText(PrivateKey, JsonConvert.SerializeObject(privateKey.ToPrivateKey()));
     }
 
     

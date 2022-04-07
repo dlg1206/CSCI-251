@@ -28,3 +28,5 @@ C:\Users\Dgarc\Programming\Rider\CSCI-251\Project 3\Messenger\obj\Debug\net6.0\r
 C:\Users\Dgarc\Programming\Rider\CSCI-251\Project 3\Messenger\obj\Debug\net6.0\Messenger.pdb
 C:\Users\Dgarc\Programming\Rider\CSCI-251\Project 3\Messenger\obj\Debug\net6.0\Messenger.genruntimeconfig.cache
 C:\Users\Dgarc\Programming\Rider\CSCI-251\Project 3\Messenger\obj\Debug\net6.0\ref\Messenger.dll
+C:\Users\Dgarc\Programming\Rider\CSCI-251\Project 3\Messenger\bin\Debug\net6.0\Newtonsoft.Json.dll
+C:\Users\Dgarc\Programming\Rider\CSCI-251\Project 3\Messenger\obj\Debug\net6.0\Messenger.csproj.CopyComplete

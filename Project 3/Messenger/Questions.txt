@@ -25,3 +25,6 @@ Design:
        Min 32 bit key like project 2? yes
        sendKey error check for email? ok sendKey Foo no
        get all msgs or just latest? just latests
+       
+Endianess ok? yes
+\u002? fixed solving
