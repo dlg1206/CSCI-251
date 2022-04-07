@@ -7,8 +7,10 @@
 
 
 using System.Text;
-using System.Text.Json;
 using System.Text.Json.Nodes;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Messenger;
 
@@ -204,15 +206,15 @@ public class WebClient
                     return;
                 
                 // else get Base64 message
-                var jsonObj = JsonSerializer.Deserialize<JsonObject>(jsonString);
-                var base64Content = jsonObj?[Content];
-                
+                var jsonObj = (JObject) JsonConvert.DeserializeObject(jsonString)!;
+                var base64Content = jsonObj[Content];
+
                 // break if message is null
                 if(base64Content == null)
                     return;
                 
                 // else decrypt and output plaintext
-                var plaintext = keyManager.Decrypt(privateKey, base64Content.AsValue().ToString());
+                var plaintext = keyManager.Decrypt(privateKey, base64Content.ToString());
                 Console.WriteLine(plaintext);
             }
             // Report Error

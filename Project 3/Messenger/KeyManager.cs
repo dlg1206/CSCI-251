@@ -60,8 +60,8 @@ public class Key
         // ALREADY IN LI
         Nonce = new BigInteger(b);
     }
-    
-    
+
+
     /// <summary>
     /// Gets a set amount of bytes from a given byte array
     /// </summary>
@@ -141,12 +141,6 @@ public class Key
             email = "",
             key = EncodeToBase64()
         };
-        
-        // return new
-        // {
-        //     email = "",
-        //     key = EncodeToBase64()
-        // }   
     }
 
     
