@@ -9,7 +9,7 @@ using System.Numerics;
 using System.Text;
 using System.Text.Json.Nodes;
 using Newtonsoft.Json;
-using JsonSerializer = System.Text.Json.JsonSerializer;
+using JsonConverter = System.Text.Json.Serialization.JsonConverter;
 
 
 namespace Messenger;
@@ -263,7 +263,7 @@ public class KeyManager
         // attempt to get key and sign it
         try
         {
-            var jsonObj = JsonSerializer.Deserialize<JsonObject>(File.ReadAllText(fileName));   // get key
+            var jsonObj = JsonConvert.DeserializeObject<JsonObject>(File.ReadAllText(fileName));   // get key
             
             // access if key exists
             if (jsonObj != null)
@@ -280,10 +280,10 @@ public class KeyManager
                     
                     // update local key
                     using var sw = File.CreateText(fileName);
-                    sw.WriteLine(JsonSerializer.Serialize(jsonObj));
+                    sw.WriteLine(JsonConvert.SerializeObject(jsonObj));
                     sw.Close();
                 }
-                return JsonSerializer.Serialize(jsonObj);   // return result
+                return JsonConvert.SerializeObject(jsonObj);   // return result
             }
             
         }
@@ -363,10 +363,10 @@ public class KeyManager
         // attempt to return stored key
         try
         {
-            var jsonObj = JsonSerializer.Deserialize<JsonObject>(File.ReadAllText(PrivateKey));
+            var jsonObj = JsonConvert.DeserializeObject<JsonObject>(File.ReadAllText(PrivateKey));
             
             // Check if Email isn't null
-            if(jsonObj?[Email] == null)
+            if(jsonObj[Email] == null)
                 return Empty;
 
             // Ensure have private key for the given email
