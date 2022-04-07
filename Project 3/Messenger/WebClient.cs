@@ -45,12 +45,7 @@ public class WebClient
         private const string MessageAddress = "http://kayrun.cs.rit.edu:5000/Message/";
 
         private const string MediaType = "application/json";    // Media type for sending info to server
-        
-        // Json Obj Access fields
-        private const string Email = "email";
-        private const string Key = "key";
-        private const string Content = "content";
-        
+
         private const string Empty = "";                // String return values
         private const string KeyExtension = ".key";     // Key extension for storing keys locally
         
@@ -141,14 +136,15 @@ public class WebClient
                 return;
             
             // Else attempt to convert jsonString to key
-            var jsonObj = JsonConvert.DeserializeObject<JsonObject>(jsonString);
-            var base64Key = jsonObj?[Key];
+            var jsonObj = JsonConvert.DeserializeObject<JsonPublicKey>(jsonString);
+            var base64Key = jsonObj?.key;
             
             // break if key is null
             if(base64Key == null)
                 return;
             
-            var publicKey = new Key(base64Key.AsValue().ToString());    // convert key
+            // todo fail if values negative
+            var publicKey = new Key(base64Key);    // convert key
             
             // build JsonMessage
             var jsonMsg = new JsonMessage
@@ -206,16 +202,15 @@ public class WebClient
                     return;
                 
                 // else get Base64 message
-                var jsonObj = JsonConvert.DeserializeObject<JsonObject>(jsonString);
-
-                var base64Content = jsonObj?[Content];
+                var jsonObj = JsonConvert.DeserializeObject<JsonMessage>(jsonString);
+                var base64Content = jsonObj?.content;
 
                 // break if message is null
                 if(base64Content == null)
                     return;
                 
                 // else decrypt and output plaintext
-                var plaintext = keyManager.Decrypt(privateKey, base64Content.ToString());
+                var plaintext = keyManager.Decrypt(privateKey, base64Content);
                 Console.WriteLine(plaintext);
             }
             // Report Error

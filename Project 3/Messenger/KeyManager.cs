@@ -21,6 +21,22 @@ namespace Messenger;
 public class Key
 {
     /// <summary>
+    /// Endian form to return data bytes
+    /// </summary>
+    private enum EndianForm { Big, Little };
+    
+    /// <summary>
+    /// Getter for Prime (E for Public, D for Private) value
+    /// </summary>
+    public BigInteger Prime { get; }
+    
+    
+    /// <summary>
+    /// Getter for Nonce Value
+    /// </summary>
+    public BigInteger Nonce { get; }
+    
+    /// <summary>
     /// Numeric constructor. Create Key when Prime and Nonce are known
     /// </summary>
     /// <param name="prime">E or D primes for public / private keys respectively</param>
@@ -38,48 +54,46 @@ public class Key
     /// <param name="base64Encoding">Base64 Encoding of the Key</param>
     public Key(string base64Encoding)
     {
+        // todo handle neg values
         var keyBytes = Convert.FromBase64String(base64Encoding);      // get initial bytes
 
         // convert 1st 4 bytes to 'e'
-        var f = GetNBytes(keyBytes, 0, 4);
-        Array.Reverse(f); // convert form LI -> BI
-        var e = BitConverter.ToInt32(f, 0);
+        var eBytes = GetNBytes(EndianForm.Big, keyBytes, 0, 4);
+        var e = BitConverter.ToInt32(eBytes, 0);
         
         // convert 'e' bytes to E
-        var a = GetNBytes(keyBytes, 4, e);
-        // Array.Reverse(a);  // ALREADY in LI
-        Prime = new BigInteger(a);
+        var primeBytes = GetNBytes(EndianForm.Little, keyBytes, 4, e);
+        Prime = new BigInteger(primeBytes);
         
         // get n
-        var l = GetNBytes(keyBytes, e + 4, 4);
-        Array.Reverse(l);   // LI -> BI
-        var n = BitConverter.ToInt32(l, 0);
+        var nBytes = GetNBytes(EndianForm.Big, keyBytes, e + 4, 4);
+        var n = BitConverter.ToInt32(nBytes, 0);
         
         // convert 'n' bytes to N
-        var b = GetNBytes(keyBytes, e + 8, n);
-        // ALREADY IN LI
-        Nonce = new BigInteger(b);
+        var nonceBytes = GetNBytes(EndianForm.Little, keyBytes, e + 8, n);
+        Nonce = new BigInteger(nonceBytes);
     }
 
 
     /// <summary>
     /// Gets a set amount of bytes from a given byte array
     /// </summary>
+    /// <param name="form">Endian form</param>
     /// <param name="source">Byte array to take section from</param>
     /// <param name="startIndex">Index to start at</param>
     /// <param name="numBytes">Number of bytes to copy</param>
     /// <returns>Sub byte array of the source</returns>
-    private byte[] GetNBytes(byte[] source, int startIndex, int numBytes)
+    private byte[] GetNBytes(EndianForm form, byte[] source, int startIndex, int numBytes)
     {
         var section = new byte[numBytes];   // init copy array
 
         // copy section
         Array.Copy(source, startIndex, section, 0, numBytes);
 
-        // // always return little endian form
-        // if (BitConverter.IsLittleEndian)
-        //     Array.Reverse(section);
-            
+        // set to big Endian if requested
+        if (form == EndianForm.Big)
+            Array.Reverse(section);
+
         return section;
     }
     
@@ -117,19 +131,6 @@ public class Key
         
     }
 
-    
-    /// <summary>
-    /// Getter for Prime (E for Public, D for Private) value
-    /// </summary>
-    public BigInteger Prime { get; }
-    
-    
-    /// <summary>
-    /// Getter for Nonce Value
-    /// </summary>
-    public BigInteger Nonce { get; }
-
-    
     /// <summary>
     /// Convert this key to a JsonPublicKey
     /// </summary>
@@ -363,15 +364,15 @@ public class KeyManager
         // attempt to return stored key
         try
         {
-            var jsonObj = JsonConvert.DeserializeObject<JsonObject>(File.ReadAllText(PrivateKey));
+            var jsonObj = JsonConvert.DeserializeObject<JsonPrivateKey>(File.ReadAllText(PrivateKey));
             
             // Check if Email isn't null
-            if(jsonObj[Email] == null)
+            if(jsonObj?.email == null)
                 return Empty;
 
             // Ensure have private key for the given email
             var haveKey = false;
-            foreach (var storedEmail in jsonObj[Email]?.AsArray()!)
+            foreach (var storedEmail in jsonObj.email!)
             {
                 if(storedEmail != null)
                     haveKey = storedEmail.ToString().Equals(email);
@@ -381,8 +382,8 @@ public class KeyManager
             }
             
             // If have private key for the given email, return json string
-            if (haveKey && jsonObj[Key] != null)
-                return jsonObj[Key]?.ToString()!;
+            if (haveKey && jsonObj.key != null)
+                return jsonObj.key;
 
             // Else report not found
             Console.WriteLine("Private key for " + email + " not found locally");
