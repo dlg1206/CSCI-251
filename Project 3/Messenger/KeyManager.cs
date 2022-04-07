@@ -244,7 +244,8 @@ public class KeyManager
         var privateKey = new Key(_E.ModInverse(r), nonce);
         
         // store values
-   
+        // todo \u002 problem
+        var foo = JsonSerializer.Serialize(publicKey.ToPublicKey());
         File.WriteAllText(PublicKey, JsonSerializer.Serialize(publicKey.ToPublicKey()));
         File.WriteAllText(PrivateKey, JsonSerializer.Serialize(privateKey.ToPrivateKey()));
     }
