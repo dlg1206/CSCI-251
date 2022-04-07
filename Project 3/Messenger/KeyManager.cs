@@ -41,7 +41,7 @@ public class Key
 
         // convert 1st 4 bytes to 'e'
         var f = GetNBytes(keyBytes, 0, 4);
-        Array.Reverse(f); // convert form BI -> LI
+        Array.Reverse(f); // convert form LI -> BI
         var e = BitConverter.ToInt32(f, 0);
         
         // convert 'e' bytes to E
@@ -51,7 +51,7 @@ public class Key
         
         // get n
         var l = GetNBytes(keyBytes, e + 4, 4);
-        Array.Reverse(l);   // BI -> LI
+        Array.Reverse(l);   // LI -> BI
         var n = BitConverter.ToInt32(l, 0);
         
         // convert 'n' bytes to N
@@ -98,13 +98,13 @@ public class Key
         // Array.Reverse(E);   // in LI
         
         var e = BitConverter.GetBytes(E.Length);
-        Array.Reverse(e);   // BI -> LI
+        Array.Reverse(e);   // LI -> BI
 
         var N = Nonce.ToByteArray();
         // Array.Reverse(N);   // in LI
         
         var n = BitConverter.GetBytes(N.Length);
-        Array.Reverse(n);   // BI -> LI
+        Array.Reverse(n);   // LI -> BI
 
         // Combine results
         var combined = Array.Empty<byte>().Concat(e).Concat(E).Concat(n).Concat(N).ToArray();
@@ -300,7 +300,7 @@ public class KeyManager
     /// </summary>
     /// <param name="publicKey">public key to encrypt with</param>
     /// <param name="plaintext">plaintext to encrypt</param>
-    /// <returns>Base64 encoded string of the ciphtertext</returns>
+    /// <returns>Base64 encoded string of the ciphertext</returns>
     public string Encrypt(Key publicKey, string plaintext)
     {
         var P = new BigInteger(Encoding.ASCII.GetBytes(plaintext));
