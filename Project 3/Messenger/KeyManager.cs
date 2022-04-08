@@ -106,26 +106,22 @@ public class Key
     {
         
         // 0, 1, ... n : BYTE ORDER
-        // TO byte array returns LI
+        // TO byte array returns LE
         // Get byte arrays and set them to little Endian form
         
         var E = Prime.ToByteArray();
-        // Array.Reverse(E);   // in LI
-        
+
         var e = BitConverter.GetBytes(E.Length);
-        Array.Reverse(e);   // LI -> BI
+        Array.Reverse(e);   // LE -> BE
 
         var N = Nonce.ToByteArray();
-        // Array.Reverse(N);   // in LI
-        
+
         var n = BitConverter.GetBytes(N.Length);
-        Array.Reverse(n);   // LI -> BI
+        Array.Reverse(n);   // LE -> BE
 
         // Combine results
         var combined = Array.Empty<byte>().Concat(e).Concat(E).Concat(n).Concat(N).ToArray();
-        
-        
-        
+
         // convert to Base64
         return Convert.ToBase64String(combined);
         
