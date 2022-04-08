@@ -58,7 +58,7 @@ public class Key
         var keyBytes = Convert.FromBase64String(base64Encoding);      // get initial bytes
 
         // convert 1st 4 bytes to 'e'
-        var eBytes = GetNBytes(EndianForm.Big, keyBytes, 0, 4);
+        var eBytes = GetNBytes(EndianForm.Big, keyBytes, 0, 4); // BIG
         var e = BitConverter.ToInt32(eBytes, 0);
         
         // convert 'e' bytes to E
@@ -66,7 +66,7 @@ public class Key
         Prime = new BigInteger(primeBytes);
         
         // get n
-        var nBytes = GetNBytes(EndianForm.Big, keyBytes, e + 4, 4);
+        var nBytes = GetNBytes(EndianForm.Big, keyBytes, e + 4, 4); // BIG
         var n = BitConverter.ToInt32(nBytes, 0);
         
         // convert 'n' bytes to N
@@ -78,7 +78,7 @@ public class Key
     /// <summary>
     /// Gets a set amount of bytes from a given byte array
     /// </summary>
-    /// <param name="form">Endian form</param>
+    /// <param name="form">Endian form to return byte array</param>
     /// <param name="source">Byte array to take section from</param>
     /// <param name="startIndex">Index to start at</param>
     /// <param name="numBytes">Number of bytes to copy</param>
