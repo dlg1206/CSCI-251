@@ -9,7 +9,6 @@ using System.Numerics;
 using System.Text;
 using System.Text.Json.Nodes;
 using Newtonsoft.Json;
-using JsonConverter = System.Text.Json.Serialization.JsonConverter;
 
 
 namespace Messenger;
@@ -54,11 +53,10 @@ public class Key
     /// <param name="base64Encoding">Base64 Encoding of the Key</param>
     public Key(string base64Encoding)
     {
-        // todo handle neg values
         var keyBytes = Convert.FromBase64String(base64Encoding);      // get initial bytes
 
         // convert 1st 4 bytes to 'e'
-        var eBytes = GetNBytes(EndianForm.Big, keyBytes, 0, 4); // BIG
+        var eBytes = GetNBytes(EndianForm.Big, keyBytes, 0, 4);
         var e = BitConverter.ToInt32(eBytes, 0);
         
         // convert 'e' bytes to E
@@ -66,7 +64,7 @@ public class Key
         Prime = new BigInteger(primeBytes);
         
         // get n
-        var nBytes = GetNBytes(EndianForm.Big, keyBytes, e + 4, 4); // BIG
+        var nBytes = GetNBytes(EndianForm.Big, keyBytes, e + 4, 4);
         var n = BitConverter.ToInt32(nBytes, 0);
         
         // convert 'n' bytes to N
@@ -104,11 +102,6 @@ public class Key
     /// <returns>Base64 Encoding of this Key</returns>
     private string EncodeToBase64()
     {
-        
-        // 0, 1, ... n : BYTE ORDER
-        // TO byte array returns LE
-        // Get byte arrays and set them to little Endian form
-        
         var E = Prime.ToByteArray();
 
         var e = BitConverter.GetBytes(E.Length);
@@ -203,11 +196,7 @@ public class KeyManager
     // key storage file names
     private const string PublicKey = "public.key";
     private const string PrivateKey = "private.key";
-    
-    // Json Obj Access fields
-    private const string Email = "email";
-    private const string Key = "key";
-    
+
     private const string Empty = "";                // String return values
     private const string KeyExtension = ".key";     // Key extension for storing keys locally
 
@@ -242,8 +231,19 @@ public class KeyManager
         var privateKey = new Key(_E.ModInverse(r), nonce);
         
         // store values
-        File.WriteAllText(PublicKey, JsonConvert.SerializeObject(publicKey.ToPublicKey()));
-        File.WriteAllText(PrivateKey, JsonConvert.SerializeObject(privateKey.ToPrivateKey()));
+        try
+        {
+            File.WriteAllText(PublicKey, JsonConvert.SerializeObject(publicKey.ToPublicKey()));
+            File.WriteAllText(PrivateKey, JsonConvert.SerializeObject(privateKey.ToPrivateKey()));
+        }
+        catch
+        {
+            Console.WriteLine("There was an error storing the keys.");
+            return;
+        }
+
+        Console.WriteLine("Keys stored successfully");
+       
     }
 
     
@@ -260,26 +260,38 @@ public class KeyManager
         // attempt to get key and sign it
         try
         {
-            var jsonObj = JsonConvert.DeserializeObject<JsonObject>(File.ReadAllText(fileName));   // get key
-            
-            // access if key exists
-            if (jsonObj != null)
+            var jsonString = File.ReadAllText(fileName);
+
+            // If public, sign a copy
+            if (isPublic)
             {
-                // If public, sign a copy
-                if (isPublic)
+                var jsonObj = JsonConvert.DeserializeObject<JsonPublicKey>(jsonString);
+                if (jsonObj != null) jsonObj.email = email;
+                
+                return JsonConvert.SerializeObject(jsonObj);   // return result
+            }
+            // If private, sign private key and update the local private key
+            else
+            {
+                var jsonObj = JsonConvert.DeserializeObject<JsonPrivateKey>(jsonString);
+
+                // if jsonObj and email array is not null
+                if (jsonObj is {email: { }})
                 {
-                    jsonObj[Email] = JsonValue.Create(email);
-                }
-                // If private, sign private key and update the local private key
-                else
-                {
-                    jsonObj[Email]?.AsArray().Add(email);   // add email
+                    // copy existing array
+                    var copy = new string[jsonObj.email.Length + 1];
+                    Array.Copy(jsonObj.email, copy, jsonObj.email.Length);
                     
-                    // update local key
-                    using var sw = File.CreateText(fileName);
-                    sw.WriteLine(JsonConvert.SerializeObject(jsonObj));
-                    sw.Close();
+                    copy[jsonObj.email.Length] = email;     // append new email
+                    
+                    jsonObj.email = copy;   // update private Key
                 }
+
+                // update local key
+                var sw = File.CreateText(fileName);
+                sw.WriteLine(JsonConvert.SerializeObject(jsonObj));
+                sw.Close();
+                
                 return JsonConvert.SerializeObject(jsonObj);   // return result
             }
             
@@ -371,7 +383,7 @@ public class KeyManager
             foreach (var storedEmail in jsonObj.email!)
             {
                 if(storedEmail != null)
-                    haveKey = storedEmail.ToString().Equals(email);
+                    haveKey = storedEmail.Equals(email);
 
                 if (haveKey)
                     break;

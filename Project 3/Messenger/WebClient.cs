@@ -58,7 +58,7 @@ public class WebClient
             // Attempt to send key to server
             try
             {
-                var signedPublicKey = keyManager.SignKey(true,email);   // sign key
+                var signedPublicKey = keyManager.SignKey(true, email);   // sign key
 
                 // break if error signing key
                 if (signedPublicKey.Equals(Empty))
@@ -114,6 +114,9 @@ public class WebClient
                 Console.WriteLine("\nException Caught!");
                 Console.WriteLine("Message :{0} ", e.Message);
             }
+
+            // report success
+            Console.WriteLine("Public key for " + email + " successfully stored");
         }
 
         
@@ -140,7 +143,6 @@ public class WebClient
             if(base64Key == null)
                 return;
             
-            // todo fail if values negative
             var publicKey = new Key(base64Key);    // convert key
             
             // build JsonMessage
@@ -208,7 +210,7 @@ public class WebClient
                 
                 // else decrypt and output plaintext
                 var plaintext = keyManager.Decrypt(privateKey, base64Content);
-                Console.WriteLine(plaintext);
+                Console.WriteLine("Message: " + plaintext);
             }
             // Report Error
             catch (HttpRequestException e)
