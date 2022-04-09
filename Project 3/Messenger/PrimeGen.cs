@@ -1,5 +1,4 @@
 ﻿/*
- * Project 2
  * Finds Primes of a given bit size
  * 
  * @author Derek Garcia
@@ -131,7 +130,12 @@ public static class BigIntExtensions
         return ProbablyPrime;
     }
     
-    
+    /// <summary>
+    /// Formula to calculate mod inverse. Used for key generation
+    /// </summary>
+    /// <param name="a">prime</param>
+    /// <param name="n">mod inverse of that prime</param>
+    /// <returns></returns>
     public static BigInteger ModInverse(this BigInteger a, BigInteger n)
     {
         BigInteger i = n, v = 0, d = 1;
@@ -157,7 +161,7 @@ public class PrimeGen
     
     private const int BitsPerByte = 8;
     
-    private static readonly object Lock = new object();    // for use in assigning primes
+    private readonly object _lock = new object();    // for use in assigning primes
     /// <summary>
     /// Finds a single probably prime number
     /// </summary>
@@ -171,7 +175,7 @@ public class PrimeGen
         var rng = RandomNumberGenerator.Create();
 
         // Loop until fine a probably prime number
-        Parallel.For(0, Int32.MaxValue, (i, state) =>
+        Parallel.For(0, int.MaxValue, (i, state) =>
         {
             
             // Make random BigInteger
@@ -184,7 +188,7 @@ public class PrimeGen
             if (!bi.InitialPrimeCheck() || !bi.IsProbablyPrime()) return;
             
             // If reach here then bi is valid prime
-            lock (Lock)
+            lock (_lock)
                 prime ??= bi;   // Assign value of bi to prime if its null
             
             // prime has been assigned, can stop threads
