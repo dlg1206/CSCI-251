@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "h0Xb996vT7M1MMrFh/pT+YBauTHwTLAQV2n3JLjS6iD36YLaztuEmFHcItjO2WUFaBuo0Qa8iSiop9aXV2U4Vw==",
+  "dgSpecHash": "cjbneGP92+o0egCj/7eV9reXA9TkhKeZIJmBe0Uo7IZxXqXoM76YmOIoYbEXdagcH4j3gBEWazWp0OWVsDApHQ==",
   "success": true,
-  "projectFilePath": "D:\\Dgarcia\\Programming\\IDEs\\Rider\\CSCI-251\\Project 3\\Messenger\\Messenger.csproj",
+  "projectFilePath": "C:\\Users\\Dgarc\\Programming\\Rider\\CSCI-251\\Project 3\\Messenger\\Messenger.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\Derpe\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512"
+    "C:\\Users\\Dgarc\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512"
   ],
   "logs": []
 }
