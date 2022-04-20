@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Dgarcia\\Programming\\IDEs\\Rider\\CSCI-251\\Project 3\\Messenger\\Messenger.csproj": {}
+    "D:\\Dgarcia\\Programming\\IDEs\\Rider\\CSCI-251\\Project 3\\messenger\\Messenger.csproj": {}
   },
   "projects": {
-    "D:\\Dgarcia\\Programming\\IDEs\\Rider\\CSCI-251\\Project 3\\Messenger\\Messenger.csproj": {
+    "D:\\Dgarcia\\Programming\\IDEs\\Rider\\CSCI-251\\Project 3\\messenger\\Messenger.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Dgarcia\\Programming\\IDEs\\Rider\\CSCI-251\\Project 3\\Messenger\\Messenger.csproj",
+        "projectUniqueName": "D:\\Dgarcia\\Programming\\IDEs\\Rider\\CSCI-251\\Project 3\\messenger\\Messenger.csproj",
         "projectName": "Messenger",
-        "projectPath": "D:\\Dgarcia\\Programming\\IDEs\\Rider\\CSCI-251\\Project 3\\Messenger\\Messenger.csproj",
+        "projectPath": "D:\\Dgarcia\\Programming\\IDEs\\Rider\\CSCI-251\\Project 3\\messenger\\Messenger.csproj",
         "packagesPath": "C:\\Users\\Derpe\\.nuget\\packages\\",
-        "outputPath": "D:\\Dgarcia\\Programming\\IDEs\\Rider\\CSCI-251\\Project 3\\Messenger\\obj\\",
+        "outputPath": "D:\\Dgarcia\\Programming\\IDEs\\Rider\\CSCI-251\\Project 3\\messenger\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Derpe\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -38,6 +38,10 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "CycloneDX.Core": {
+              "target": "Package",
+              "version": "[5.2.0, )"
+            },
             "Newtonsoft.Json": {
               "target": "Package",
               "version": "[13.0.1, )"

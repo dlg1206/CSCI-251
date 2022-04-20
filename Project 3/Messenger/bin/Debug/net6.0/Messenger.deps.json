@@ -8,10 +8,69 @@
     ".NETCoreApp,Version=v6.0": {
       "Messenger/1.0.0": {
         "dependencies": {
+          "CycloneDX.Core": "5.2.0",
           "Newtonsoft.Json": "13.0.1"
         },
         "runtime": {
           "Messenger.dll": {}
+        }
+      },
+      "CycloneDX.Core/5.2.0": {
+        "dependencies": {
+          "JsonSchema.Net": "2.2.0",
+          "System.Text.Json": "6.0.2",
+          "protobuf-net": "3.0.101"
+        },
+        "runtime": {
+          "lib/netstandard2.0/CycloneDX.Core.dll": {
+            "assemblyVersion": "5.2.0.0",
+            "fileVersion": "5.2.0.0"
+          }
+        }
+      },
+      "JetBrains.Annotations/2021.2.0": {
+        "runtime": {
+          "lib/netstandard2.0/JetBrains.Annotations.dll": {
+            "assemblyVersion": "2021.2.0.0",
+            "fileVersion": "2021.2.0.0"
+          }
+        }
+      },
+      "Json.More.Net/1.4.4": {
+        "dependencies": {
+          "System.Text.Json": "6.0.2"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Json.More.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.4.4.0"
+          }
+        }
+      },
+      "JsonPointer.Net/2.1.0": {
+        "dependencies": {
+          "Json.More.Net": "1.4.4",
+          "System.Text.Json": "6.0.2"
+        },
+        "runtime": {
+          "lib/netstandard2.0/JsonPointer.Net.dll": {
+            "assemblyVersion": "2.0.0.0",
+            "fileVersion": "2.1.0.0"
+          }
+        }
+      },
+      "JsonSchema.Net/2.2.0": {
+        "dependencies": {
+          "JetBrains.Annotations": "2021.2.0",
+          "Json.More.Net": "1.4.4",
+          "JsonPointer.Net": "2.1.0",
+          "System.Text.Json": "6.0.2"
+        },
+        "runtime": {
+          "lib/netstandard2.0/JsonSchema.Net.dll": {
+            "assemblyVersion": "2.0.0.0",
+            "fileVersion": "2.2.0.0"
+          }
         }
       },
       "Newtonsoft.Json/13.0.1": {
@@ -19,6 +78,43 @@
           "lib/netstandard2.0/Newtonsoft.Json.dll": {
             "assemblyVersion": "13.0.0.0",
             "fileVersion": "13.0.1.25517"
+          }
+        }
+      },
+      "protobuf-net/3.0.101": {
+        "dependencies": {
+          "protobuf-net.Core": "3.0.101"
+        },
+        "runtime": {
+          "lib/net5.0/protobuf-net.dll": {
+            "assemblyVersion": "3.0.0.0",
+            "fileVersion": "3.0.101.59408"
+          }
+        }
+      },
+      "protobuf-net.Core/3.0.101": {
+        "runtime": {
+          "lib/net5.0/protobuf-net.Core.dll": {
+            "assemblyVersion": "3.0.0.0",
+            "fileVersion": "3.0.101.59408"
+          }
+        }
+      },
+      "System.Runtime.CompilerServices.Unsafe/6.0.0": {},
+      "System.Text.Encodings.Web/6.0.0": {
+        "dependencies": {
+          "System.Runtime.CompilerServices.Unsafe": "6.0.0"
+        }
+      },
+      "System.Text.Json/6.0.2": {
+        "dependencies": {
+          "System.Runtime.CompilerServices.Unsafe": "6.0.0",
+          "System.Text.Encodings.Web": "6.0.0"
+        },
+        "runtime": {
+          "lib/net6.0/System.Text.Json.dll": {
+            "assemblyVersion": "6.0.0.0",
+            "fileVersion": "6.0.222.6406"
           }
         }
       }
@@ -30,12 +126,82 @@
       "serviceable": false,
       "sha512": ""
     },
+    "CycloneDX.Core/5.2.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-LQjzv1J7KcJy0lthRA6gPhWC05PPPlIZmiNo7id6Yawlk/Bxcg+Glw4Thbdf4TBa8uf+KmL8L8Js4ZsTMBShnA==",
+      "path": "cyclonedx.core/5.2.0",
+      "hashPath": "cyclonedx.core.5.2.0.nupkg.sha512"
+    },
+    "JetBrains.Annotations/2021.2.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-kKSyoVfndMriKHLfYGmr0uzQuI4jcc3TKGyww7buJFCYeHb/X0kodYBPL7n9454q7v6ASiRmDgpPGaDGerg/Hg==",
+      "path": "jetbrains.annotations/2021.2.0",
+      "hashPath": "jetbrains.annotations.2021.2.0.nupkg.sha512"
+    },
+    "Json.More.Net/1.4.4": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-fEODh5RsZ1cd4Cfg/f6NoVZ1v3a0iZ5XtshIsdWPnuIMMwxuN07/v8QJ7wyIQI+0MASa1l3v0k7XN9FjypaY3A==",
+      "path": "json.more.net/1.4.4",
+      "hashPath": "json.more.net.1.4.4.nupkg.sha512"
+    },
+    "JsonPointer.Net/2.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-T/upKtpS8MWV1Th90bnyWtcs+vt9WRcrH2BSQIXkIDNwwcdoUxfhJkO+mrtCSlkyCOREbHrV3KeT1U2oL+n+6w==",
+      "path": "jsonpointer.net/2.1.0",
+      "hashPath": "jsonpointer.net.2.1.0.nupkg.sha512"
+    },
+    "JsonSchema.Net/2.2.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-J2Q7SYncE3bbYHsyG6ltA/Gue7BOEQR7XcbWtpKh7KXiMZVkEJ8YNpI1lAQMuDuSpe9Ba1JuncxjRFclPFMBHg==",
+      "path": "jsonschema.net/2.2.0",
+      "hashPath": "jsonschema.net.2.2.0.nupkg.sha512"
+    },
     "Newtonsoft.Json/13.0.1": {
       "type": "package",
       "serviceable": true,
       "sha512": "sha512-ppPFpBcvxdsfUonNcvITKqLl3bqxWbDCZIzDWHzjpdAHRFfZe0Dw9HmA0+za13IdyrgJwpkDTDA9fHaxOrt20A==",
       "path": "newtonsoft.json/13.0.1",
       "hashPath": "newtonsoft.json.13.0.1.nupkg.sha512"
+    },
+    "protobuf-net/3.0.101": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-mLm8VGfGylp9q+rbJDp3uw0BOeNzfGENecVz/EYGlzq3ss7tfajGXHCMoZm/GxJ9vSn9pcK22UXWZnQ5GJQMjA==",
+      "path": "protobuf-net/3.0.101",
+      "hashPath": "protobuf-net.3.0.101.nupkg.sha512"
+    },
+    "protobuf-net.Core/3.0.101": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-gf9QIF0RlctfjmOjbE6eOyMulkNEsH7tHncjKj/4BTu9tkuTyrH3fv5I+35GnolJqKJ6fh9kYaezvNRL3t75+Q==",
+      "path": "protobuf-net.core/3.0.101",
+      "hashPath": "protobuf-net.core.3.0.101.nupkg.sha512"
+    },
+    "System.Runtime.CompilerServices.Unsafe/6.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-/iUeP3tq1S0XdNNoMz5C9twLSrM/TH+qElHkXWaPvuNOt+99G75NrV0OS2EqHx5wMN7popYjpc8oTjC1y16DLg==",
+      "path": "system.runtime.compilerservices.unsafe/6.0.0",
+      "hashPath": "system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512"
+    },
+    "System.Text.Encodings.Web/6.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Vg8eB5Tawm1IFqj4TVK1czJX89rhFxJo9ELqc/Eiq0eXy13RK00eubyU6TJE6y+GQXjyV5gSfiewDUZjQgSE0w==",
+      "path": "system.text.encodings.web/6.0.0",
+      "hashPath": "system.text.encodings.web.6.0.0.nupkg.sha512"
+    },
+    "System.Text.Json/6.0.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-0nE2gwXLn3PTBOPwORLqwuYvWB+Beomt9ZBX+6LmogMNKUvfD1SoDb/ycB1vBntT94rGaB/SvxEyeLu14H6aEg==",
+      "path": "system.text.json/6.0.2",
+      "hashPath": "system.text.json.6.0.2.nupkg.sha512"
     }
   }
 }

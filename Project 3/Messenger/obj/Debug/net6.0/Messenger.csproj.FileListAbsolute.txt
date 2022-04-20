@@ -32,3 +32,11 @@ C:\Users\Dgarc\Programming\Rider\CSCI-251\Project 3\Messenger\bin\Debug\net6.0\N
 C:\Users\Dgarc\Programming\Rider\CSCI-251\Project 3\Messenger\obj\Debug\net6.0\Messenger.csproj.CopyComplete
 D:\Dgarcia\Programming\IDEs\Rider\CSCI-251\Project 3\Messenger\bin\Debug\net6.0\Newtonsoft.Json.dll
 D:\Dgarcia\Programming\IDEs\Rider\CSCI-251\Project 3\Messenger\obj\Debug\net6.0\Messenger.csproj.CopyComplete
+D:\Dgarcia\Programming\IDEs\Rider\CSCI-251\Project 3\messenger\bin\Debug\net6.0\CycloneDX.Core.dll
+D:\Dgarcia\Programming\IDEs\Rider\CSCI-251\Project 3\messenger\bin\Debug\net6.0\JetBrains.Annotations.dll
+D:\Dgarcia\Programming\IDEs\Rider\CSCI-251\Project 3\messenger\bin\Debug\net6.0\Json.More.dll
+D:\Dgarcia\Programming\IDEs\Rider\CSCI-251\Project 3\messenger\bin\Debug\net6.0\JsonPointer.Net.dll
+D:\Dgarcia\Programming\IDEs\Rider\CSCI-251\Project 3\messenger\bin\Debug\net6.0\JsonSchema.Net.dll
+D:\Dgarcia\Programming\IDEs\Rider\CSCI-251\Project 3\messenger\bin\Debug\net6.0\protobuf-net.dll
+D:\Dgarcia\Programming\IDEs\Rider\CSCI-251\Project 3\messenger\bin\Debug\net6.0\protobuf-net.Core.dll
+D:\Dgarcia\Programming\IDEs\Rider\CSCI-251\Project 3\messenger\bin\Debug\net6.0\System.Text.Json.dll
