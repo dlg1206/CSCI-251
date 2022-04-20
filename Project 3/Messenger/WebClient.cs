@@ -183,7 +183,7 @@ public class WebClient
         /// <param name="email">email to get the messages for</param>
         public async Task GetMsg(KeyManager keyManager, string email)
         {
-            var base64PrivateKey = keyManager.GetPrivateKey(email);     // get locally stored private key
+            var base64PrivateKey = keyManager.GetPrivateKey(email); // get locally stored private key
             
             // break if don't have private key for email
             if(base64PrivateKey.Equals(Empty))
