@@ -40,3 +40,4 @@ D:\Dgarcia\Programming\IDEs\Rider\CSCI-251\Project 3\messenger\bin\Debug\net6.0\
 D:\Dgarcia\Programming\IDEs\Rider\CSCI-251\Project 3\messenger\bin\Debug\net6.0\protobuf-net.dll
 D:\Dgarcia\Programming\IDEs\Rider\CSCI-251\Project 3\messenger\bin\Debug\net6.0\protobuf-net.Core.dll
 D:\Dgarcia\Programming\IDEs\Rider\CSCI-251\Project 3\messenger\bin\Debug\net6.0\System.Text.Json.dll
+D:\Dgarcia\Programming\IDEs\Rider\CSCI-251\Project 3\messenger\bin\Debug\net6.0\CycloneDX.Utils.dll
