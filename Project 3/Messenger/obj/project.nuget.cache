@@ -1,11 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "K4Zlqz9Fkuc+uMc38VTYJum9ZZsTVyiaZ8Zo2Fv7eXuVVT09TQvUiPLMiracm3zbmjgcD6DJNAOAFCI+uLaebQ==",
+  "dgSpecHash": "uuuVx6lBKS4oxxMHBA98bdbgfSevLlWW/bw4ZZDYPaHWX7lk30ILWId2mDqGNkrlJDt4y/LOO7APNEKhkOxFiQ==",
   "success": true,
   "projectFilePath": "D:\\Dgarcia\\Programming\\IDEs\\Rider\\CSCI-251\\Project 3\\messenger\\Messenger.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Derpe\\.nuget\\packages\\cyclonedx.core\\5.2.0\\cyclonedx.core.5.2.0.nupkg.sha512",
-    "C:\\Users\\Derpe\\.nuget\\packages\\cyclonedx.utils\\5.2.0\\cyclonedx.utils.5.2.0.nupkg.sha512",
     "C:\\Users\\Derpe\\.nuget\\packages\\jetbrains.annotations\\2021.2.0\\jetbrains.annotations.2021.2.0.nupkg.sha512",
     "C:\\Users\\Derpe\\.nuget\\packages\\json.more.net\\1.4.4\\json.more.net.1.4.4.nupkg.sha512",
     "C:\\Users\\Derpe\\.nuget\\packages\\jsonpointer.net\\2.1.0\\jsonpointer.net.2.1.0.nupkg.sha512",

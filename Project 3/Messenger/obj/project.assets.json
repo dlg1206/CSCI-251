@@ -16,18 +16,6 @@
           "lib/netstandard2.0/CycloneDX.Core.dll": {}
         }
       },
-      "CycloneDX.Utils/5.2.0": {
-        "type": "package",
-        "dependencies": {
-          "CycloneDX.Core": "5.2.0"
-        },
-        "compile": {
-          "lib/netstandard2.0/CycloneDX.Utils.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/CycloneDX.Utils.dll": {}
-        }
-      },
       "JetBrains.Annotations/2021.2.0": {
         "type": "package",
         "compile": {
@@ -169,18 +157,6 @@
         "cyclonedx.core.5.2.0.nupkg.sha512",
         "cyclonedx.core.nuspec",
         "lib/netstandard2.0/CycloneDX.Core.dll"
-      ]
-    },
-    "CycloneDX.Utils/5.2.0": {
-      "sha512": "vV+KfTT1sDuCWx2rF6Ap3CWDTqNwjrrpFurlfiKDD0gpUPSl+8M6BdhoOO0o7oR9zecwk3cexNrH+6YPOSgdyA==",
-      "type": "package",
-      "path": "cyclonedx.utils/5.2.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "cyclonedx.utils.5.2.0.nupkg.sha512",
-        "cyclonedx.utils.nuspec",
-        "lib/netstandard2.0/CycloneDX.Utils.dll"
       ]
     },
     "JetBrains.Annotations/2021.2.0": {
@@ -431,7 +407,6 @@
   "projectFileDependencyGroups": {
     "net6.0": [
       "CycloneDX.Core >= 5.2.0",
-      "CycloneDX.Utils >= 5.2.0",
       "Newtonsoft.Json >= 13.0.1"
     ]
   },
@@ -473,10 +448,6 @@
         "targetAlias": "net6.0",
         "dependencies": {
           "CycloneDX.Core": {
-            "target": "Package",
-            "version": "[5.2.0, )"
-          },
-          "CycloneDX.Utils": {
             "target": "Package",
             "version": "[5.2.0, )"
           },

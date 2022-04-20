@@ -42,10 +42,6 @@
               "target": "Package",
               "version": "[5.2.0, )"
             },
-            "CycloneDX.Utils": {
-              "target": "Package",
-              "version": "[5.2.0, )"
-            },
             "Newtonsoft.Json": {
               "target": "Package",
               "version": "[13.0.1, )"
