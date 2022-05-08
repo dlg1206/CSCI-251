@@ -70,9 +70,10 @@ namespace Messenger
                     if (args.Length == 2 && int.TryParse(args[1], out var keySize))
                     {
                         keyManager.KeyGen(keySize);
-                    } 
-                    else { p.PrintUsage(); }
-                        
+                    }
+                    else
+                    { p.PrintUsage(); }
+
                     break;
 
                 // Attempt to send key to server

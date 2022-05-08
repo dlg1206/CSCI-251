@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Dgarc\\Programs\\Rider\\CSCI-251\\Project 3\\Messenger\\Messenger.csproj": {}
+    "D:\\Dgarcia\\Programming\\IDEs\\Rider\\CSCI-251\\Project 3\\Messenger\\Messenger.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Dgarc\\Programs\\Rider\\CSCI-251\\Project 3\\Messenger\\Messenger.csproj": {
+    "D:\\Dgarcia\\Programming\\IDEs\\Rider\\CSCI-251\\Project 3\\Messenger\\Messenger.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Dgarc\\Programs\\Rider\\CSCI-251\\Project 3\\Messenger\\Messenger.csproj",
+        "projectUniqueName": "D:\\Dgarcia\\Programming\\IDEs\\Rider\\CSCI-251\\Project 3\\Messenger\\Messenger.csproj",
         "projectName": "Messenger",
-        "projectPath": "C:\\Users\\Dgarc\\Programs\\Rider\\CSCI-251\\Project 3\\Messenger\\Messenger.csproj",
-        "packagesPath": "C:\\Users\\Dgarc\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Dgarc\\Programs\\Rider\\CSCI-251\\Project 3\\Messenger\\obj\\",
+        "projectPath": "D:\\Dgarcia\\Programming\\IDEs\\Rider\\CSCI-251\\Project 3\\Messenger\\Messenger.csproj",
+        "packagesPath": "C:\\Users\\Derpe\\.nuget\\packages\\",
+        "outputPath": "D:\\Dgarcia\\Programming\\IDEs\\Rider\\CSCI-251\\Project 3\\Messenger\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Dgarc\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Derpe\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
@@ -58,7 +58,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.101\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files (x86)\\dotnet\\sdk\\6.0.101\\RuntimeIdentifierGraph.json"
         }
       }
     }
