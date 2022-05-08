@@ -10,9 +10,6 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="HighlightingSettingsPerFile">
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/184721741f1cbf7b652ab87e592df39ce069dbafd53b4c4d315218be55b12/Parallel.cs" root0="SKIP_HIGHLIGHTING" />
-  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -71,6 +68,7 @@
       <workItem from="1648608407034" duration="689000" />
       <workItem from="1648701669758" duration="1675000" />
       <workItem from="1649187887717" duration="685000" />
+      <workItem from="1652024851558" duration="36000" />
     </task>
     <task id="LOCAL-00001" summary="init Project 2">
       <created>1644851895650</created>
@@ -86,7 +84,14 @@
       <option name="project" value="LOCAL" />
       <updated>1645107584365</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Project 2 final commit">
+      <created>1652024866578</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1652024866578</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -110,6 +115,7 @@
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
     <MESSAGE value="init Project 2" />
     <MESSAGE value="added name" />
-    <option name="LAST_COMMIT_MESSAGE" value="added name" />
+    <MESSAGE value="Project 2 final commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="Project 2 final commit" />
   </component>
 </project>
